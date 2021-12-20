@@ -12,19 +12,11 @@
 		E8B1752E26A9AA8C00F1F764 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8B1752D26A9AA8C00F1F764 /* Assets.xcassets */; };
 		E8B1753126A9AA8C00F1F764 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8B1753026A9AA8C00F1F764 /* Preview Assets.xcassets */; };
 		E8B1753C26A9AA8C00F1F764 /* LearningTCATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B1753B26A9AA8C00F1F764 /* LearningTCATests.swift */; };
-		E8B1754726A9AA8C00F1F764 /* LearningTCAUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B1754626A9AA8C00F1F764 /* LearningTCAUITests.swift */; };
 		E8B1755626A9AB7600F1F764 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = E8B1755526A9AB7600F1F764 /* ComposableArchitecture */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		E8B1753826A9AA8C00F1F764 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E8B1751E26A9AA8A00F1F764 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E8B1752526A9AA8A00F1F764;
-			remoteInfo = LearningTCA;
-		};
-		E8B1754326A9AA8C00F1F764 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E8B1751E26A9AA8A00F1F764 /* Project object */;
 			proxyType = 1;
@@ -43,9 +35,6 @@
 		E8B1753726A9AA8C00F1F764 /* LearningTCATests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LearningTCATests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8B1753B26A9AA8C00F1F764 /* LearningTCATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningTCATests.swift; sourceTree = "<group>"; };
 		E8B1753D26A9AA8C00F1F764 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E8B1754226A9AA8C00F1F764 /* LearningTCAUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LearningTCAUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E8B1754626A9AA8C00F1F764 /* LearningTCAUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningTCAUITests.swift; sourceTree = "<group>"; };
-		E8B1754826A9AA8C00F1F764 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,13 +53,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E8B1753F26A9AA8C00F1F764 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -79,7 +61,6 @@
 			children = (
 				E8B1752826A9AA8A00F1F764 /* LearningTCA */,
 				E8B1753A26A9AA8C00F1F764 /* LearningTCATests */,
-				E8B1754526A9AA8C00F1F764 /* LearningTCAUITests */,
 				E8B1752726A9AA8A00F1F764 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -89,7 +70,6 @@
 			children = (
 				E8B1752626A9AA8A00F1F764 /* LearningTCA.app */,
 				E8B1753726A9AA8C00F1F764 /* LearningTCATests.xctest */,
-				E8B1754226A9AA8C00F1F764 /* LearningTCAUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -121,15 +101,6 @@
 				E8B1753D26A9AA8C00F1F764 /* Info.plist */,
 			);
 			path = LearningTCATests;
-			sourceTree = "<group>";
-		};
-		E8B1754526A9AA8C00F1F764 /* LearningTCAUITests */ = {
-			isa = PBXGroup;
-			children = (
-				E8B1754626A9AA8C00F1F764 /* LearningTCAUITests.swift */,
-				E8B1754826A9AA8C00F1F764 /* Info.plist */,
-			);
-			path = LearningTCAUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -173,24 +144,6 @@
 			productReference = E8B1753726A9AA8C00F1F764 /* LearningTCATests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		E8B1754126A9AA8C00F1F764 /* LearningTCAUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E8B1755126A9AA8C00F1F764 /* Build configuration list for PBXNativeTarget "LearningTCAUITests" */;
-			buildPhases = (
-				E8B1753E26A9AA8C00F1F764 /* Sources */,
-				E8B1753F26A9AA8C00F1F764 /* Frameworks */,
-				E8B1754026A9AA8C00F1F764 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				E8B1754426A9AA8C00F1F764 /* PBXTargetDependency */,
-			);
-			name = LearningTCAUITests;
-			productName = LearningTCAUITests;
-			productReference = E8B1754226A9AA8C00F1F764 /* LearningTCAUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -204,10 +157,6 @@
 						CreatedOnToolsVersion = 12.5.1;
 					};
 					E8B1753626A9AA8C00F1F764 = {
-						CreatedOnToolsVersion = 12.5.1;
-						TestTargetID = E8B1752526A9AA8A00F1F764;
-					};
-					E8B1754126A9AA8C00F1F764 = {
 						CreatedOnToolsVersion = 12.5.1;
 						TestTargetID = E8B1752526A9AA8A00F1F764;
 					};
@@ -231,7 +180,6 @@
 			targets = (
 				E8B1752526A9AA8A00F1F764 /* LearningTCA */,
 				E8B1753626A9AA8C00F1F764 /* LearningTCATests */,
-				E8B1754126A9AA8C00F1F764 /* LearningTCAUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -247,13 +195,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		E8B1753526A9AA8C00F1F764 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E8B1754026A9AA8C00F1F764 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -280,14 +221,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E8B1753E26A9AA8C00F1F764 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E8B1754726A9AA8C00F1F764 /* LearningTCAUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -295,11 +228,6 @@
 			isa = PBXTargetDependency;
 			target = E8B1752526A9AA8A00F1F764 /* LearningTCA */;
 			targetProxy = E8B1753826A9AA8C00F1F764 /* PBXContainerItemProxy */;
-		};
-		E8B1754426A9AA8C00F1F764 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E8B1752526A9AA8A00F1F764 /* LearningTCA */;
-			targetProxy = E8B1754326A9AA8C00F1F764 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -504,44 +432,6 @@
 			};
 			name = Release;
 		};
-		E8B1755226A9AA8C00F1F764 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = LearningTCAUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = dev.davidroman.LearningTCAUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = LearningTCA;
-			};
-			name = Debug;
-		};
-		E8B1755326A9AA8C00F1F764 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = LearningTCAUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = dev.davidroman.LearningTCAUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = LearningTCA;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -568,15 +458,6 @@
 			buildConfigurations = (
 				E8B1754F26A9AA8C00F1F764 /* Debug */,
 				E8B1755026A9AA8C00F1F764 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		E8B1755126A9AA8C00F1F764 /* Build configuration list for PBXNativeTarget "LearningTCAUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E8B1755226A9AA8C00F1F764 /* Debug */,
-				E8B1755326A9AA8C00F1F764 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
