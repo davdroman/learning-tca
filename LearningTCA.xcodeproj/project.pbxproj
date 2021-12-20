@@ -7,11 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E8B1752A26A9AA8A00F1F764 /* LearningTCAApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B1752926A9AA8A00F1F764 /* LearningTCAApp.swift */; };
-		E8B1752C26A9AA8A00F1F764 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B1752B26A9AA8A00F1F764 /* ContentView.swift */; };
+		E8B1752A26A9AA8A00F1F764 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B1752926A9AA8A00F1F764 /* App.swift */; };
 		E8B1752E26A9AA8C00F1F764 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8B1752D26A9AA8C00F1F764 /* Assets.xcassets */; };
 		E8B1753126A9AA8C00F1F764 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8B1753026A9AA8C00F1F764 /* Preview Assets.xcassets */; };
-		E8B1753C26A9AA8C00F1F764 /* LearningTCATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B1753B26A9AA8C00F1F764 /* LearningTCATests.swift */; };
 		E8B1755626A9AB7600F1F764 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = E8B1755526A9AB7600F1F764 /* ComposableArchitecture */; };
 /* End PBXBuildFile section */
 
@@ -27,13 +25,11 @@
 
 /* Begin PBXFileReference section */
 		E8B1752626A9AA8A00F1F764 /* LearningTCA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LearningTCA.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		E8B1752926A9AA8A00F1F764 /* LearningTCAApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningTCAApp.swift; sourceTree = "<group>"; };
-		E8B1752B26A9AA8A00F1F764 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		E8B1752926A9AA8A00F1F764 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		E8B1752D26A9AA8C00F1F764 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E8B1753026A9AA8C00F1F764 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E8B1753226A9AA8C00F1F764 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E8B1753726A9AA8C00F1F764 /* LearningTCATests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LearningTCATests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E8B1753B26A9AA8C00F1F764 /* LearningTCATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningTCATests.swift; sourceTree = "<group>"; };
 		E8B1753D26A9AA8C00F1F764 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -77,8 +73,7 @@
 		E8B1752826A9AA8A00F1F764 /* LearningTCA */ = {
 			isa = PBXGroup;
 			children = (
-				E8B1752926A9AA8A00F1F764 /* LearningTCAApp.swift */,
-				E8B1752B26A9AA8A00F1F764 /* ContentView.swift */,
+				E8B1752926A9AA8A00F1F764 /* App.swift */,
 				E8B1752D26A9AA8C00F1F764 /* Assets.xcassets */,
 				E8B1753226A9AA8C00F1F764 /* Info.plist */,
 				E8B1752F26A9AA8C00F1F764 /* Preview Content */,
@@ -97,7 +92,6 @@
 		E8B1753A26A9AA8C00F1F764 /* LearningTCATests */ = {
 			isa = PBXGroup;
 			children = (
-				E8B1753B26A9AA8C00F1F764 /* LearningTCATests.swift */,
 				E8B1753D26A9AA8C00F1F764 /* Info.plist */,
 			);
 			path = LearningTCATests;
@@ -208,8 +202,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E8B1752C26A9AA8A00F1F764 /* ContentView.swift in Sources */,
-				E8B1752A26A9AA8A00F1F764 /* LearningTCAApp.swift in Sources */,
+				E8B1752A26A9AA8A00F1F764 /* App.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,7 +210,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E8B1753C26A9AA8C00F1F764 /* LearningTCATests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
