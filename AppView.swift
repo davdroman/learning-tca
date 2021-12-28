@@ -2,39 +2,33 @@ import ComposableArchitecture
 import IdentifiedCollections
 import SwiftUI
 
-struct Todo: Equatable, Identifiable {
-    var id: UUID
-    var description = ""
-    var isComplete = false
-}
-
-enum TodoAction: Equatable {
-    case checkboxTapped
-    case textFieldChanged(String)
-}
-
-struct TodoEnvironment {
-
-}
-
-let todoReducer = Reducer<Todo, TodoAction, TodoEnvironment> { state, action, environment in
-    switch action {
-    case .checkboxTapped:
-        state.isComplete.toggle()
-        return .none
-    case .textFieldChanged(let text):
-        state.description = text
-        return .none
-    }
-}
-
 struct AppState: Equatable {
     var todos: IdentifiedArrayOf<Todo>
+    var focusedTodoID: Todo.ID?
+}
+
+extension AppState {
+    var todoRowStates: IdentifiedArrayOf<TodoRowState> {
+        get {
+            IdentifiedArray(
+                uniqueElements: todos.map {
+                    TodoRowState(
+                        todo: $0,
+                        isFocused: focusedTodoID == $0.id
+                    )
+                }
+            )
+        }
+        set {
+            todos = IdentifiedArray(uniqueElements: newValue.map(\.todo))
+            focusedTodoID = newValue.first(where: \.isFocused)?.id
+        }
+    }
 }
 
 enum AppAction: Equatable {
     case addButtonTapped
-    case todo(index: Todo.ID, action: TodoAction)
+    case todo(id: Todo.ID, action: TodoRowAction)
     case sortCompletedTodos
 }
 
@@ -45,20 +39,23 @@ struct AppEnvironment {
 
 let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
     todoReducer.forEach(
-        state: \AppState.todos,
+        state: \AppState.todoRowStates,
         action: /AppAction.todo,
-        environment: { _ in TodoEnvironment() }
+        environment: { _ in TodoRowEnvironment() }
     ),
     Reducer { state, action, environment in
         switch action {
         case .addButtonTapped:
-            state.todos.insert(Todo(id: environment.uuid()), at: 0)
-            return .none
+            let newTodo = Todo(id: environment.uuid(), description: "")
+            state.todos.insert(newTodo, at: 0)
 
-        case .todo(index: _, action: .checkboxTapped):
+            return Effect(value: .todo(id: newTodo.id, action: .binding(.set(\.$isFocused, true))))
+                .deferred(for: 0, scheduler: environment.mainQueue)
+
+        case .todo(id: _, action: .checkboxTapped):
             struct CancelID: Hashable {}
 
-            return Effect(value: AppAction.sortCompletedTodos)
+            return Effect(value: .sortCompletedTodos)
                 .debounce(id: CancelID(), for: 1, scheduler: environment.mainQueue.animation(.default))
 
         case .todo:
@@ -75,9 +72,9 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
         }
     }
 )
-//.debug()
+.debug()
 
-struct ContentView: View {
+struct AppView: View {
     let store: Store<AppState, AppAction>
 
     var body: some View {
@@ -85,8 +82,8 @@ struct ContentView: View {
             WithViewStore(store) { viewStore in
                 List {
                     ForEachStore(
-                        store.scope(state: \.todos, action: AppAction.todo),
-                        content: TodoView.init
+                        store.scope(state: \.todoRowStates, action: AppAction.todo),
+                        content: TodoRowView.init
                     )
                     .listStyle(.plain)
                 }
@@ -99,34 +96,9 @@ struct ContentView: View {
     }
 }
 
-struct TodoView: View {
-    let store: Store<Todo, TodoAction>
-
-    var body: some View {
-        WithViewStore(store) { viewStore in
-            HStack {
-                Button(action: { viewStore.send(.checkboxTapped, animation: .default) }) {
-                    Image(systemName: viewStore.isComplete ? "checkmark.square" : "square")
-                }
-                .buttonStyle(.plain)
-
-                TextField(
-                    "Untitled todo",
-                    text: viewStore.binding(
-                        get: \.description,
-                        send: { .textFieldChanged($0) }
-                    )
-                )
-                .disabled(viewStore.isComplete)
-            }
-            .foregroundColor(viewStore.isComplete ? .gray : nil)
-        }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
+struct AppView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(
+        AppView(
             store: Store(
                 initialState: AppState(
                     todos: [

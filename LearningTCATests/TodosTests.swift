@@ -20,7 +20,7 @@ final class TodosTests: XCTestCase {
             )
         )
 
-        store.send(.todo(index: state.todos[0].id, action: .checkboxTapped)) {
+        store.send(.todo(id: state.todos[0].id, action: .checkboxTapped)) {
             $0.todos[id: state.todos[0].id]?.isComplete = true
         }
         store.receive(.sortCompletedTodos)
@@ -32,7 +32,7 @@ final class TodosTests: XCTestCase {
             reducer: appReducer,
             environment: AppEnvironment(
                 uuid: { UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")! },
-                mainQueue: .failing
+                mainQueue: .immediate
             )
         )
         store.send(.addButtonTapped) {
@@ -43,6 +43,9 @@ final class TodosTests: XCTestCase {
                     isComplete: false
                 )
             ]
+        }
+        store.receive(.todo(id: UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")!, action: .binding(.set(\.$isFocused, true)))) {
+            $0.focusedTodoID = UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")!
         }
     }
 
@@ -69,7 +72,7 @@ final class TodosTests: XCTestCase {
             )
         )
 
-        store.send(.todo(index: state.todos[0].id, action: .checkboxTapped)) {
+        store.send(.todo(id: state.todos[0].id, action: .checkboxTapped)) {
             $0.todos = [
                 Todo(
                     id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!,
