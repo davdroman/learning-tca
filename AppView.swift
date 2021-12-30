@@ -85,7 +85,6 @@ struct AppView: View {
                         store.scope(state: \.todoRowStates, action: AppAction.todo),
                         content: TodoRowView.init
                     )
-                    .listStyle(.plain)
                 }
                 .navigationTitle("Todos")
                 .navigationBarItems(trailing: Button("Add") {
