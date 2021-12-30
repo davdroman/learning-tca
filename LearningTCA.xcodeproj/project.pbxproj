@@ -66,7 +66,6 @@
 				D5AEE2582779136300A62DAD /* LearningTCA */,
 				D5AEE2692779136400A62DAD /* LearningTCATests */,
 				D5AEE2572779136300A62DAD /* Products */,
-				D5EF0B2E277D327C00A3378B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -105,13 +104,6 @@
 				D5AEE26A2779136400A62DAD /* TodosTests.swift */,
 			);
 			path = LearningTCATests;
-			sourceTree = "<group>";
-		};
-		D5EF0B2E277D327C00A3378B /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
