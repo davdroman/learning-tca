@@ -64,8 +64,6 @@ struct TodoRowView: View {
                     UIBarButtonItem.flexibleSpace()
                     UIBarButtonItem(systemItem: .done, primaryAction: endEditing)
                 }
-//                .font(.largeTitle)
-                .foregroundColor(.red)
                 .focused($isFocused)
                 .disabled(viewStore.todo.isComplete)
             }
