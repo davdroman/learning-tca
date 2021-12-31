@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D565F183277EA79A00761BEA /* KeyboardToolbar in Frameworks */ = {isa = PBXBuildFile; productRef = D565F182277EA79A00761BEA /* KeyboardToolbar */; };
 		D5987C30277B660D0039F71D /* TodoRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5987C2F277B660D0039F71D /* TodoRowView.swift */; };
 		D5AEE25E2779136400A62DAD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D5AEE25D2779136400A62DAD /* Assets.xcassets */; };
 		D5AEE2612779136400A62DAD /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D5AEE2602779136400A62DAD /* Preview Assets.xcassets */; };
@@ -28,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D565F180277EA79100761BEA /* KeyboardToolbar */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = KeyboardToolbar; sourceTree = "<group>"; };
 		D5987C2F277B660D0039F71D /* TodoRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoRowView.swift; sourceTree = "<group>"; };
 		D5AEE2562779136300A62DAD /* LearningTCA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LearningTCA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5AEE25D2779136400A62DAD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -45,6 +47,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D5EF0B30277D327C00A3378B /* MultilineTextField in Frameworks */,
+				D565F183277EA79A00761BEA /* KeyboardToolbar in Frameworks */,
 				D5AEE285277913F100A62DAD /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -62,6 +65,7 @@
 		D5AEE24D2779136300A62DAD = {
 			isa = PBXGroup;
 			children = (
+				D565F180277EA79100761BEA /* KeyboardToolbar */,
 				D5EF0B2B277D31A200A3378B /* MultilineTextField */,
 				D5AEE2582779136300A62DAD /* LearningTCA */,
 				D5AEE2692779136400A62DAD /* LearningTCATests */,
@@ -125,6 +129,7 @@
 			packageProductDependencies = (
 				D5AEE284277913F100A62DAD /* ComposableArchitecture */,
 				D5EF0B2F277D327C00A3378B /* MultilineTextField */,
+				D565F182277EA79A00761BEA /* KeyboardToolbar */,
 			);
 			productName = LearningTCA;
 			productReference = D5AEE2562779136300A62DAD /* LearningTCA.app */;
@@ -496,6 +501,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D565F182277EA79A00761BEA /* KeyboardToolbar */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KeyboardToolbar;
+		};
 		D5AEE284277913F100A62DAD /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D5AEE283277913F100A62DAD /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;

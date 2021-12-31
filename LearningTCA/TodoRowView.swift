@@ -1,5 +1,6 @@
 import ComposableArchitecture
 import IdentifiedCollections
+import KeyboardToolbar
 import MultilineTextField
 import SwiftUI
 
@@ -59,6 +60,10 @@ struct TodoRowView: View {
 //                    "Untitled todo",
 //                    text: viewStore.binding(get: \.todo.description, send: TodoRowAction.textFieldDidChange)
 //                )
+                .keyboardToolbar { endEditing in
+                    UIBarButtonItem.flexibleSpace()
+                    UIBarButtonItem(systemItem: .done, primaryAction: endEditing)
+                }
 //                .font(.largeTitle)
                 .foregroundColor(.red)
                 .focused($isFocused)
