@@ -88,9 +88,13 @@ struct AppView: View {
                 }
                 .listStyle(.plain)
                 .navigationTitle("Todos")
-                .navigationBarItems(trailing: Button("Add") {
-                    viewStore.send(.addButtonTapped, animation: .default)
-                })
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Add") {
+                            viewStore.send(.addButtonTapped, animation: .default)
+                        }
+                    }
+                }
             }
         }
     }
