@@ -5,10 +5,12 @@ public struct MultilineTextField: View {
     private var placeholder: String
     @Binding
     private var text: String
+    private var minHeight: CGFloat
 
-    public init(_ placeholder: String, text: Binding<String>) {
+    public init(_ placeholder: String, text: Binding<String>, minHeight: CGFloat? = nil) {
         self.placeholder = placeholder
         self._text = text
+        self.minHeight = minHeight ?? 0
     }
 
     public var body: some View {
@@ -42,7 +44,7 @@ public struct MultilineTextField: View {
             }
 
             TextEditor(text: $text)
-                .frame(height: max(textFieldMinimumHeight, textHeight).rounded(.up))
+                .frame(height: max(minHeight, textFieldMinimumHeight, textHeight).rounded(.up))
                 .introspectTextView {
                     $0.isScrollEnabled = false
                     $0.backgroundColor = .clear
