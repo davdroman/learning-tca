@@ -25,6 +25,7 @@ public struct MultilineTextField: View {
                 )
 
             Text(text)
+                .fixedSize(horizontal: false, vertical: true)
                 .hidden()
                 .background(
                     GeometryReader {
@@ -41,7 +42,7 @@ public struct MultilineTextField: View {
             }
 
             TextEditor(text: $text)
-                .frame(height: max(textFieldMinimumHeight, textHeight))
+                .frame(height: max(textFieldMinimumHeight, textHeight).rounded(.up))
                 .introspectTextView {
                     $0.isScrollEnabled = false
                     $0.backgroundColor = .clear
