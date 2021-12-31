@@ -56,10 +56,6 @@ struct TodoRowView: View {
                     "Untitled todo",
                     text: viewStore.binding(get: \.todo.description, send: TodoRowAction.textFieldDidChange)
                 )
-//                TextField(
-//                    "Untitled todo",
-//                    text: viewStore.binding(get: \.todo.description, send: TodoRowAction.textFieldDidChange)
-//                )
                 .keyboardToolbar()
                 .focused($isFocused)
                 .disabled(viewStore.todo.isComplete)
