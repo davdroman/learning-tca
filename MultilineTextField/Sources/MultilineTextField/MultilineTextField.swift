@@ -75,3 +75,14 @@ private struct TextHeightKey: PreferenceKey {
         value = value + nextValue()
     }
 }
+
+struct MultilineTextField_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            MultilineTextField("Placeholder", text: .constant(""))
+            MultilineTextField("Placeholder", text: .constant("Lorem ipsum dolor sit amet"))
+        }
+        .padding()
+        .previewLayout(.sizeThatFits)
+    }
+}
