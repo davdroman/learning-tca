@@ -86,6 +86,7 @@ struct AppView: View {
                         content: TodoRowView.init
                     )
                 }
+                .listStyle(.plain)
                 .navigationTitle("Todos")
                 .navigationBarItems(trailing: Button("Add") {
                     viewStore.send(.addButtonTapped, animation: .default)
