@@ -20,7 +20,7 @@ public struct MultilineTextField: View {
                 .background(
                     GeometryReader {
                         Color.clear.preference(
-                            key: TextFieldMinimumHeightKey.self,
+                            key: TextFieldMinHeightKey.self,
                             value: $0.frame(in: .local).size.height
                         )
                     }
@@ -44,7 +44,7 @@ public struct MultilineTextField: View {
             }
 
             TextEditor(text: $text)
-                .frame(height: max(minHeight, textFieldMinimumHeight, textHeight).rounded(.up))
+                .frame(height: max(minHeight, textFieldMinHeight, textHeight).rounded(.up))
                 .introspectTextView {
                     $0.isScrollEnabled = false
                     $0.backgroundColor = .clear
@@ -52,19 +52,19 @@ public struct MultilineTextField: View {
                     $0.textContainer.lineFragmentPadding = .zero
                 }
         }
-        .onPreferenceChange(TextFieldMinimumHeightKey.self) {
-            textFieldMinimumHeight = $0
+        .onPreferenceChange(TextFieldMinHeightKey.self) {
+            textFieldMinHeight = $0
         }
         .onPreferenceChange(TextHeightKey.self) {
             textHeight = $0
         }
     }
 
-    @State private var textFieldMinimumHeight: CGFloat = 0
+    @State private var textFieldMinHeight: CGFloat = 0
     @State private var textHeight: CGFloat = 0
 }
 
-private struct TextFieldMinimumHeightKey: PreferenceKey {
+private struct TextFieldMinHeightKey: PreferenceKey {
     static var defaultValue: CGFloat { 0 }
     static func reduce(value: inout Value, nextValue: () -> Value) {
         value = value + nextValue()
