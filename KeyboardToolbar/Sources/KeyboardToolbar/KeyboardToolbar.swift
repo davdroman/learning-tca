@@ -1,34 +1,42 @@
 import Introspect
 import SwiftUI
 
-@resultBuilder
-public struct UIBarButtonItemBuilder {
-    public typealias Element = UIBarButtonItem
-    public typealias Array = Swift.Array<Element>
+public protocol KeyboardToolbar {
+    func items(_ endEditing: UIAction) -> [UIBarButtonItem]
+}
 
-    public static func buildArray(_ arrays: [Array]) -> Array { arrays.reduce([], +) }
-    public static func buildBlock(_ arrays: Array...) -> Array { arrays.reduce([], +) }
-    public static func buildEither(first array: Array) -> Array { array }
-    public static func buildEither(second array: Array) -> Array { array }
-    public static func buildExpression(_ element: Element) -> Array { [element] }
-    public static func buildLimitedAvailability(_ array: Array) -> Array { array }
-    public static func buildOptional(_ array: Array?) -> Array { array ?? [] }
+public struct DefaultKeyboardToolbar: KeyboardToolbar {
+    public func items(_ endEditing: UIAction) -> [UIBarButtonItem] {
+        [
+            UIBarButtonItem.flexibleSpace(),
+            UIBarButtonItem(systemItem: .done, primaryAction: endEditing),
+        ]
+    }
+}
+
+extension KeyboardToolbar where Self == DefaultKeyboardToolbar {
+    public static var `default`: DefaultKeyboardToolbar { .init() }
 }
 
 extension View {
     @ViewBuilder
-    public func keyboardToolbar(@UIBarButtonItemBuilder items: @escaping (UIAction) -> [UIBarButtonItem]) -> some View {
-        self.modifier(KeyboardToolbarModifier(items: items))
+    public func keyboardToolbar<KT: KeyboardToolbar>(_ toolbar: KT) -> some View {
+        self.modifier(KeyboardToolbarModifier(toolbar))
+    }
+
+    @ViewBuilder
+    public func keyboardToolbar() -> some View {
+        self.modifier(KeyboardToolbarModifier(.default))
     }
 }
 
-struct KeyboardToolbarModifier: ViewModifier {
+struct KeyboardToolbarModifier<KT: KeyboardToolbar>: ViewModifier {
     @FocusState
     private var isFocused: Bool
-    private let items: (UIAction) -> [UIBarButtonItem]
-    private var toolbar: UIToolbar {
+    private var toolbar: KT
+    private var uiToolbar: UIToolbar {
         UIToolbar.keyboardToolbar(
-            items: items(
+            items: toolbar.items(
                 UIAction { _ in
                     isFocused = false
                 }
@@ -36,15 +44,15 @@ struct KeyboardToolbarModifier: ViewModifier {
         )
     }
 
-    init(@UIBarButtonItemBuilder items: @escaping (UIAction) -> [UIBarButtonItem]) {
-        self.items = items
+    init(_ toolbar: KT) {
+        self.toolbar = toolbar
     }
 
     func body(content: Content) -> some View {
         content
             .focused($isFocused)
-            .introspectTextField { $0.inputAccessoryView = toolbar }
-            .introspectTextView { $0.inputAccessoryView = toolbar }
+            .introspectTextField { $0.inputAccessoryView = uiToolbar }
+            .introspectTextView { $0.inputAccessoryView = uiToolbar }
     }
 }
 
