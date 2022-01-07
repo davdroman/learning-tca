@@ -78,30 +78,32 @@ extension View {
 
 struct TodoRowView_Previews: PreviewProvider {
     static var previews: some View {
-        Group {
+        let states = [
+            TodoRowState(
+                todo: Todo(id: UUID(), description: "", isComplete: false),
+                isFocused: false
+            ),
+            TodoRowState(
+                todo: Todo(id: UUID(), description: "Milk", isComplete: false),
+                isFocused: false
+            ),
+            TodoRowState(
+                todo: Todo(id: UUID(), description: "Milk", isComplete: true),
+                isFocused: false
+            ),
+        ]
+        ForEach(states) { state in
             TodoRowView(
                 store: Store(
-                    initialState: .init(
-                        todo: Todo(id: UUID(), description: "Milk", isComplete: true),
-                        isFocused: false
-                    ),
-                    reducer: todoReducer,
-                    environment: TodoRowEnvironment()
-                )
-            )
-            TodoRowView(
-                store: Store(
-                    initialState: .init(
-                        todo: Todo(id: UUID(), description: "", isComplete: true),
-                        isFocused: false
-                    ),
+                    initialState: state,
                     reducer: todoReducer,
                     environment: TodoRowEnvironment()
                 )
             )
         }
+        .padding()
+        .background(Color(uiColor: .systemBackground))
         .environment(\.colorScheme, .dark)
         .previewLayout(.sizeThatFits)
-        .padding()
     }
 }
