@@ -6,6 +6,18 @@ extension View {
     public func textFieldInsets(_ insets: EdgeInsets) -> some View {
         self.modifier(TextFieldInsetsModifier(insets: insets))
     }
+
+    @ViewBuilder
+    public func textFieldInsets(_ length: CGFloat) -> some View {
+        self.textFieldInsets(
+            EdgeInsets(
+                top: length,
+                leading: length,
+                bottom: length,
+                trailing: length
+            )
+        )
+    }
 }
 
 private struct TextFieldInsetsModifier: ViewModifier {
@@ -60,7 +72,7 @@ extension UITextView: FocusableTextInput {}
 struct TextFieldInsets_Previews: PreviewProvider {
     static var previews: some View {
         TextField("Placeholder", text: .constant("Lorem ipsum dolor sit amet"))
-            .textFieldInsets(.init(top: 32, leading: 32, bottom: 32, trailing: 32))
+            .textFieldInsets(32)
             .background(Color.red)
             .previewLayout(.sizeThatFits)
     }
