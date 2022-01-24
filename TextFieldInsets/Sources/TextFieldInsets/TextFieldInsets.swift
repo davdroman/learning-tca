@@ -22,7 +22,7 @@ extension View {
 
 private struct TextFieldInsetsModifier: ViewModifier {
     @Weak
-    private var view: FocusableTextInput?
+    private var view: (UIView & FocusableTextInput)?
 
     let insets: EdgeInsets
 
@@ -31,9 +31,8 @@ private struct TextFieldInsetsModifier: ViewModifier {
             .introspectTextField { view = $0 }
             .introspectTextView { view = $0 }
             .padding(insets)
-            .background(BackgroundTapView { point in
+            .background(LocatedTap(in: view) { point in
                 guard let view = view else { return }
-                let point = CGPoint(x: point.x - insets.leading, y: point.y - insets.top)
                 let newPosition = view.closestPosition(to: point) ?? view.endOfDocument
                 view.becomeFirstResponder()
                 view.selectedTextRange = view.textRange(from: newPosition, to: newPosition)
@@ -64,8 +63,17 @@ private class Weak<T: AnyObject> {
 extension UITextField: FocusableTextInput {}
 extension UITextView: FocusableTextInput {}
 
-private struct BackgroundTapView: UIViewRepresentable {
+private struct LocatedTap: UIViewRepresentable {
+    var localView: () -> UIView?
     var handler: (CGPoint) -> Void
+
+    init(
+        in localView: @escaping @autoclosure () -> UIView?,
+        handler: @escaping (CGPoint) -> Void
+    ) {
+        self.localView = localView
+        self.handler = handler
+    }
 
     func makeUIView(context: Context) -> UIView {
         let view = UIView(frame: .zero)
@@ -79,20 +87,25 @@ private struct BackgroundTapView: UIViewRepresentable {
     }
 
     final class Coordinator: NSObject {
+        var localView: () -> UIView?
         var handler: (CGPoint) -> Void
 
-        init(handler: @escaping (CGPoint) -> Void) {
+        init(
+            localView: @escaping () -> UIView?,
+            handler: @escaping (CGPoint) -> Void
+        ) {
+            self.localView = localView
             self.handler = handler
         }
 
         @objc func tapped(gesture: UITapGestureRecognizer) {
-            let point = gesture.location(in: gesture.view)
+            let point = gesture.location(in: localView() ?? gesture.view)
             self.handler(point)
         }
     }
 
     func makeCoordinator() -> Coordinator {
-        return Coordinator(handler: handler)
+        return Coordinator(localView: localView, handler: handler)
     }
 
     func updateUIView(_ uiView: UIView, context: Context) {}
