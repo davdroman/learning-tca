@@ -31,18 +31,13 @@ private struct TextFieldInsetsModifier: ViewModifier {
             .introspectTextField { view = $0 }
             .introspectTextView { view = $0 }
             .padding(insets)
-            .contentShape(Rectangle())
-            .onTapGesture {
-                guard
-                    let view = view,
-                    !view.isFirstResponder
-                else {
-                    return
-                }
-                let newPosition = view.endOfDocument
+            .background(BackgroundTapView { point in
+                guard let view = view else { return }
+                let point = CGPoint(x: point.x - insets.leading, y: point.y - insets.top)
+                let newPosition = view.closestPosition(to: point) ?? view.endOfDocument
                 view.becomeFirstResponder()
                 view.selectedTextRange = view.textRange(from: newPosition, to: newPosition)
-            }
+            })
     }
 }
 
@@ -68,6 +63,40 @@ private class Weak<T: AnyObject> {
 
 extension UITextField: FocusableTextInput {}
 extension UITextView: FocusableTextInput {}
+
+private struct BackgroundTapView: UIViewRepresentable {
+    var handler: (CGPoint) -> Void
+
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView(frame: .zero)
+        view.addGestureRecognizer(
+            UITapGestureRecognizer(
+                target: context.coordinator,
+                action: #selector(Coordinator.tapped)
+            )
+        )
+        return view
+    }
+
+    final class Coordinator: NSObject {
+        var handler: (CGPoint) -> Void
+
+        init(handler: @escaping (CGPoint) -> Void) {
+            self.handler = handler
+        }
+
+        @objc func tapped(gesture: UITapGestureRecognizer) {
+            let point = gesture.location(in: gesture.view)
+            self.handler(point)
+        }
+    }
+
+    func makeCoordinator() -> Coordinator {
+        return Coordinator(handler: handler)
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {}
+}
 
 struct TextFieldInsets_Previews: PreviewProvider {
     static var previews: some View {
