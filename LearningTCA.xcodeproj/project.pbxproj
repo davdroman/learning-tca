@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D563857C279F084800CCE0A3 /* TextFieldInsets in Frameworks */ = {isa = PBXBuildFile; productRef = D563857B279F084800CCE0A3 /* TextFieldInsets */; };
 		D565F183277EA79A00761BEA /* KeyboardToolbar in Frameworks */ = {isa = PBXBuildFile; productRef = D565F182277EA79A00761BEA /* KeyboardToolbar */; };
 		D5987C30277B660D0039F71D /* TodoRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5987C2F277B660D0039F71D /* TodoRowView.swift */; };
 		D5AEE25E2779136400A62DAD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D5AEE25D2779136400A62DAD /* Assets.xcassets */; };
@@ -29,6 +30,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D5638579279F07EA00CCE0A3 /* TextFieldInsets */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TextFieldInsets; sourceTree = "<group>"; };
 		D565F180277EA79100761BEA /* KeyboardToolbar */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = KeyboardToolbar; sourceTree = "<group>"; };
 		D5987C2F277B660D0039F71D /* TodoRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoRowView.swift; sourceTree = "<group>"; };
 		D5AEE2562779136300A62DAD /* LearningTCA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LearningTCA.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -48,6 +50,7 @@
 			files = (
 				D5EF0B30277D327C00A3378B /* MultilineTextField in Frameworks */,
 				D565F183277EA79A00761BEA /* KeyboardToolbar in Frameworks */,
+				D563857C279F084800CCE0A3 /* TextFieldInsets in Frameworks */,
 				D5AEE285277913F100A62DAD /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -62,14 +65,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D563857A279F084800CCE0A3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D5AEE24D2779136300A62DAD = {
 			isa = PBXGroup;
 			children = (
+				D5638579279F07EA00CCE0A3 /* TextFieldInsets */,
 				D565F180277EA79100761BEA /* KeyboardToolbar */,
 				D5EF0B2B277D31A200A3378B /* MultilineTextField */,
 				D5AEE2582779136300A62DAD /* LearningTCA */,
 				D5AEE2692779136400A62DAD /* LearningTCATests */,
 				D5AEE2572779136300A62DAD /* Products */,
+				D563857A279F084800CCE0A3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -130,6 +142,7 @@
 				D5AEE284277913F100A62DAD /* ComposableArchitecture */,
 				D5EF0B2F277D327C00A3378B /* MultilineTextField */,
 				D565F182277EA79A00761BEA /* KeyboardToolbar */,
+				D563857B279F084800CCE0A3 /* TextFieldInsets */,
 			);
 			productName = LearningTCA;
 			productReference = D5AEE2562779136300A62DAD /* LearningTCA.app */;
@@ -501,6 +514,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D563857B279F084800CCE0A3 /* TextFieldInsets */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TextFieldInsets;
+		};
 		D565F182277EA79A00761BEA /* KeyboardToolbar */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = KeyboardToolbar;
