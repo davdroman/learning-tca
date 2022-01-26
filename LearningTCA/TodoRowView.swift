@@ -2,6 +2,7 @@ import ComposableArchitecture
 import IdentifiedCollections
 import KeyboardToolbar
 import MultilineTextField
+import TextFieldInsets
 import SwiftUI
 
 struct Todo: Equatable, Identifiable {
@@ -56,6 +57,7 @@ struct TodoRowView: View {
                     "Untitled todo",
                     text: viewStore.binding(get: \.todo.description, send: TodoRowAction.textFieldDidChange)
                 )
+                .textFieldInsets(EdgeInsets(top: 12, leading: 2, bottom: 12, trailing: 2))
                 .keyboardToolbar()
                 .focused($isFocused)
                 .disabled(viewStore.todo.isComplete)
