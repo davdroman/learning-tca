@@ -58,6 +58,7 @@ struct TodoRowView: View {
                     text: viewStore.binding(get: \.todo.description, send: TodoRowAction.textFieldDidChange)
                 )
                 .textFieldInsets(EdgeInsets(top: 12, leading: 2, bottom: 12, trailing: 2))
+                .paragraphSpacing(12)
                 .keyboardToolbar()
                 .focused($isFocused)
                 .disabled(viewStore.todo.isComplete)
