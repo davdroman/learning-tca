@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D511E56A27F36D7500DF0400 /* whatever it takes bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D511E56827F36D7500DF0400 /* whatever it takes bold.ttf */; };
+		D511E56B27F36D7500DF0400 /* whatever it takes.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D511E56927F36D7500DF0400 /* whatever it takes.ttf */; };
 		D563857C279F084800CCE0A3 /* TextFieldInsets in Frameworks */ = {isa = PBXBuildFile; productRef = D563857B279F084800CCE0A3 /* TextFieldInsets */; };
 		D565F183277EA79A00761BEA /* KeyboardToolbar in Frameworks */ = {isa = PBXBuildFile; productRef = D565F182277EA79A00761BEA /* KeyboardToolbar */; };
 		D5987C30277B660D0039F71D /* TodoRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5987C2F277B660D0039F71D /* TodoRowView.swift */; };
@@ -30,6 +32,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D511E56827F36D7500DF0400 /* whatever it takes bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "whatever it takes bold.ttf"; sourceTree = "<group>"; };
+		D511E56927F36D7500DF0400 /* whatever it takes.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "whatever it takes.ttf"; sourceTree = "<group>"; };
+		D511E56C27F36DD300DF0400 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D5638579279F07EA00CCE0A3 /* TextFieldInsets */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TextFieldInsets; sourceTree = "<group>"; };
 		D565F180277EA79100761BEA /* KeyboardToolbar */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = KeyboardToolbar; sourceTree = "<group>"; };
 		D5987C2F277B660D0039F71D /* TodoRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoRowView.swift; sourceTree = "<group>"; };
@@ -97,9 +102,12 @@
 		D5AEE2582779136300A62DAD /* LearningTCA */ = {
 			isa = PBXGroup;
 			children = (
+				D511E56C27F36DD300DF0400 /* Info.plist */,
 				D5AEE2862779140100A62DAD /* App.swift */,
 				D5AEE2872779140100A62DAD /* AppView.swift */,
 				D5987C2F277B660D0039F71D /* TodoRowView.swift */,
+				D511E56827F36D7500DF0400 /* whatever it takes bold.ttf */,
+				D511E56927F36D7500DF0400 /* whatever it takes.ttf */,
 				D5AEE25D2779136400A62DAD /* Assets.xcassets */,
 				D5AEE25F2779136400A62DAD /* Preview Content */,
 			);
@@ -213,7 +221,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D511E56B27F36D7500DF0400 /* whatever it takes.ttf in Resources */,
 				D5AEE2612779136400A62DAD /* Preview Assets.xcassets in Resources */,
+				D511E56A27F36D7500DF0400 /* whatever it takes bold.ttf in Resources */,
 				D5AEE25E2779136400A62DAD /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -384,6 +394,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"LearningTCA/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LearningTCA/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -414,6 +425,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"LearningTCA/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LearningTCA/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
