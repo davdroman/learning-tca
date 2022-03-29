@@ -44,8 +44,7 @@ public struct MultilineTextField: View {
                     $0.textContainerInset = .zero
                     $0.textContainer.lineFragmentPadding = .zero
                 }
-                .onAppear(perform: refreshTextHeightOnNextRunLoopPass)
-                .onSizeChange(perform: refreshTextHeightOnNextRunLoopPass)
+                .onSizeChange(perform: refreshTextHeight)
         }
     }
 
