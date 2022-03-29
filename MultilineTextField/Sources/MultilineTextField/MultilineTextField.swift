@@ -10,6 +10,8 @@ public struct MultilineTextField: View {
     private var view: UITextView?
     @State
     private var delegate: TextStorageDelegate?
+    @Environment(\.multilineTextFieldAttributes)
+    private var attributes
 
     public init(_ placeholder: String, text: Binding<String>) {
         self.placeholder = placeholder
@@ -71,20 +73,15 @@ public struct MultilineTextField: View {
     }
 
     private func applyCustomTextAttributes(to storage: NSTextStorage) {
+        guard !attributes.isEmpty else {
+            return
+        }
         let range = NSRange(location: 0, length: storage.length)
         let attributedString = NSMutableAttributedString(
             attributedString: storage.attributedSubstring(from: range)
         )
-        attributedString.addAttributes(customTextAttributes(), range: range)
+        attributedString.addAttributes(attributes, range: range)
         storage.setAttributedString(attributedString)
-    }
-
-    private func customTextAttributes() -> [NSAttributedString.Key: Any] {
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.paragraphSpacing = 12
-        return [
-            .paragraphStyle: paragraphStyle
-        ]
     }
 }
 
@@ -149,6 +146,17 @@ extension View {
 private struct SizePreferenceKey: PreferenceKey {
     static var defaultValue: CGSize = .zero
     static func reduce(value: inout CGSize, nextValue: () -> CGSize) {}
+}
+
+extension EnvironmentValues {
+    var multilineTextFieldAttributes: [NSAttributedString.Key: Any] {
+        get { self[MultilineTextFieldAttributesKey.self] }
+        set { self[MultilineTextFieldAttributesKey.self] = newValue }
+    }
+}
+
+private struct MultilineTextFieldAttributesKey: EnvironmentKey {
+    static let defaultValue: [NSAttributedString.Key: Any] = [:]
 }
 
 struct MultilineTextField_Previews: PreviewProvider {
