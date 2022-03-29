@@ -61,6 +61,8 @@ struct TodoRowView: View {
                 .keyboardToolbar()
                 .focused($isFocused)
                 .disabled(viewStore.todo.isComplete)
+                .font(.custom("whatever it takes", size: 21))
+                .offset(y: 2) // slight offset to counter the font's natural y offset
             }
             .foregroundColor(viewStore.todo.isComplete ? .gray : nil)
             .synchronize(viewStore.binding(\.$isFocused), $isFocused)
