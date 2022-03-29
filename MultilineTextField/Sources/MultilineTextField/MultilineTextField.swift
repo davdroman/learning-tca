@@ -9,7 +9,7 @@ public struct MultilineTextField: View {
     @Weak
     private var view: UITextView?
     @State
-    private var delegate: NSTextStorageDelegate?
+    private var delegate: TextStorageDelegate?
 
     public init(_ placeholder: String, text: Binding<String>) {
         self.placeholder = placeholder
@@ -29,8 +29,11 @@ public struct MultilineTextField: View {
                     // collect view instance
                     view = $0
 
-                    // observe text changes via delegate
-                    delegate = NSTextStorageDelegateInstance(onEditing: refreshTextHeightOnNextRunLoopPass)
+                    // observe text editing via delegate
+                    delegate = TextStorageDelegate(
+                        onWillProcessEditing: applyCustomTextAttributes,
+                        onDidProcessEditing: { _ in refreshTextHeightOnNextRunLoopPass() }
+                    )
                     $0.textStorage.delegate = delegate
 
                     // set misc properties
@@ -62,7 +65,26 @@ public struct MultilineTextField: View {
             return
         }
 
+        applyCustomTextAttributes(to: view.textStorage)
+
         textHeight = proposedTextHeight
+    }
+
+    private func applyCustomTextAttributes(to storage: NSTextStorage) {
+        let range = NSRange(location: 0, length: storage.length)
+        let attributedString = NSMutableAttributedString(
+            attributedString: storage.attributedSubstring(from: range)
+        )
+        attributedString.addAttributes(customTextAttributes(), range: range)
+        storage.setAttributedString(attributedString)
+    }
+
+    private func customTextAttributes() -> [NSAttributedString.Key: Any] {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.paragraphSpacing = 12
+        return [
+            .paragraphStyle: paragraphStyle
+        ]
     }
 }
 
@@ -88,18 +110,27 @@ private class Weak<T: AnyObject> {
     }
 }
 
-private final class NSTextStorageDelegateInstance: NSObject, NSTextStorageDelegate {
-    typealias OnEditing = () -> Void
+private final class TextStorageDelegate: NSObject, NSTextStorageDelegate {
+    typealias OnProcessEditing = (NSTextStorage) -> Void
 
-    let onEditing: OnEditing
+    private let onWillProcessEditing: OnProcessEditing
+    private let onDidProcessEditing: OnProcessEditing
 
-    init(onEditing: @escaping OnEditing) {
-        self.onEditing = onEditing
+    init(
+        onWillProcessEditing: @escaping OnProcessEditing,
+        onDidProcessEditing: @escaping OnProcessEditing
+    ) {
+        self.onWillProcessEditing = onWillProcessEditing
+        self.onDidProcessEditing = onDidProcessEditing
         super.init()
     }
 
+    func textStorage(_ textStorage: NSTextStorage, willProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
+        onWillProcessEditing(textStorage)
+    }
+
     func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
-        onEditing()
+        onDidProcessEditing(textStorage)
     }
 }
 
