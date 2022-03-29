@@ -5,17 +5,15 @@ public struct MultilineTextField: View {
     private var placeholder: String
     @Binding
     private var text: String
-    private var minHeight: CGFloat
 
     @Weak
     private var view: UITextView?
     @State
     private var delegate: NSTextStorageDelegate?
 
-    public init(_ placeholder: String, text: Binding<String>, minHeight: CGFloat? = nil) {
+    public init(_ placeholder: String, text: Binding<String>) {
         self.placeholder = placeholder
         self._text = text
-        self.minHeight = minHeight ?? 0
     }
 
     public var body: some View {
@@ -26,7 +24,7 @@ public struct MultilineTextField: View {
             }
 
             TextEditor(text: $text)
-                .frame(height: max(minHeight, textHeight).rounded(.up))
+                .frame(idealHeight: textHeight.rounded(.up))
                 .introspectTextView {
                     // collect view instance
                     view = $0
@@ -121,7 +119,6 @@ private struct SizePreferenceKey: PreferenceKey {
     static var defaultValue: CGSize = .zero
     static func reduce(value: inout CGSize, nextValue: () -> CGSize) {}
 }
-
 
 struct MultilineTextField_Previews: PreviewProvider {
     static var previews: some View {
