@@ -1,6 +1,12 @@
 import SwiftUI
 
 extension View {
+    public func textAreaScrollDisabled(_ disabled: Bool) -> some View {
+        environment(\.textAreaScrollDisabled, disabled)
+    }
+}
+
+extension View {
     public func textAreaParagraphSpacing(_ paragraphSpacing: CGFloat) -> some View {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.paragraphSpacing = paragraphSpacing

@@ -10,6 +10,8 @@ public struct TextArea: View {
     private var view: UITextView?
     @State
     private var delegate: TextStorageDelegate?
+    @Environment(\.textAreaScrollDisabled)
+    private var scrollDisabled
     @Environment(\.textAreaAttributes)
     private var attributes
 
@@ -26,7 +28,7 @@ public struct TextArea: View {
             }
 
             TextEditor(text: $text)
-                .frame(idealHeight: textHeight.rounded(.up))
+                .frame(idealHeight: textHeight?.rounded(.up))
                 .introspectTextView {
                     // collect view instance
                     view = $0
@@ -39,7 +41,7 @@ public struct TextArea: View {
                     $0.textStorage.delegate = delegate
 
                     // set misc properties
-                    $0.isScrollEnabled = false
+                    $0.isScrollEnabled = !scrollDisabled
                     $0.backgroundColor = .clear
                     $0.textContainerInset = .zero
                     $0.textContainer.lineFragmentPadding = .zero
@@ -48,7 +50,7 @@ public struct TextArea: View {
         }
     }
 
-    @State private var textHeight: CGFloat = 0
+    @State private var textHeight: CGFloat? = nil
 
     private func refreshTextHeightOnNextRunLoopPass() {
         DispatchQueue.main.async(execute: refreshTextHeight)
@@ -59,14 +61,19 @@ public struct TextArea: View {
             return
         }
 
+        guard scrollDisabled else {
+            if textHeight != nil {
+                textHeight = nil
+            }
+            return
+        }
+
         let currentTextHeight = self.textHeight
         let proposedTextHeight = view.idealTextHeight()
 
         guard proposedTextHeight != currentTextHeight else {
             return
         }
-
-        applyCustomTextAttributes(to: view.textStorage)
 
         textHeight = proposedTextHeight
     }
@@ -145,6 +152,17 @@ extension View {
 private struct SizePreferenceKey: PreferenceKey {
     static var defaultValue: CGSize = .zero
     static func reduce(value: inout CGSize, nextValue: () -> CGSize) {}
+}
+
+extension EnvironmentValues {
+    var textAreaScrollDisabled: Bool {
+        get { self[TextAreaScrollDisabledKey.self] }
+        set { self[TextAreaScrollDisabledKey.self] = newValue }
+    }
+}
+
+private struct TextAreaScrollDisabledKey: EnvironmentKey {
+    static let defaultValue: Bool = false
 }
 
 extension EnvironmentValues {
