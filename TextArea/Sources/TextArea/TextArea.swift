@@ -50,6 +50,9 @@ public struct TextArea: View {
                         right: padding.trailing
                     )
                     $0.textContainer.lineFragmentPadding = .zero
+
+                    // refresh text container
+                    applyTextAreaAttributes(to: $0.textStorage)
                 }
                 .onSizeChange(perform: refreshTextHeight)
         }
