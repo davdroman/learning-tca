@@ -3,13 +3,13 @@ import SwiftUI
 
 extension View {
     @ViewBuilder
-    public func textFieldInsets(_ insets: EdgeInsets) -> some View {
-        self.modifier(TextFieldInsetsModifier(insets: insets))
+    public func textFieldPadding(_ insets: EdgeInsets) -> some View {
+        self.modifier(TextFieldPaddingModifier(insets: insets))
     }
 
     @ViewBuilder
-    public func textFieldInsets(_ length: CGFloat) -> some View {
-        self.textFieldInsets(
+    public func textFieldPadding(_ length: CGFloat) -> some View {
+        self.textFieldPadding(
             EdgeInsets(
                 top: length,
                 leading: length,
@@ -20,7 +20,7 @@ extension View {
     }
 }
 
-private struct TextFieldInsetsModifier: ViewModifier {
+private struct TextFieldPaddingModifier: ViewModifier {
     @Weak
     private var view: (UIView & FocusableTextInput)?
 
@@ -111,10 +111,10 @@ private struct LocatedTap: UIViewRepresentable {
     func updateUIView(_ uiView: UIView, context: Context) {}
 }
 
-struct TextFieldInsets_Previews: PreviewProvider {
+struct TextFieldPadding_Previews: PreviewProvider {
     static var previews: some View {
         TextField("Placeholder", text: .constant("Lorem ipsum dolor sit amet"))
-            .textFieldInsets(32)
+            .textFieldPadding(32)
             .background(Color.red)
             .previewLayout(.sizeThatFits)
     }
