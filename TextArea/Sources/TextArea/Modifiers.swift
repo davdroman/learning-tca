@@ -19,6 +19,25 @@ extension EnvironmentValues {
     }
 }
 
+// MARK: textAreaPadding
+
+extension View {
+    public func textAreaPadding(_ insets: EdgeInsets) -> some View {
+        environment(\.textAreaPadding, insets)
+    }
+}
+
+extension EnvironmentValues {
+    var textAreaPadding: EdgeInsets {
+        get { self[TextAreaPaddingKey.self] }
+        set { self[TextAreaPaddingKey.self] = newValue }
+    }
+
+    private struct TextAreaPaddingKey: EnvironmentKey {
+        static let defaultValue: EdgeInsets = .init()
+    }
+}
+
 // MARK: textAreaAttributes
 
 extension View {

@@ -12,6 +12,8 @@ public struct TextArea: View {
     private var delegate: TextStorageDelegate?
     @Environment(\.textAreaScrollDisabled)
     private var scrollDisabled
+    @Environment(\.textAreaPadding)
+    private var padding
     @Environment(\.textAreaAttributes)
     private var attributes
 
@@ -25,6 +27,7 @@ public struct TextArea: View {
             if text.isEmpty {
                 Text(placeholder)
                     .foregroundColor(Color(.tertiaryLabel))
+                    .padding(padding)
             }
 
             TextEditor(text: $text)
@@ -43,7 +46,12 @@ public struct TextArea: View {
                     // set misc properties
                     $0.isScrollEnabled = !scrollDisabled
                     $0.backgroundColor = .clear
-                    $0.textContainerInset = .zero
+                    $0.textContainerInset = UIEdgeInsets(
+                        top: padding.top,
+                        left: padding.leading,
+                        bottom: padding.bottom,
+                        right: padding.trailing
+                    )
                     $0.textContainer.lineFragmentPadding = .zero
                 }
                 .onSizeChange(perform: refreshTextHeight)
