@@ -95,8 +95,8 @@ extension View {
     }
 
     public func textAreaAttributes(_ attributes: [NSAttributedString.Key: Any]) -> some View {
-        self.transformEnvironment(\.textAreaAttributes) { current in
-            current.merge(attributes, uniquingKeysWith: { old, new in new })
+        self.transformEnvironment(\.textAreaAttributes) { attrs in
+            attrs.merge(attributes, uniquingKeysWith: { old, new in new })
         }
     }
 }
