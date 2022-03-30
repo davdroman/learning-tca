@@ -96,8 +96,8 @@ public struct TextArea: View {
     }
 }
 
-extension UITextView {
-    fileprivate func idealTextHeight() -> CGFloat {
+private extension UITextView {
+    func idealTextHeight() -> CGFloat {
         let newSize = self.sizeThatFits(CGSize(width: self.frame.size.width, height: .greatestFiniteMagnitude))
         let newHeight = newSize.height
         return newHeight
