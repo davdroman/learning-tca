@@ -109,7 +109,7 @@ struct TodoRowView_Previews: PreviewProvider {
             )
         }
         .padding()
-        .background(Color(uiColor: .systemBackground))
+        .background(Color(.systemBackground))
         .environment(\.colorScheme, .dark)
         .previewLayout(.sizeThatFits)
     }
