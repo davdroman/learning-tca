@@ -1,7 +1,7 @@
 import Introspect
 import SwiftUI
 
-public struct MultilineTextField: View {
+public struct TextArea: View {
     private var placeholder: String
     @Binding
     private var text: String
@@ -10,7 +10,7 @@ public struct MultilineTextField: View {
     private var view: UITextView?
     @State
     private var delegate: TextStorageDelegate?
-    @Environment(\.multilineTextFieldAttributes)
+    @Environment(\.textAreaAttributes)
     private var attributes
 
     public init(_ placeholder: String, text: Binding<String>) {
@@ -148,21 +148,21 @@ private struct SizePreferenceKey: PreferenceKey {
 }
 
 extension EnvironmentValues {
-    var multilineTextFieldAttributes: [NSAttributedString.Key: Any] {
-        get { self[MultilineTextFieldAttributesKey.self] }
-        set { self[MultilineTextFieldAttributesKey.self] = newValue }
+    var textAreaAttributes: [NSAttributedString.Key: Any] {
+        get { self[TextAreaAttributesKey.self] }
+        set { self[TextAreaAttributesKey.self] = newValue }
     }
 }
 
-private struct MultilineTextFieldAttributesKey: EnvironmentKey {
+private struct TextAreaAttributesKey: EnvironmentKey {
     static let defaultValue: [NSAttributedString.Key: Any] = [:]
 }
 
-struct MultilineTextField_Previews: PreviewProvider {
+struct TextArea_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            MultilineTextField("Placeholder", text: .constant(""))
-            MultilineTextField("Placeholder", text: .constant("Lorem ipsum dolor sit amet"))
+            TextArea("Placeholder", text: .constant(""))
+            TextArea("Placeholder", text: .constant("Lorem ipsum dolor sit amet"))
         }
         .padding()
         .previewLayout(.sizeThatFits)

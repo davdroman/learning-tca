@@ -1,7 +1,7 @@
 import ComposableArchitecture
 import IdentifiedCollections
 import KeyboardToolbar
-import MultilineTextField
+import TextArea
 import TextFieldInsets
 import SwiftUI
 
@@ -53,7 +53,7 @@ struct TodoRowView: View {
                 }
                 .buttonStyle(.plain)
 
-                MultilineTextField(
+                TextArea(
                     "Untitled todo",
                     text: viewStore.binding(get: \.todo.description, send: TodoRowAction.textFieldDidChange)
                 )
