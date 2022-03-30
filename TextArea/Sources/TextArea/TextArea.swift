@@ -8,8 +8,7 @@ public struct TextArea: View {
 
     @Weak
     private var view: UITextView?
-    @State
-    private var delegate: TextStorageDelegate?
+    private let delegate = TextStorageDelegate()
     @Environment(\.textAreaScrollDisabled)
     private var scrollDisabled
     @Environment(\.textAreaPadding)
@@ -37,10 +36,8 @@ public struct TextArea: View {
                     view = $0
 
                     // observe text editing via delegate
-                    delegate = TextStorageDelegate(
-                        onWillProcessEditing: applyTextAreaAttributes,
-                        onDidProcessEditing: { _ in refreshTextHeightOnNextRunLoopPass() }
-                    )
+                    delegate.onWillProcessEditing = applyTextAreaAttributes
+                    delegate.onDidProcessEditing = { _ in refreshTextHeightOnNextRunLoopPass() }
                     $0.textStorage.delegate = delegate
 
                     // set misc properties
