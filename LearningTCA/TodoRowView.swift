@@ -57,9 +57,9 @@ struct TodoRowView: View {
                     "Untitled todo",
                     text: viewStore.binding(get: \.todo.description, send: TodoRowAction.textFieldDidChange)
                 )
+                .textAreaScrollDisabled(true)
                 .textAreaPadding(.vertical, 12)
                 .textAreaPadding(.horizontal, 2)
-                .textAreaScrollDisabled(true)
                 .textAreaParagraphStyle(\.paragraphSpacing, 12)
                 .keyboardToolbar()
                 .focused($isFocused)
