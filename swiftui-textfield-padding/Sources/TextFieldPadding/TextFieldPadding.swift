@@ -22,14 +22,13 @@ extension View {
 
 private struct TextFieldPaddingModifier: ViewModifier {
     @Weak
-    private var view: (UIView & FocusableTextInput)?
+    private var view: UITextField?
 
     let insets: EdgeInsets
 
     func body(content: Content) -> some View {
         content
             .introspectTextField { view = $0 }
-            .introspectTextView { view = $0 }
             .padding(insets)
             .background(LocatedTap(in: view) { point in
                 guard let view = view else { return }
@@ -53,15 +52,6 @@ private class Weak<T: AnyObject> {
         self.weakValue = wrappedValue
     }
 }
-
-@objc private protocol FocusableTextInput: UITextInput {
-    @discardableResult
-    func becomeFirstResponder() -> Bool
-    var isFirstResponder: Bool { get }
-}
-
-extension UITextField: FocusableTextInput {}
-extension UITextView: FocusableTextInput {}
 
 private struct LocatedTap: UIViewRepresentable {
     var localView: () -> UIView?
