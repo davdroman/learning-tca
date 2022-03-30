@@ -88,12 +88,6 @@ extension EnvironmentValues {
 // MARK: textAreaAttributes
 
 extension View {
-    public func textAreaParagraphSpacing(_ paragraphSpacing: CGFloat) -> some View {
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.paragraphSpacing = paragraphSpacing
-        return textAreaAttributes([.paragraphStyle: paragraphStyle])
-    }
-
     public func textAreaAttributes(_ attributes: [NSAttributedString.Key: Any]) -> some View {
         self.transformEnvironment(\.textAreaAttributes) { attrs in
             attrs.merge(attributes, uniquingKeysWith: { old, new in new })
@@ -109,6 +103,26 @@ extension EnvironmentValues {
 
     private struct TextAreaAttributesKey: EnvironmentKey {
         static let defaultValue: [NSAttributedString.Key: Any] = [:]
+    }
+}
+
+// MARK: textAreaParagraphStyle
+
+extension View {
+    public func textAreaParagraphStyle(_ paragraphStyle: NSMutableParagraphStyle) -> some View {
+        textAreaAttributes([.paragraphStyle: paragraphStyle])
+    }
+
+    public func textAreaParagraphStyle<V>(_ keyPath: WritableKeyPath<NSMutableParagraphStyle, V>, _ value: V) -> some View {
+        textAreaParagraphStyle { $0[keyPath: keyPath] = value }
+    }
+
+    public func textAreaParagraphStyle(_ transform: @escaping (inout NSMutableParagraphStyle) -> Void) -> some View {
+        self.transformEnvironment(\.textAreaAttributes) { attrs in
+            var paragraphStyle = attrs[.paragraphStyle] as? NSMutableParagraphStyle ?? .init()
+            transform(&paragraphStyle)
+            attrs[.paragraphStyle] = paragraphStyle
+        }
     }
 }
 

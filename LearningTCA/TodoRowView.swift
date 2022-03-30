@@ -60,7 +60,7 @@ struct TodoRowView: View {
                 .textAreaPadding(.vertical, 12)
                 .textAreaPadding(.horizontal, 2)
                 .textAreaScrollDisabled(true)
-                .textAreaParagraphSpacing(12)
+                .textAreaParagraphStyle(\.paragraphSpacing, 12)
                 .keyboardToolbar()
                 .focused($isFocused)
                 .disabled(viewStore.todo.isComplete)
