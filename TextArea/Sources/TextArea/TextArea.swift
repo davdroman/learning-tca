@@ -35,7 +35,7 @@ public struct TextArea: View {
 
                     // observe text editing via delegate
                     delegate = TextStorageDelegate(
-                        onWillProcessEditing: applyCustomTextAttributes,
+                        onWillProcessEditing: applyTextAreaAttributes,
                         onDidProcessEditing: { _ in refreshTextHeightOnNextRunLoopPass() }
                     )
                     $0.textStorage.delegate = delegate
@@ -78,7 +78,7 @@ public struct TextArea: View {
         textHeight = proposedTextHeight
     }
 
-    private func applyCustomTextAttributes(to storage: NSTextStorage) {
+    private func applyTextAreaAttributes(to storage: NSTextStorage) {
         guard !attributes.isEmpty else {
             return
         }
