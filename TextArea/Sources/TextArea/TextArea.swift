@@ -104,6 +104,24 @@ extension UITextView {
     }
 }
 
+private extension View {
+    @ViewBuilder
+    func onSizeChange(perform action: @escaping () -> Void) -> some View {
+        self.background(
+            GeometryReader { proxy in
+                Color.clear.preference(key: SizePreferenceKey.self, value: proxy.size)
+            }
+        )
+        .onPreferenceChange(SizePreferenceKey.self) { _ in action() }
+    }
+}
+
+private struct SizePreferenceKey: PreferenceKey {
+    static var defaultValue: CGSize = .zero
+    static func reduce(value: inout CGSize, nextValue: () -> CGSize) {}
+}
+
+
 struct TextArea_Previews: PreviewProvider {
     static var previews: some View {
         Group {
