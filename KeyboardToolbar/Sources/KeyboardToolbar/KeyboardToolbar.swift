@@ -31,14 +31,16 @@ extension View {
 }
 
 struct KeyboardToolbarModifier<KT: KeyboardToolbar>: ViewModifier {
-    @FocusState
-    private var isFocused: Bool
+    private typealias TextInputView = (UIView & TextInput)
+
+    @Weak
+    private var view: TextInputView?
     private var toolbar: KT
     private var uiToolbar: UIToolbar {
         UIToolbar.keyboardToolbar(
             items: toolbar.items(
                 UIAction { _ in
-                    isFocused = false
+                    view?.resignFirstResponder()
                 }
             )
         )
@@ -50,13 +52,24 @@ struct KeyboardToolbarModifier<KT: KeyboardToolbar>: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .focused($isFocused)
-            .introspectTextField { $0.inputAccessoryView = uiToolbar }
-            .introspectTextView { $0.inputAccessoryView = uiToolbar }
+            .introspectTextField(customize: collect)
+            .introspectTextView(customize: collect)
+    }
+
+    private func collect(_ textInputView: TextInputView) {
+        textInputView.inputAccessoryView = uiToolbar
+        view = textInputView
     }
 }
 
-extension UIToolbar {
+@objc private protocol TextInput: UITextInput {
+    var inputAccessoryView: UIView? { get set }
+}
+
+extension UITextField: TextInput {}
+extension UITextView: TextInput {}
+
+private extension UIToolbar {
     static func keyboardToolbar(items: [UIBarButtonItem]) -> UIToolbar {
         let bar = UIToolbar()
         bar.items = items
