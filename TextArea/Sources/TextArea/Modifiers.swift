@@ -88,6 +88,12 @@ extension EnvironmentValues {
 // MARK: textAreaAttributes
 
 extension View {
+    @available(iOS 15, *)
+    public func textAreaAttributes(_ container: AttributeContainer) -> some View {
+        let attributes = try? [NSAttributedString.Key: Any](container, including: \.uiKit)
+        return textAreaAttributes(attributes ?? [:])
+    }
+
     public func textAreaAttributes(_ attributes: [NSAttributedString.Key: Any]) -> some View {
         self.transformEnvironment(\.textAreaAttributes) { attrs in
             attrs.merge(attributes, uniquingKeysWith: { old, new in new })
