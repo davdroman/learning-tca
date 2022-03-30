@@ -1,7 +1,7 @@
 import SwiftUI
 
 extension View {
-    public func paragraphSpacing(_ paragraphSpacing: CGFloat) -> some View {
+    public func textAreaParagraphSpacing(_ paragraphSpacing: CGFloat) -> some View {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.paragraphSpacing = paragraphSpacing
         return textAreaAttributes([.paragraphStyle: paragraphStyle])
