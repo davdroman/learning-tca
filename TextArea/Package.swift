@@ -10,11 +10,12 @@ let package = Package(
     products: [
         .library(name: "TextArea", targets: ["TextArea"]),
     ],
-    dependencies: [
-        .package(name: "Introspect", url: "https://github.com/siteline/SwiftUI-Introspect", from: "0.1.3"),
-    ],
     targets: [
         .target(name: "TextArea", dependencies: [.product(name: "Introspect", package: "Introspect")]),
 //        .testTarget(name: "TextAreaTests", dependencies: ["TextArea"]),
     ]
 )
+
+package.dependencies = [
+    .package(name: "Introspect", url: "https://github.com/siteline/SwiftUI-Introspect", from: "0.1.3"),
+]
