@@ -4,63 +4,30 @@ import SwiftUI
 extension View {
     @ViewBuilder
     public func textFieldPadding(_ insets: EdgeInsets) -> some View {
-        Group {
-            if self.isTextFieldPaddingModifierApplied {
-                self
-            } else {
-                self.modifier(TextFieldPaddingModifier())
-            }
+        transformUITextFieldPadding {
+            $0.top = insets.top
+            $0.left = insets.leading
+            $0.bottom = insets.bottom
+            $0.right = insets.trailing
         }
-        .environment(\.textFieldPadding, insets)
     }
 
     @ViewBuilder
     public func textFieldPadding(_ length: CGFloat) -> some View {
-        self.textFieldPadding(
-            EdgeInsets(
-                top: length,
-                leading: length,
-                bottom: length,
-                trailing: length
-            )
-        )
-    }
-}
-
-private extension View {
-    // TODO: strengthen this logic somehow... maybe through reflection?
-    var isTextFieldPaddingModifierApplied: Bool {
-        let modifierTypeName = String(describing: TextFieldPaddingModifier.self)
-        let currentTypeName = String(describing: type(of: self))
-        return currentTypeName.contains(modifierTypeName)
-    }
-}
-
-private struct TextFieldPaddingModifier: ViewModifier {
-    @Environment(\.textFieldPadding)
-    private var padding
-
-    func body(content: Content) -> some View {
-        content
-            .introspectTextField {
-                $0.textRectInsets = UIEdgeInsets(
-                    top: padding.top,
-                    left: padding.leading,
-                    bottom: padding.bottom,
-                    right: padding.trailing
-                )
-            }
-    }
-}
-
-private extension EnvironmentValues {
-    var textFieldPadding: EdgeInsets {
-        get { self[TextFieldPaddingKey.self] }
-        set { self[TextFieldPaddingKey.self] = newValue }
+        transformUITextFieldPadding {
+            $0.top = length
+            $0.left = length
+            $0.bottom = length
+            $0.right = length
+        }
     }
 
-    struct TextFieldPaddingKey: EnvironmentKey {
-        static let defaultValue: EdgeInsets = .init()
+    private func transformUITextFieldPadding(_ transform: @escaping (inout UIEdgeInsets) -> Void) -> some View {
+        self.introspectTextField {
+            var insets = $0.textRectInsets ?? UIEdgeInsets()
+            transform(&insets)
+            $0.textRectInsets = insets
+        }
     }
 }
 
