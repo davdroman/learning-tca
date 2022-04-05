@@ -62,7 +62,7 @@ struct InputAccessoryModifier<InputAccessory: View>: ViewModifier {
     }
 }
 
-final class InputAccessoryHostingController<Content: View>: UIHostingController<Content> {
+final class InputAccessoryHostingController: UIHostingController<AnyView> {
     override func viewWillAppear(_ animated: Bool) {
         fixViewLayout()
         super.viewWillAppear(animated)
