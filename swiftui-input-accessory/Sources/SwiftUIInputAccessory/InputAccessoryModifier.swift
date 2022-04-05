@@ -59,10 +59,6 @@ private extension UIView {
 }
 
 extension EnvironmentValues {
-    public var inputAccessoryEndEditing: () -> Void {
-        get { self[InputAccessoryEndEditingKey.self] }
-    }
-
     var _inputAccessoryEndEditing: () -> Void {
         get { self[InputAccessoryEndEditingKey.self] }
         set { self[InputAccessoryEndEditingKey.self] = newValue }
