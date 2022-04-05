@@ -1,9 +1,9 @@
 import ComposableArchitecture
 import IdentifiedCollections
-import KeyboardToolbar
 import TextArea
 import TextFieldPadding
 import SwiftUI
+import SwiftUIInputAccessory
 
 struct Todo: Equatable, Identifiable {
     var id: UUID
@@ -61,7 +61,7 @@ struct TodoRowView: View {
                 .textAreaPadding(.vertical, 12)
                 .textAreaPadding(.horizontal, 2)
                 .textAreaParagraphStyle(\.paragraphSpacing, 12)
-                .keyboardToolbar { KeyboardToolbarSwiftUIView() }
+                .inputAccessory { InputAccessoryView() }
                 .focused($isFocused)
                 .disabled(viewStore.todo.isComplete)
                 .font(.custom("whatever it takes", size: 22))
@@ -73,13 +73,13 @@ struct TodoRowView: View {
     }
 }
 
-struct KeyboardToolbarSwiftUIView: View {
-    @Environment(\.keyboardToolbarEndEditing)
-    private var keyboardToolbarEndEditing
+struct InputAccessoryView: View {
+    @Environment(\.inputAccessoryEndEditing)
+    private var endEditing
 
     var body: some View {
         VStack {
-            Button("hello", action: keyboardToolbarEndEditing)
+            Button("hello", action: endEditing)
             Text("Hello")
         }
         .frame(maxWidth: .infinity)

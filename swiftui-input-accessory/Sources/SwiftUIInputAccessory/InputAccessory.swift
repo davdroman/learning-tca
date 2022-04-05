@@ -1,11 +1,11 @@
 import Introspect
 import SwiftUI
 
-//public protocol KeyboardToolbar {
+//public protocol InputAccessory {
 //    func items(_ endEditing: UIAction) -> [UIBarButtonItem]
 //}
 //
-//public struct DefaultKeyboardToolbar: KeyboardToolbar {
+//public struct DefaultInputAccessory: InputAccessory {
 //    public func items(_ endEditing: UIAction) -> [UIBarButtonItem] {
 //        [
 //            UIBarButtonItem.flexibleSpace(),
@@ -14,35 +14,35 @@ import SwiftUI
 //    }
 //}
 //
-//extension KeyboardToolbar where Self == DefaultKeyboardToolbar {
-//    public static var `default`: DefaultKeyboardToolbar { .init() }
+//extension InputAccessory where Self == DefaultInputAccessory {
+//    public static var `default`: DefaultInputAccessory { .init() }
 //}
 
 extension View {
     @ViewBuilder
-    public func keyboardToolbar<Toolbar: View>(@ViewBuilder _ toolbar: () -> Toolbar) -> some View {
-        self.modifier(KeyboardToolbarModifier(toolbar))
+    public func inputAccessory<InputAccessory: View>(@ViewBuilder _ content: () -> InputAccessory) -> some View {
+        self.modifier(InputAccessoryModifier(content))
     }
 }
 
-struct KeyboardToolbarModifier<Toolbar: View>: ViewModifier {
+struct InputAccessoryModifier<InputAccessory: View>: ViewModifier {
     private typealias TextInputView = (UIView & TextInput)
 
     @State
     private var hosting: UIHostingController<AnyView>?
-    private var toolbar: Toolbar
+    private var inputAccessory: InputAccessory
 
-    init(@ViewBuilder _ toolbar: () -> Toolbar) {
-        self.toolbar = toolbar()
+    init(@ViewBuilder _ inputAccessory: () -> InputAccessory) {
+        self.inputAccessory = inputAccessory()
     }
 
     func body(content: Content) -> some View {
         content
-            .introspectTextField(customize: setToolbar)
-            .introspectTextView(customize: setToolbar)
+            .introspectTextField(customize: setInputAccessoryView)
+            .introspectTextView(customize: setInputAccessoryView)
     }
 
-    private func setToolbar(for field: TextInputView) {
+    private func setInputAccessoryView(for field: TextInputView) {
         guard
             hosting == nil,
             let parent = field.parentViewController
@@ -50,10 +50,10 @@ struct KeyboardToolbarModifier<Toolbar: View>: ViewModifier {
             return
         }
 
-        let toolbar = toolbar.environment(\._keyboardToolbarEndEditing) {
+        let inputAccessory = inputAccessory.environment(\._inputAccessoryEndEditing) {
             field.resignFirstResponder()
         }
-        let hosting = KeyboardToolbarHostingController(rootView: AnyView(toolbar))
+        let hosting = InputAccessoryHostingController(rootView: AnyView(inputAccessory))
         hosting.view.translatesAutoresizingMaskIntoConstraints = false
         parent.addChild(hosting)
         field.inputAccessoryView = hosting.view
@@ -62,23 +62,23 @@ struct KeyboardToolbarModifier<Toolbar: View>: ViewModifier {
     }
 }
 
-final class KeyboardToolbarHostingController<Content: View>: UIHostingController<Content> {
+final class InputAccessoryHostingController<Content: View>: UIHostingController<Content> {
     override func viewWillAppear(_ animated: Bool) {
-        fixKeyboardToolbarSize()
+        fixViewLayout()
         super.viewWillAppear(animated)
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        fixKeyboardToolbarSize()
+        fixViewLayout()
         super.viewWillTransition(to: size, with: coordinator)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        fixKeyboardToolbarSize()
+        fixViewLayout()
         super.viewWillDisappear(animated)
     }
 
-    private func fixKeyboardToolbarSize() {
+    private func fixViewLayout() {
         removeAllViewConstraints()
         forceViewRelayout()
     }
@@ -101,23 +101,22 @@ extension UITextField: TextInput {}
 extension UITextView: TextInput {}
 
 extension EnvironmentValues {
-    public var keyboardToolbarEndEditing: () -> Void {
-        get { self[KeyboardToolbarEndEditingKey.self] }
+    public var inputAccessoryEndEditing: () -> Void {
+        get { self[InputAccessoryEndEditingKey.self] }
     }
 
-    var _keyboardToolbarEndEditing: () -> Void {
-        get { self[KeyboardToolbarEndEditingKey.self] }
-        set { self[KeyboardToolbarEndEditingKey.self] = newValue }
+    var _inputAccessoryEndEditing: () -> Void {
+        get { self[InputAccessoryEndEditingKey.self] }
+        set { self[InputAccessoryEndEditingKey.self] = newValue }
     }
 
-    private struct KeyboardToolbarEndEditingKey: EnvironmentKey {
+    private struct InputAccessoryEndEditingKey: EnvironmentKey {
         static let defaultValue: () -> Void = {}
     }
 }
 
 extension UIView {
     var parentViewController: UIViewController? {
-        // Starts from next (As we know self is not a UIViewController).
         var parentResponder: UIResponder? = self.next
         while parentResponder != nil {
             if let viewController = parentResponder as? UIViewController {
