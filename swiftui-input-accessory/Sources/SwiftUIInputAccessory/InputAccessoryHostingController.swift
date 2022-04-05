@@ -6,6 +6,11 @@ final class InputAccessoryHostingController: UIHostingController<AnyView> {
         super.viewWillAppear(animated)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        fixViewLayout()
+    }
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         fixViewLayout()
         super.viewWillTransition(to: size, with: coordinator)
@@ -14,6 +19,11 @@ final class InputAccessoryHostingController: UIHostingController<AnyView> {
     override func viewWillDisappear(_ animated: Bool) {
         fixViewLayout()
         super.viewWillDisappear(animated)
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        fixViewLayout()
     }
 
     private func fixViewLayout() {
