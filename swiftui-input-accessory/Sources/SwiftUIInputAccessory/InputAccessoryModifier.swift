@@ -45,7 +45,7 @@ struct InputAccessoryModifier<InputAccessory: View>: ViewModifier {
 extension UITextField: TextInput {}
 extension UITextView: TextInput {}
 
-extension UIView {
+private extension UIView {
     var parentViewController: UIViewController? {
         var parentResponder: UIResponder? = self.next
         while parentResponder != nil {
