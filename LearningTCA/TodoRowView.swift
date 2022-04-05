@@ -61,7 +61,7 @@ struct TodoRowView: View {
                 .textAreaPadding(.vertical, 12)
                 .textAreaPadding(.horizontal, 2)
                 .textAreaParagraphStyle(\.paragraphSpacing, 12)
-                .keyboardToolbar()
+                .keyboardToolbar { KeyboardToolbarSwiftUIView() }
                 .focused($isFocused)
                 .disabled(viewStore.todo.isComplete)
                 .font(.custom("whatever it takes", size: 22))
@@ -70,6 +70,21 @@ struct TodoRowView: View {
             .foregroundColor(viewStore.todo.isComplete ? .gray : nil)
             .synchronize(viewStore.binding(\.$isFocused), $isFocused)
         }
+    }
+}
+
+struct KeyboardToolbarSwiftUIView: View {
+    @Environment(\.keyboardToolbarEndEditing)
+    private var keyboardToolbarEndEditing
+
+    var body: some View {
+        VStack {
+            Button("hello", action: keyboardToolbarEndEditing)
+            Text("Hello")
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 44)
+        .background(Color.red)
     }
 }
 
