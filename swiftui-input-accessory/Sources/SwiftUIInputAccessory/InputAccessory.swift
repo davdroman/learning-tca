@@ -1,27 +1,17 @@
 import Introspect
 import SwiftUI
 
-//public protocol InputAccessory {
-//    func items(_ endEditing: UIAction) -> [UIBarButtonItem]
-//}
-//
-//public struct DefaultInputAccessory: InputAccessory {
-//    public func items(_ endEditing: UIAction) -> [UIBarButtonItem] {
-//        [
-//            UIBarButtonItem.flexibleSpace(),
-//            UIBarButtonItem(systemItem: .done, primaryAction: endEditing),
-//        ]
-//    }
-//}
-//
-//extension InputAccessory where Self == DefaultInputAccessory {
-//    public static var `default`: DefaultInputAccessory { .init() }
-//}
+public protocol InputAccessory: View {}
 
 extension View {
     @ViewBuilder
     public func inputAccessory<Content: View>(@ViewBuilder _ content: () -> Content) -> some View {
         self.modifier(InputAccessoryModifier(content))
+    }
+
+    @ViewBuilder
+    public func inputAccessory<Content: InputAccessory>(_ content: Content) -> some View {
+        inputAccessory { content }
     }
 }
 
