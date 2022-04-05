@@ -20,7 +20,7 @@ import SwiftUI
 
 extension View {
     @ViewBuilder
-    public func inputAccessory<InputAccessory: View>(@ViewBuilder _ content: () -> InputAccessory) -> some View {
+    public func inputAccessory<Content: View>(@ViewBuilder _ content: () -> Content) -> some View {
         self.modifier(InputAccessoryModifier(content))
     }
 }
