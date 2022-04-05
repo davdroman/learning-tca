@@ -127,12 +127,3 @@ extension UIView {
         return nil
     }
 }
-
-private extension UIToolbar {
-    static func keyboardToolbar(items: [UIBarButtonItem]) -> UIToolbar {
-        let bar = UIToolbar()
-        bar.items = items
-        bar.sizeToFit()
-        return bar
-    }
-}
