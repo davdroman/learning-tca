@@ -12,7 +12,7 @@ public struct DefaultInputAccessory: InputAccessory {
         }
         .frame(maxWidth: .infinity, alignment: .trailing)
         .frame(height: 44)
-        .background(Color(uiColor: .secondarySystemBackground))
+        .background(Color(.secondarySystemBackground))
     }
 }
 
