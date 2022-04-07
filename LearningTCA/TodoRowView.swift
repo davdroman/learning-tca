@@ -4,7 +4,6 @@ import TextArea
 import TextFieldPadding
 import SwiftUI
 import SwiftUIInput
-import SwiftUIInputAccessory
 
 struct Todo: Equatable, Identifiable {
     var id: UUID

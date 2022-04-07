@@ -3,7 +3,7 @@ import SwiftUI
 public protocol InputAccessory: View {}
 
 public struct DefaultInputAccessory: InputAccessory {
-    @Environment(\.inputAccessoryEndEditing)
+    @Environment(\.inputEndEditing)
     private var endEditing
 
     public var body: some View {
@@ -23,17 +23,11 @@ extension InputAccessory where Self == DefaultInputAccessory {
 extension View {
     @ViewBuilder
     public func inputAccessory<Content: View>(@ViewBuilder _ content: () -> Content) -> some View {
-        self.modifier(InputAccessoryModifier(content))
+        self.modifier(Modifier(\.inputAccessoryView, content))
     }
 
     @ViewBuilder
     public func inputAccessory<Content: InputAccessory>(_ content: Content) -> some View {
         inputAccessory { content }
-    }
-}
-
-extension EnvironmentValues {
-    public var inputAccessoryEndEditing: () -> Void {
-        get { self[InputAccessoryEndEditingKey.self] }
     }
 }

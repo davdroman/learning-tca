@@ -1,15 +1,20 @@
 import Introspect
 import SwiftUI
 
-struct InputModifier<Input: View>: ViewModifier {
+struct Modifier<SwiftUIView: View>: ViewModifier {
     private typealias TextInputView = (UIView & TextInput)
 
     @State
     private var hosting: UIHostingController<AnyView>?
-    private var input: Input
+    private let keyPath: ReferenceWritableKeyPath<TextInput, UIView?>
+    private let swiftUIView: SwiftUIView
 
-    init(@ViewBuilder _ input: () -> Input) {
-        self.input = input()
+    init(
+        _ keyPath: ReferenceWritableKeyPath<TextInput, UIView?>,
+        @ViewBuilder _ swiftUIView: () -> SwiftUIView
+    ) {
+        self.keyPath = keyPath
+        self.swiftUIView = swiftUIView()
     }
 
     func body(content: Content) -> some View {
@@ -26,20 +31,21 @@ struct InputModifier<Input: View>: ViewModifier {
             return
         }
 
-        let input = input.environment(\._inputEndEditing) {
+        let input = swiftUIView.environment(\._inputEndEditing) {
             field.endEditing(true)
         }
         let hosting = UIHostingController_FB9641883(rootView: AnyView(input))
         hosting.view.translatesAutoresizingMaskIntoConstraints = false
         parent.addChild(hosting)
-        field.inputView = hosting.view
+        field[keyPath: keyPath] = hosting.view
         hosting.didMove(toParent: parent)
         self.hosting = hosting
     }
 }
 
-@objc private protocol TextInput: UITextInput {
+@objc protocol TextInput: UITextInput {
     var inputView: UIView? { get set }
+    var inputAccessoryView: UIView? { get set }
 }
 
 extension UITextField: TextInput {}
@@ -59,6 +65,10 @@ private extension UIView {
 }
 
 extension EnvironmentValues {
+    public var inputEndEditing: () -> Void {
+        get { self[InputEndEditingKey.self] }
+    }
+
     var _inputEndEditing: () -> Void {
         get { self[InputEndEditingKey.self] }
         set { self[InputEndEditingKey.self] = newValue }
