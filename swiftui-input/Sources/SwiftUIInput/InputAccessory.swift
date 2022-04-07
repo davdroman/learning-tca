@@ -7,8 +7,13 @@ public struct DefaultInputAccessory: InputAccessory {
     private var endEditing
 
     public var body: some View {
-        ZStack {
-            Button("Done", action: endEditing).padding()
+        VStack(alignment: .trailing, spacing: 0) {
+            Divider()
+                .opacity(0.3)
+                .edgesIgnoringSafeArea(.all)
+            Button("Done", action: endEditing)
+                .padding(.horizontal)
+                .frame(maxHeight: .infinity)
         }
         .frame(maxWidth: .infinity, alignment: .trailing)
         .frame(height: 44)
