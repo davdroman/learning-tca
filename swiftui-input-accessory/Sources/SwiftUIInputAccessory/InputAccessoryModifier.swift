@@ -29,7 +29,7 @@ struct InputAccessoryModifier<InputAccessory: View>: ViewModifier {
         let inputAccessory = inputAccessory.environment(\._inputAccessoryEndEditing) {
             field.resignFirstResponder()
         }
-        let hosting = InputAccessoryHostingController(rootView: AnyView(inputAccessory))
+        let hosting = UIHostingController_FB9641883(rootView: AnyView(inputAccessory))
         hosting.view.translatesAutoresizingMaskIntoConstraints = false
         parent.addChild(hosting)
         field.inputAccessoryView = hosting.view
