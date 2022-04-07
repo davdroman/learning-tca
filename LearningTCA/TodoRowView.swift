@@ -73,7 +73,7 @@ struct TodoRowView: View {
                 .inputAccessory(.default)
                 .focused($isFocused)
                 .disabled(viewStore.todo.isComplete)
-                .font(.custom("whatever it takes", size: 22))
+                .font(.custom("whatever it takes", size: 23))
                 .offset(y: 2) // slight offset to counter the font's natural y offset
             }
             .foregroundColor(viewStore.todo.isComplete ? .gray : nil)
