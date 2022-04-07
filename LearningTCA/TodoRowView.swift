@@ -67,10 +67,9 @@ struct TodoRowView: View {
                         DatePicker("", selection: .constant(.now))
                             .datePickerStyle(.wheel)
                             .labelsHidden()
-                            .background(Color.red)
                     }
                     .frame(maxWidth: .infinity)
-                    .background(Color.blue)
+                    .background(Color(.secondarySystemBackground))
                 }
                 .inputAccessory(.default)
                 .focused($isFocused)
