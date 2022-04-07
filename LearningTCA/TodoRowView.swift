@@ -3,6 +3,7 @@ import IdentifiedCollections
 import TextArea
 import TextFieldPadding
 import SwiftUI
+import SwiftUIInput
 import SwiftUIInputAccessory
 
 struct Todo: Equatable, Identifiable {
@@ -61,6 +62,16 @@ struct TodoRowView: View {
                 .textAreaPadding(.vertical, 12)
                 .textAreaPadding(.horizontal, 2)
                 .textAreaParagraphStyle(\.paragraphSpacing, 12)
+                .input {
+                    ZStack {
+                        DatePicker("", selection: .constant(.now))
+                            .datePickerStyle(.wheel)
+                            .labelsHidden()
+                            .background(Color.red)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .background(Color.blue)
+                }
                 .inputAccessory(.default)
                 .focused($isFocused)
                 .disabled(viewStore.todo.isComplete)
