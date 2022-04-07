@@ -61,15 +61,7 @@ struct TodoRowView: View {
                 .textAreaPadding(.vertical, 12)
                 .textAreaPadding(.horizontal, 2)
                 .textAreaParagraphStyle(\.paragraphSpacing, 12)
-                .input {
-                    ZStack {
-                        DatePicker("", selection: .constant(.now))
-                            .datePickerStyle(.wheel)
-                            .labelsHidden()
-                    }
-                    .frame(maxWidth: .infinity)
-                    .background(Color(.secondarySystemBackground))
-                }
+                .input(.datePicker(.constant(.now)))
                 .inputAccessory(.default)
                 .focused($isFocused)
                 .disabled(viewStore.todo.isComplete)
