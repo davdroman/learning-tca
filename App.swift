@@ -17,6 +17,7 @@ struct App: SwiftUI.App {
                     ),
                     reducer: appReducer,
                     environment: AppEnvironment(
+                        now: Date.init,
                         uuid: UUID.init,
                         mainQueue: .main
                     )

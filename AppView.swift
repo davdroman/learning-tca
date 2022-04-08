@@ -3,8 +3,13 @@ import IdentifiedCollections
 import SwiftUI
 
 struct AppState: Equatable {
+    struct TodoFocus: Equatable {
+        var id: Todo.ID
+        var field: TodoRowState.FocusedField
+    }
+
     var todos: IdentifiedArrayOf<Todo>
-    var focusedTodoID: Todo.ID?
+    var focus: TodoFocus?
 }
 
 extension AppState {
@@ -14,14 +19,18 @@ extension AppState {
                 uniqueElements: todos.map {
                     TodoRowState(
                         todo: $0,
-                        isFocused: focusedTodoID == $0.id
+                        focus: focus?.id == $0.id ? focus?.field : nil
                     )
                 }
             )
         }
-        set {
-            todos = IdentifiedArray(uniqueElements: newValue.map(\.todo))
-            focusedTodoID = newValue.first(where: \.isFocused)?.id
+        set(newTodoRowStates) {
+            todos = IdentifiedArray(uniqueElements: newTodoRowStates.map(\.todo))
+            if let focusedTodo = newTodoRowStates.last(where: { $0.focus != nil }), let field = focusedTodo.focus {
+                focus = .init(id: focusedTodo.id, field: field)
+            } else {
+                focus = nil
+            }
         }
     }
 }
@@ -33,15 +42,22 @@ enum AppAction: Equatable {
 }
 
 struct AppEnvironment {
+    var now: () -> Date
     var uuid: () -> UUID
     var mainQueue: AnySchedulerOf<DispatchQueue>
+}
+
+extension AppEnvironment {
+    var todoRowEnvironment: TodoRowEnvironment {
+        TodoRowEnvironment(now: now)
+    }
 }
 
 let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
     todoReducer.forEach(
         state: \AppState.todoRowStates,
         action: /AppAction.todo,
-        environment: { _ in TodoRowEnvironment() }
+        environment: \.todoRowEnvironment
     ),
     Reducer { state, action, environment in
         switch action {
@@ -49,7 +65,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
             let newTodo = Todo(id: environment.uuid(), description: "")
             state.todos.insert(newTodo, at: 0)
 
-            return Effect(value: .todo(id: newTodo.id, action: .binding(.set(\.$isFocused, true))))
+            return Effect(value: .todo(id: newTodo.id, action: .set(\.$focus, .description)))
                 .deferred(for: 0, scheduler: environment.mainQueue)
 
         case .todo(id: _, action: .checkboxTapped):
@@ -112,6 +128,7 @@ struct AppView_Previews: PreviewProvider {
                 ),
                 reducer: appReducer,
                 environment: AppEnvironment(
+                    now: Date.init,
                     uuid: UUID.init,
                     mainQueue: .main
                 )

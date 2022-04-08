@@ -1,3 +1,4 @@
+import CombineSchedulers
 import ComposableArchitecture
 import IdentifiedCollections
 import TextArea
@@ -8,30 +9,51 @@ import SwiftUIInput
 struct Todo: Equatable, Identifiable {
     var id: UUID
     var description: String
+    var dueDate: Date?
     var isComplete = false
 }
 
 struct TodoRowState: Equatable, Identifiable {
+    enum FocusedField: Hashable {
+        case description
+        case dueDate
+    }
+
     var id: Todo.ID { todo.id }
     var todo: Todo
     @BindableState
-    var isFocused: Bool
+    var focus: FocusedField?
+
+    var showDueDate: Bool {
+        todo.dueDate != nil || focus != nil
+    }
 }
 
 enum TodoRowAction: BindableAction, Equatable {
     case binding(BindingAction<TodoRowState>)
     case textFieldDidChange(String)
+    case dueDateDidChange(Date)
     case checkboxTapped
 }
 
-struct TodoRowEnvironment {}
+struct TodoRowEnvironment {
+    var now: () -> Date
+}
 
 let todoReducer = Reducer<TodoRowState, TodoRowAction, TodoRowEnvironment> { state, action, environment in
     switch action {
+    case .binding(.set(\.$focus, .dueDate)):
+        if state.todo.dueDate == nil {
+            state.todo.dueDate = environment.now()
+        }
+        return .none
     case .binding:
         return .none
     case .textFieldDidChange(let text):
         state.todo.description = text
+        return .none
+    case .dueDateDidChange(let date):
+        state.todo.dueDate = date
         return .none
     case .checkboxTapped:
         state.todo.isComplete.toggle()
@@ -43,7 +65,7 @@ let todoReducer = Reducer<TodoRowState, TodoRowAction, TodoRowEnvironment> { sta
 struct TodoRowView: View {
     let store: Store<TodoRowState, TodoRowAction>
 
-    @FocusState private var isFocused: Bool
+    @FocusState private var focus: TodoRowState.FocusedField?
 
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -53,24 +75,59 @@ struct TodoRowView: View {
                 }
                 .buttonStyle(.plain)
 
-                TextArea(
-                    "Untitled todo",
-                    text: viewStore.binding(get: \.todo.description, send: TodoRowAction.textFieldDidChange)
-                )
-                .textAreaScrollDisabled(true)
-                .textAreaPadding(.vertical, 12)
-                .textAreaPadding(.horizontal, 2)
-                .textAreaParagraphStyle(\.paragraphSpacing, 12)
-                .input(.datePicker(.constant(.now)))
-                .inputAccessory(.default)
-                .focused($isFocused)
+                VStack(alignment: .leading, spacing: 0) {
+                    TextArea(
+                        "Untitled todo",
+                        text: viewStore.binding(get: \.todo.description, send: TodoRowAction.textFieldDidChange)
+                    )
+                    .animationDisabled()
+                    .focused($focus, equals: .description)
+                    .textAreaScrollDisabled(true)
+                    .textAreaPadding(.top, 12)
+                    .textAreaPadding(.bottom, viewStore.showDueDate ? 4 : 12)
+                    .textAreaPadding(.horizontal, 2)
+                    .textAreaParagraphStyle(\.paragraphSpacing, 12)
+                    .inputAccessory(.default)
+
+                    if viewStore.showDueDate {
+                        TextField(
+                            "Due date",
+                            text: .constant(viewStore.todo.dueDate?.formatted(.dateTime) ?? "")
+                        )
+                        .foregroundColor(.gray)
+                        .transition(.asymmetric(insertion: .opacity, removal: .identity))
+                        .focused($focus, equals: .dueDate)
+                        .textFieldPadding(.top, 4)
+                        .textFieldPadding(.bottom, 12)
+                        .textFieldPadding(.horizontal, 2)
+                        .input(.datePicker(viewStore.binding(get: \.todo.dueDate.nowIfNil, send: TodoRowAction.dueDateDidChange)))
+                        .inputAccessory(.default)
+                    }
+                }
                 .disabled(viewStore.todo.isComplete)
                 .font(.custom("whatever it takes", size: 23))
                 .offset(y: 2) // slight offset to counter the font's natural y offset
             }
-            .foregroundColor(viewStore.todo.isComplete ? .gray : nil)
-            .synchronize(viewStore.binding(\.$isFocused), $isFocused)
+            .opacity(viewStore.todo.isComplete ? 0.5 : 1)
+            .synchronize(viewStore.binding(\.$focus), $focus)
+            .animation(.spring(), value: viewStore.showDueDate)
         }
+    }
+}
+
+extension View {
+    func animationDisabled(_ isDisabled: Bool = true) -> some View {
+        transaction {
+            if isDisabled {
+                $0.animation = nil
+            }
+        }
+    }
+}
+
+extension Optional where Wrapped == Date {
+    var nowIfNil: Date {
+        self ?? .now
     }
 }
 
@@ -88,16 +145,13 @@ struct TodoRowView_Previews: PreviewProvider {
     static var previews: some View {
         let states = [
             TodoRowState(
-                todo: Todo(id: UUID(), description: "", isComplete: false),
-                isFocused: false
+                todo: Todo(id: UUID(), description: "", isComplete: false)
             ),
             TodoRowState(
-                todo: Todo(id: UUID(), description: "Milk", isComplete: false),
-                isFocused: false
+                todo: Todo(id: UUID(), description: "Milk", isComplete: false)
             ),
             TodoRowState(
-                todo: Todo(id: UUID(), description: "Milk", isComplete: true),
-                isFocused: false
+                todo: Todo(id: UUID(), description: "Milk", isComplete: true)
             ),
         ]
         ForEach(states) { state in
@@ -105,7 +159,7 @@ struct TodoRowView_Previews: PreviewProvider {
                 store: Store(
                     initialState: state,
                     reducer: todoReducer,
-                    environment: TodoRowEnvironment()
+                    environment: TodoRowEnvironment(now: Date.init)
                 )
             )
         }
