@@ -15,6 +15,7 @@ final class TodosTests: XCTestCase {
             initialState: state,
             reducer: appReducer,
             environment: AppEnvironment(
+                now: { fatalError("unimplemented") },
                 uuid: { fatalError("unimplemented") },
                 mainQueue: .immediate
             )
@@ -31,6 +32,7 @@ final class TodosTests: XCTestCase {
             initialState: AppState(todos: []),
             reducer: appReducer,
             environment: AppEnvironment(
+                now: { fatalError("unimplemented") },
                 uuid: { UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")! },
                 mainQueue: .immediate
             )
@@ -44,8 +46,8 @@ final class TodosTests: XCTestCase {
                 )
             ]
         }
-        store.receive(.todo(id: UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")!, action: .binding(.set(\.$isFocused, true)))) {
-            $0.focusedTodoID = UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")!
+        store.receive(.todo(id: UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")!, action: .binding(.set(\.$focus, .description)))) {
+            $0.focus = .init(id: UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")!, field: .description)
         }
     }
 
@@ -67,6 +69,7 @@ final class TodosTests: XCTestCase {
             initialState: state,
             reducer: appReducer,
             environment: AppEnvironment(
+                now: { fatalError("unimplemented") },
                 uuid: { fatalError("unimplemented") },
                 mainQueue: scheduler.eraseToAnyScheduler()
             )
