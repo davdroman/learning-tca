@@ -2,8 +2,6 @@ import Introspect
 import SwiftUI
 
 struct Modifier<SwiftUIView: View>: ViewModifier {
-    private typealias TextInputView = (UIView & TextInput)
-
     @State
     private var hosting: UIHostingController<AnyView>?
     private let keyPath: ReferenceWritableKeyPath<TextInput, UIView?>
@@ -18,9 +16,7 @@ struct Modifier<SwiftUIView: View>: ViewModifier {
     }
 
     func body(content: Content) -> some View {
-        content
-            .introspectTextField(customize: setInputView)
-            .introspectTextView(customize: setInputView)
+        content.introspectTextInput(customize: setInputView)
     }
 
     private func setInputView(for field: TextInputView) {
@@ -50,6 +46,17 @@ struct Modifier<SwiftUIView: View>: ViewModifier {
 
 extension UITextField: TextInput {}
 extension UITextView: TextInput {}
+
+typealias TextInputView = (UIView & TextInput)
+
+extension View {
+    func introspectTextInput(customize: @escaping (TextInputView) -> ()) -> some View {
+        introspect(
+            selector: { Introspect.findAncestorOrAncestorChild(ofType: TextInputView.self, from: $0) },
+            customize: customize
+        )
+    }
+}
 
 private extension UIView {
     var parentViewController: UIViewController? {
