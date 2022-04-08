@@ -4,11 +4,11 @@ import SwiftUI
 struct Modifier<SwiftUIView: View>: ViewModifier {
     @State
     private var hosting: UIHostingController<AnyView>?
-    private let keyPath: ReferenceWritableKeyPath<TextInput, UIView?>
+    private let keyPath: ReferenceWritableKeyPath<TextContainer, UIView?>
     private let swiftUIView: SwiftUIView
 
     init(
-        _ keyPath: ReferenceWritableKeyPath<TextInput, UIView?>,
+        _ keyPath: ReferenceWritableKeyPath<TextContainer, UIView?>,
         @ViewBuilder _ swiftUIView: () -> SwiftUIView
     ) {
         self.keyPath = keyPath
@@ -16,43 +16,43 @@ struct Modifier<SwiftUIView: View>: ViewModifier {
     }
 
     func body(content: Content) -> some View {
-        content.introspectTextInput(customize: setInputView)
+        content.introspectTextContainerView(customize: setInputView)
     }
 
-    private func setInputView(for field: TextInputView) {
+    private func setInputView(for container: TextContainerView) {
         guard
             hosting == nil,
-            let parent = field.parentViewController
+            let parent = container.parentViewController
         else {
             return
         }
 
         let input = swiftUIView.environment(\._inputEndEditing) {
-            field.endEditing(true)
+            container.endEditing(true)
         }
         let hosting = UIHostingController_FB9641883(rootView: AnyView(input))
         hosting.view.translatesAutoresizingMaskIntoConstraints = false
         parent.addChild(hosting)
-        field[keyPath: keyPath] = hosting.view
+        container[keyPath: keyPath] = hosting.view
         hosting.didMove(toParent: parent)
         self.hosting = hosting
     }
 }
 
-@objc protocol TextInput: UITextInput {
+@objc protocol TextContainer: UITextInput {
     var inputView: UIView? { get set }
     var inputAccessoryView: UIView? { get set }
 }
 
-extension UITextField: TextInput {}
-extension UITextView: TextInput {}
+extension UITextField: TextContainer {}
+extension UITextView: TextContainer {}
 
-typealias TextInputView = (UIView & TextInput)
+typealias TextContainerView = UIView & TextContainer
 
 extension View {
-    func introspectTextInput(customize: @escaping (TextInputView) -> ()) -> some View {
+    func introspectTextContainerView(customize: @escaping (TextContainerView) -> ()) -> some View {
         introspect(
-            selector: { Introspect.findAncestorOrAncestorChild(ofType: TextInputView.self, from: $0) },
+            selector: { Introspect.findAncestorOrAncestorChild(ofType: TextContainerView.self, from: $0) },
             customize: customize
         )
     }
