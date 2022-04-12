@@ -26,7 +26,7 @@ extension AppState {
         }
         set(newTodoRowStates) {
             todos = IdentifiedArray(uniqueElements: newTodoRowStates.map(\.todo))
-            if let focusedTodo = newTodoRowStates.last(where: { $0.focus != nil }), let field = focusedTodo.focus {
+            if let focusedTodo = newTodoRowStates.first(where: { $0.focus != nil }), let field = focusedTodo.focus {
                 focus = .init(id: focusedTodo.id, field: field)
             } else {
                 focus = nil
@@ -38,6 +38,7 @@ extension AppState {
 enum AppAction: Equatable {
     case addButtonTapped
     case todo(id: Todo.ID, action: TodoRowAction)
+    case setFocus(AppState.TodoFocus?)
     case sortCompletedTodos
 }
 
@@ -49,7 +50,10 @@ struct AppEnvironment {
 
 extension AppEnvironment {
     var todoRowEnvironment: TodoRowEnvironment {
-        TodoRowEnvironment(now: now)
+        TodoRowEnvironment(
+            now: now,
+            mainQueue: mainQueue
+        )
     }
 }
 
@@ -64,9 +68,12 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
         case .addButtonTapped:
             let newTodo = Todo(id: environment.uuid(), description: "")
             state.todos.insert(newTodo, at: 0)
-
-            return Effect(value: .todo(id: newTodo.id, action: .set(\.$focus, .description)))
+            return Effect(value: .setFocus(.init(id: newTodo.id, field: .description)))
                 .deferred(for: 0, scheduler: environment.mainQueue)
+
+        case .setFocus(let focus):
+            state.focus = focus
+            return .none
 
         case .todo(id: _, action: .checkboxTapped):
             struct CancelID: Hashable {}

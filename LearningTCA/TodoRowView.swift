@@ -29,8 +29,9 @@ struct TodoRowState: Equatable, Identifiable {
     }
 }
 
-enum TodoRowAction: BindableAction, Equatable {
-    case binding(BindingAction<TodoRowState>)
+enum TodoRowAction: Equatable {
+    case focusDidChange(TodoRowState.FocusedField?)
+    case setFocus(TodoRowState.FocusedField?)
     case textFieldDidChange(String)
     case dueDateDidChange(Date)
     case checkboxTapped
@@ -38,16 +39,23 @@ enum TodoRowAction: BindableAction, Equatable {
 
 struct TodoRowEnvironment {
     var now: () -> Date
+    var mainQueue: AnySchedulerOf<DispatchQueue>
 }
 
 let todoReducer = Reducer<TodoRowState, TodoRowAction, TodoRowEnvironment> { state, action, environment in
     switch action {
-    case .binding(.set(\.$focus, .dueDate)):
-        if state.todo.dueDate == nil {
+    case .focusDidChange(let newFocus):
+        if state.focus == nil, newFocus != nil {
+            return Effect(value: TodoRowAction.setFocus(newFocus))
+                .deferred(for: 0, scheduler: environment.mainQueue)
+        } else {
+            return Effect(value: TodoRowAction.setFocus(newFocus))
+        }
+    case .setFocus(let newFocus):
+        if state.todo.dueDate == nil, newFocus == .dueDate {
             state.todo.dueDate = environment.now()
         }
-        return .none
-    case .binding:
+        state.focus = newFocus
         return .none
     case .textFieldDidChange(let text):
         state.todo.description = text
@@ -60,7 +68,6 @@ let todoReducer = Reducer<TodoRowState, TodoRowAction, TodoRowEnvironment> { sta
         return .none
     }
 }
-.binding()
 
 struct TodoRowView: View {
     let store: Store<TodoRowState, TodoRowAction>
@@ -109,7 +116,7 @@ struct TodoRowView: View {
                 .offset(y: 2) // slight offset to counter the font's natural y offset
             }
             .opacity(viewStore.todo.isComplete ? 0.5 : 1)
-            .synchronize(viewStore.binding(\.$focus), $focus)
+            .synchronize(viewStore.binding(get: \.focus, send: TodoRowAction.focusDidChange), $focus)
             .animation(.spring(), value: viewStore.showDueDate)
         }
     }
@@ -159,7 +166,10 @@ struct TodoRowView_Previews: PreviewProvider {
                 store: Store(
                     initialState: state,
                     reducer: todoReducer,
-                    environment: TodoRowEnvironment(now: Date.init)
+                    environment: TodoRowEnvironment(
+                        now: Date.init,
+                        mainQueue: .main
+                    )
                 )
             )
         }
