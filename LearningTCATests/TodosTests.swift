@@ -46,7 +46,7 @@ final class TodosTests: XCTestCase {
                 )
             ]
         }
-        store.receive(.todo(id: UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")!, action: .binding(.set(\.$focus, .description)))) {
+        store.receive(.setFocus(.init(id: UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")!, field: .description))) {
             $0.focus = .init(id: UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")!, field: .description)
         }
     }
