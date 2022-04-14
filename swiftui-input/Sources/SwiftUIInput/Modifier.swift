@@ -27,8 +27,8 @@ struct Modifier<SwiftUIView: View>: ViewModifier {
             return
         }
 
-        let input = swiftUIView.environment(\._inputEndEditing) {
-            container.endEditing(true)
+        let input = swiftUIView.environment(\._inputEndEditing) { [weak container] in
+            container?.endEditing(true)
         }
         let hosting = UIHostingController_FB9641883(rootView: AnyView(input))
         hosting.view.translatesAutoresizingMaskIntoConstraints = false
