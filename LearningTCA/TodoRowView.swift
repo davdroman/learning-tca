@@ -21,7 +21,6 @@ struct TodoRowState: Equatable, Identifiable {
 
     var id: Todo.ID { todo.id }
     var todo: Todo
-    @BindableState
     var focus: FocusedField?
 
     var showDueDate: Bool {
