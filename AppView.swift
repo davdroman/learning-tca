@@ -10,6 +10,10 @@ struct AppState: Equatable {
 
     var todos: IdentifiedArrayOf<Todo>
     var focus: TodoFocus?
+
+    func focusedField(for todo: Todo) -> TodoRowState.FocusedField? {
+        todo.id == focus?.id ? focus?.field : nil
+    }
 }
 
 extension AppState {
@@ -17,20 +21,12 @@ extension AppState {
         get {
             IdentifiedArray(
                 uniqueElements: todos.map {
-                    TodoRowState(
-                        todo: $0,
-                        focus: focus?.id == $0.id ? focus?.field : nil
-                    )
+                    TodoRowState(todo: $0, focus: focusedField(for: $0))
                 }
             )
         }
-        set(newTodoRowStates) {
-            todos = IdentifiedArray(uniqueElements: newTodoRowStates.map(\.todo))
-            if let focusedTodo = newTodoRowStates.first(where: { $0.focus != nil }), let field = focusedTodo.focus {
-                focus = .init(id: focusedTodo.id, field: field)
-            } else {
-                focus = nil
-            }
+        set {
+            todos = IdentifiedArray(uniqueElements: newValue.map(\.todo))
         }
     }
 }
@@ -38,7 +34,6 @@ extension AppState {
 enum AppAction: Equatable {
     case addButtonTapped
     case todo(id: Todo.ID, action: TodoRowAction)
-    case setFocus(AppState.TodoFocus?)
     case sortCompletedTodos
 }
 
@@ -68,11 +63,15 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
         case .addButtonTapped:
             let newTodo = Todo(id: environment.uuid(), description: "")
             state.todos.insert(newTodo, at: 0)
-            return Effect(value: .setFocus(.init(id: newTodo.id, field: .description)))
+            return Effect(value: .todo(id: newTodo.id, action: .setFocus(.description)))
                 .deferred(for: 0, scheduler: environment.mainQueue)
 
-        case .setFocus(let focus):
-            state.focus = focus
+        case .todo(let id, .setFocus(let field)):
+            if let field = field {
+                state.focus = .init(id: id, field: field)
+            } else if state.focus?.id == id {
+                state.focus = nil
+            }
             return .none
 
         case .todo(id: _, action: .checkboxTapped):

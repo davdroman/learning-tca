@@ -30,7 +30,6 @@ struct TodoRowState: Equatable, Identifiable {
 }
 
 enum TodoRowAction: Equatable {
-    case focusDidChange(TodoRowState.FocusedField?)
     case setFocus(TodoRowState.FocusedField?)
     case textFieldDidChange(String)
     case dueDateDidChange(Date)
@@ -44,13 +43,6 @@ struct TodoRowEnvironment {
 
 let todoReducer = Reducer<TodoRowState, TodoRowAction, TodoRowEnvironment> { state, action, environment in
     switch action {
-    case .focusDidChange(let newFocus):
-        if state.focus == nil, newFocus != nil {
-            return Effect(value: TodoRowAction.setFocus(newFocus))
-                .deferred(for: 0, scheduler: environment.mainQueue)
-        } else {
-            return Effect(value: TodoRowAction.setFocus(newFocus))
-        }
     case .setFocus(let newFocus):
         if state.todo.dueDate == nil, newFocus == .dueDate {
             state.todo.dueDate = environment.now()
@@ -116,8 +108,8 @@ struct TodoRowView: View {
                 .offset(y: 2) // slight offset to counter the font's natural y offset
             }
             .opacity(viewStore.todo.isComplete ? 0.5 : 1)
-            .synchronize(viewStore.binding(get: \.focus, send: TodoRowAction.focusDidChange), $focus)
             .animation(.spring(), value: viewStore.showDueDate)
+            .synchronize(viewStore.binding(get: \.focus, send: TodoRowAction.setFocus), $focus)
         }
     }
 }
@@ -126,7 +118,7 @@ extension View {
     func animationDisabled(_ isDisabled: Bool = true) -> some View {
         transaction {
             if isDisabled {
-                $0.animation = nil
+                $0.disablesAnimations = true
             }
         }
     }
