@@ -21,7 +21,7 @@ struct Modifier<SwiftUIView: View>: ViewModifier {
 
     private func setInputView(for container: TextContainerView) {
         guard
-            hosting == nil,
+            container[keyPath: keyPath] == nil,
             let parent = container.parentViewController
         else {
             return
