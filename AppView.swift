@@ -46,8 +46,7 @@ struct AppEnvironment {
 extension AppEnvironment {
     var todoRowEnvironment: TodoRowEnvironment {
         TodoRowEnvironment(
-            now: now,
-            mainQueue: mainQueue
+            now: now
         )
     }
 }

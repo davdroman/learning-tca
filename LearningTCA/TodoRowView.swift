@@ -37,7 +37,6 @@ enum TodoRowAction: Equatable {
 
 struct TodoRowEnvironment {
     var now: () -> Date
-    var mainQueue: AnySchedulerOf<DispatchQueue>
 }
 
 let todoReducer = Reducer<TodoRowState, TodoRowAction, TodoRowEnvironment> { state, action, environment in
@@ -158,8 +157,7 @@ struct TodoRowView_Previews: PreviewProvider {
                     initialState: state,
                     reducer: todoReducer,
                     environment: TodoRowEnvironment(
-                        now: Date.init,
-                        mainQueue: .main
+                        now: Date.init
                     )
                 )
             )
