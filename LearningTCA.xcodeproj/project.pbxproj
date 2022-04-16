@@ -43,8 +43,8 @@
 		D5AEE2602779136400A62DAD /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D5AEE2662779136400A62DAD /* LearningTCATests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LearningTCATests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5AEE26A2779136400A62DAD /* TodosTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosTests.swift; sourceTree = "<group>"; };
-		D5AEE2862779140100A62DAD /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = SOURCE_ROOT; };
-		D5AEE2872779140100A62DAD /* AppView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = SOURCE_ROOT; };
+		D5AEE2862779140100A62DAD /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = App.swift; path = LearningTCA/App.swift; sourceTree = SOURCE_ROOT; };
+		D5AEE2872779140100A62DAD /* AppView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppView.swift; path = LearningTCA/AppView.swift; sourceTree = SOURCE_ROOT; };
 		D5EFED2A27FDDF6B0046640F /* swiftui-input */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "swiftui-input"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
