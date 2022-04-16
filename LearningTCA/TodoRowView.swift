@@ -77,7 +77,6 @@ struct TodoRowView: View {
                         "Untitled todo",
                         text: viewStore.binding(get: \.todo.description, send: TodoRowAction.textFieldDidChange)
                     )
-                    .animationDisabled()
                     .focused($focus, equals: .description)
                     .textAreaScrollDisabled(true)
                     .textAreaPadding(.top, 12)
@@ -92,7 +91,6 @@ struct TodoRowView: View {
                             text: .constant(viewStore.todo.dueDate?.formatted(.dateTime) ?? "")
                         )
                         .foregroundColor(.gray)
-                        .transition(.asymmetric(insertion: .opacity, removal: .identity))
                         .focused($focus, equals: .dueDate)
                         .textFieldPadding(.top, 4)
                         .textFieldPadding(.bottom, 12)
@@ -106,7 +104,6 @@ struct TodoRowView: View {
                 .offset(y: 2) // slight offset to counter the font's natural y offset
             }
             .opacity(viewStore.todo.isComplete ? 0.5 : 1)
-            .animation(.spring(), value: viewStore.showDueDate)
             .synchronize(viewStore.binding(get: \.focus, send: TodoRowAction.setFocus), $focus)
         }
     }
