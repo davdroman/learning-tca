@@ -13,56 +13,56 @@ struct Todo: Equatable, Identifiable {
     var isComplete = false
 }
 
-struct TodoRowState: Equatable, Identifiable {
-    enum FocusedField: Hashable {
-        case description
-        case dueDate
-    }
-
-    var id: Todo.ID { todo.id }
-    var todo: Todo
-    var focus: FocusedField?
-
-    var showDueDate: Bool {
-        todo.dueDate != nil || focus != nil
-    }
-}
-
-enum TodoRowAction: Equatable {
-    case setFocus(TodoRowState.FocusedField?)
-    case textFieldDidChange(String)
-    case dueDateDidChange(Date)
-    case checkboxTapped
-}
-
-struct TodoRowEnvironment {
-    var now: () -> Date
-}
-
-let todoReducer = Reducer<TodoRowState, TodoRowAction, TodoRowEnvironment> { state, action, environment in
-    switch action {
-    case .setFocus(let newFocus):
-        if state.todo.dueDate == nil, newFocus == .dueDate {
-            state.todo.dueDate = environment.now()
+struct TodoRow: ReducerProtocol {
+    struct State: Equatable, Identifiable {
+        enum FocusedField: Hashable {
+            case description
+            case dueDate
         }
-        state.focus = newFocus
-        return .none
-    case .textFieldDidChange(let text):
-        state.todo.description = text
-        return .none
-    case .dueDateDidChange(let date):
-        state.todo.dueDate = date
-        return .none
-    case .checkboxTapped:
-        state.todo.isComplete.toggle()
-        return .none
+
+        var id: Todo.ID { todo.id }
+        var todo: Todo
+        var focus: FocusedField?
+
+        var showDueDate: Bool {
+            todo.dueDate != nil || focus != nil
+        }
+    }
+
+    enum Action: Equatable {
+        case setFocus(State.FocusedField?)
+        case textFieldDidChange(String)
+        case dueDateDidChange(Date)
+        case checkboxTapped
+    }
+
+    @Dependency(\.date) var now
+
+    func reduce(into state: inout State, action: Action) -> Effect<Action, Never> {
+        switch action {
+        case .setFocus(let newFocus):
+            if state.todo.dueDate == nil, newFocus == .dueDate {
+                state.todo.dueDate = now()
+            }
+            state.focus = newFocus
+            return .none
+        case .textFieldDidChange(let text):
+            state.todo.description = text
+            return .none
+        case .dueDateDidChange(let date):
+            state.todo.dueDate = date
+            return .none
+        case .checkboxTapped:
+            state.todo.isComplete.toggle()
+            return .none
+        }
     }
 }
 
 struct TodoRowView: View {
-    let store: Store<TodoRowState, TodoRowAction>
+    let store: StoreOf<TodoRow>
 
-    @FocusState private var focus: TodoRowState.FocusedField?
+    @FocusState private var focus: TodoRow.State.FocusedField?
 
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -75,7 +75,7 @@ struct TodoRowView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     TextArea(
                         "Untitled todo",
-                        text: viewStore.binding(get: \.todo.description, send: TodoRowAction.textFieldDidChange)
+                        text: viewStore.binding(get: \.todo.description, send: TodoRow.Action.textFieldDidChange)
                     )
                     .focused($focus, equals: .description)
                     .textAreaScrollDisabled(true)
@@ -95,7 +95,7 @@ struct TodoRowView: View {
                         .textFieldPadding(.top, 4)
                         .textFieldPadding(.bottom, 12)
                         .textFieldPadding(.horizontal, 2)
-                        .input(.datePicker(viewStore.binding(get: \.todo.dueDate.nowIfNil, send: TodoRowAction.dueDateDidChange)))
+                        .input(.datePicker(viewStore.binding(get: \.todo.dueDate.nowIfNil, send: TodoRow.Action.dueDateDidChange)))
                         .inputAccessory(.default)
                     }
                 }
@@ -104,7 +104,7 @@ struct TodoRowView: View {
                 .offset(y: 2) // slight offset to counter the font's natural y offset
             }
             .opacity(viewStore.todo.isComplete ? 0.5 : 1)
-            .synchronize(viewStore.binding(get: \.focus, send: TodoRowAction.setFocus), $focus)
+            .synchronize(viewStore.binding(get: \.focus, send: TodoRow.Action.setFocus), $focus)
         }
     }
 }
@@ -138,13 +138,13 @@ extension View {
 struct TodoRowView_Previews: PreviewProvider {
     static var previews: some View {
         let states = [
-            TodoRowState(
+            TodoRow.State(
                 todo: Todo(id: UUID(), description: "", isComplete: false)
             ),
-            TodoRowState(
+            TodoRow.State(
                 todo: Todo(id: UUID(), description: "Milk", isComplete: false)
             ),
-            TodoRowState(
+            TodoRow.State(
                 todo: Todo(id: UUID(), description: "Milk", isComplete: true)
             ),
         ]
@@ -152,10 +152,7 @@ struct TodoRowView_Previews: PreviewProvider {
             TodoRowView(
                 store: Store(
                     initialState: state,
-                    reducer: todoReducer,
-                    environment: TodoRowEnvironment(
-                        now: Date.init
-                    )
+                    reducer: TodoRow()
                 )
             )
         }

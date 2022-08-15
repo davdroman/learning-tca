@@ -17,7 +17,7 @@
 		D5AEE26B2779136400A62DAD /* TodosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AEE26A2779136400A62DAD /* TodosTests.swift */; };
 		D5AEE285277913F100A62DAD /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = D5AEE284277913F100A62DAD /* ComposableArchitecture */; };
 		D5AEE2882779140100A62DAD /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AEE2862779140100A62DAD /* App.swift */; };
-		D5AEE2892779140100A62DAD /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AEE2872779140100A62DAD /* AppView.swift */; };
+		D5AEE2892779140100A62DAD /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AEE2872779140100A62DAD /* RootView.swift */; };
 		D5EFED2E27FDE42A0046640F /* SwiftUIInput in Frameworks */ = {isa = PBXBuildFile; productRef = D5EFED2D27FDE42A0046640F /* SwiftUIInput */; };
 /* End PBXBuildFile section */
 
@@ -44,7 +44,7 @@
 		D5AEE2662779136400A62DAD /* LearningTCATests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LearningTCATests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5AEE26A2779136400A62DAD /* TodosTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosTests.swift; sourceTree = "<group>"; };
 		D5AEE2862779140100A62DAD /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = App.swift; path = LearningTCA/App.swift; sourceTree = SOURCE_ROOT; };
-		D5AEE2872779140100A62DAD /* AppView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppView.swift; path = LearningTCA/AppView.swift; sourceTree = SOURCE_ROOT; };
+		D5AEE2872779140100A62DAD /* RootView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RootView.swift; path = LearningTCA/RootView.swift; sourceTree = SOURCE_ROOT; };
 		D5EFED2A27FDDF6B0046640F /* swiftui-input */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "swiftui-input"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -104,7 +104,7 @@
 			children = (
 				D511E56C27F36DD300DF0400 /* Info.plist */,
 				D5AEE2862779140100A62DAD /* App.swift */,
-				D5AEE2872779140100A62DAD /* AppView.swift */,
+				D5AEE2872779140100A62DAD /* RootView.swift */,
 				D5987C2F277B660D0039F71D /* TodoRowView.swift */,
 				D511E56827F36D7500DF0400 /* whatever it takes bold.ttf */,
 				D511E56927F36D7500DF0400 /* whatever it takes.ttf */,
@@ -242,7 +242,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D5AEE2892779140100A62DAD /* AppView.swift in Sources */,
+				D5AEE2892779140100A62DAD /* RootView.swift in Sources */,
 				D5987C30277B660D0039F71D /* TodoRowView.swift in Sources */,
 				D5AEE2882779140100A62DAD /* App.swift in Sources */,
 			);
@@ -521,8 +521,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.31.0;
+				branch = protocol;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

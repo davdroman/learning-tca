@@ -5,9 +5,9 @@ import SwiftUI
 struct App: SwiftUI.App {
     var body: some Scene {
         WindowGroup {
-            AppView(
+            RootView(
                 store: Store(
-                    initialState: AppState(
+                    initialState: Root.State(
                         todos: [
                             Todo(id: UUID(), description: "Milk"),
                             Todo(id: UUID(), description: "Eggs"),
@@ -15,12 +15,7 @@ struct App: SwiftUI.App {
                             Todo(id: UUID(), description: "Hand soap", isComplete: true),
                         ]
                     ),
-                    reducer: appReducer,
-                    environment: AppEnvironment(
-                        now: Date.init,
-                        uuid: UUID.init,
-                        mainQueue: .main
-                    )
+                    reducer: Root()
                 )
             )
         }

@@ -4,7 +4,7 @@ import XCTest
 
 final class TodosTests: XCTestCase {
     func testCompletingTodo() {
-        let state = AppState(todos: [
+        let state = Root.State(todos: [
             Todo(
                 id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!,
                 description: "Milk",
@@ -13,30 +13,23 @@ final class TodosTests: XCTestCase {
         ])
         let store = TestStore(
             initialState: state,
-            reducer: appReducer,
-            environment: AppEnvironment(
-                now: { fatalError("unimplemented") },
-                uuid: { fatalError("unimplemented") },
-                mainQueue: .immediate
-            )
+            reducer: Root().dependency(\.mainQueue, .immediate)
         )
 
-        store.send(.todo(id: state.todos[0].id, action: .checkboxTapped)) {
-            $0.todos[id: state.todos[0].id]?.isComplete = true
+        store.send(.todo(id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!, action: .checkboxTapped)) {
+            $0.todos[id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!]?.isComplete = true
         }
         store.receive(.sortCompletedTodos)
     }
 
     func testAddTodo() {
         let store = TestStore(
-            initialState: AppState(todos: []),
-            reducer: appReducer,
-            environment: AppEnvironment(
-                now: { fatalError("unimplemented") },
-                uuid: { UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")! },
-                mainQueue: .immediate
-            )
+            initialState: Root.State(todos: []),
+            reducer: Root()
+                .dependency(\.uuid, .constant(UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")!))
+                .dependency(\.mainQueue, .immediate)
         )
+
         store.send(.addButtonTapped) {
             $0.todos = [
                 Todo(
@@ -52,7 +45,7 @@ final class TodosTests: XCTestCase {
     }
 
     func testTodoSorting() {
-        let state = AppState(todos: [
+        let state = Root.State(todos: [
             Todo(
                 id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!,
                 description: "Milk",
@@ -67,12 +60,7 @@ final class TodosTests: XCTestCase {
         let scheduler = DispatchQueue.test
         let store = TestStore(
             initialState: state,
-            reducer: appReducer,
-            environment: AppEnvironment(
-                now: { fatalError("unimplemented") },
-                uuid: { fatalError("unimplemented") },
-                mainQueue: scheduler.eraseToAnyScheduler()
-            )
+            reducer: Root().dependency(\.mainQueue, scheduler.eraseToAnyScheduler())
         )
 
         store.send(.todo(id: state.todos[0].id, action: .checkboxTapped)) {
