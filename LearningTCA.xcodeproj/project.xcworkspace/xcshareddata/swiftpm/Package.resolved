@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/pointfreeco/combine-schedulers",
         "state": {
           "branch": null,
-          "revision": "8fee20f993e64bbbf22bc3e3f444758ac2d05692",
-          "version": "0.7.2"
+          "revision": "aa3e575929f2bcc5bad012bd2575eae716cbcdf7",
+          "version": "0.8.0"
         }
       },
       {
@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/pointfreeco/swift-case-paths",
         "state": {
           "branch": null,
-          "revision": "a09839348486db8866f85a727b8550be1d671c50",
-          "version": "0.9.1"
+          "revision": "7346701ea29da0a85d4403cf3d7a589a58ae3dee",
+          "version": "0.9.2"
         }
       },
       {
@@ -24,17 +24,17 @@
         "repositoryURL": "https://github.com/apple/swift-collections",
         "state": {
           "branch": null,
-          "revision": "48254824bb4248676bf7ce56014ff57b142b77eb",
-          "version": "1.0.2"
+          "revision": "f504716c27d2e5d4144fa4794b12129301d17729",
+          "version": "1.0.3"
         }
       },
       {
         "package": "swift-composable-architecture",
         "repositoryURL": "https://github.com/pointfreeco/swift-composable-architecture.git",
         "state": {
-          "branch": "protocol",
-          "revision": "a3a09a6a6fcd522601527b5d57fb0ec52cde3dc2",
-          "version": null
+          "branch": null,
+          "revision": "4228ff40e0df1cb849f6a158e018b1c13d6bd9c9",
+          "version": "0.41.2"
         }
       },
       {
@@ -42,8 +42,8 @@
         "repositoryURL": "https://github.com/pointfreeco/swift-custom-dump",
         "state": {
           "branch": null,
-          "revision": "21ec1d717c07cea5a026979cb0471dd95c7087e7",
-          "version": "0.5.0"
+          "revision": "819d9d370cd721c9d87671e29d947279292e4541",
+          "version": "0.6.0"
         }
       },
       {
@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/pointfreeco/swift-identified-collections",
         "state": {
           "branch": null,
-          "revision": "2d6b7ffcc67afd9077fac5e5a29bcd6d39b71076",
-          "version": "0.4.0"
+          "revision": "bfb0d43e75a15b6dfac770bf33479e8393884a36",
+          "version": "0.4.1"
         }
       },
       {
@@ -69,8 +69,8 @@
         "repositoryURL": "https://github.com/pointfreeco/xctest-dynamic-overlay",
         "state": {
           "branch": null,
-          "revision": "38bc9242e4388b80bd23ddfdf3071428859e3260",
-          "version": "0.4.0"
+          "revision": "30314f1ece684dd60679d598a9b89107557b67d9",
+          "version": "0.4.1"
         }
       }
     ]
