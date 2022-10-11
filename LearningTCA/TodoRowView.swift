@@ -36,13 +36,13 @@ struct TodoRow: ReducerProtocol {
         case checkboxTapped
     }
 
-    @Dependency(\.date) var now
+    @Dependency(\.date.now) var now
 
     func reduce(into state: inout State, action: Action) -> Effect<Action, Never> {
         switch action {
         case .setFocus(let newFocus):
             if state.todo.dueDate == nil, newFocus == .dueDate {
-                state.todo.dueDate = now()
+                state.todo.dueDate = now
             }
             state.focus = newFocus
             return .none
