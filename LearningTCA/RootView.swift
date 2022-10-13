@@ -61,11 +61,10 @@ struct Root: ReducerProtocol {
             case .todo(id: _, action: .checkboxTapped):
                 enum CancelID {}
                 return .task {
-                    try await withTaskCancellation(id: CancelID.self, cancelInFlight: true) {
-                        try await self.mainQueue.sleep(for: .seconds(1))
-                        return .sortCompletedTodos
-                    }
+                    try await self.mainQueue.sleep(for: .seconds(1))
+                    return .sortCompletedTodos
                 }
+                .cancellable(id: CancelID.self, cancelInFlight: true)
                 .animation(.default)
 
             case .todo:
