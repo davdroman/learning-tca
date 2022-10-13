@@ -73,10 +73,7 @@ struct Root: ReducerProtocol {
 
             case .sortCompletedTodos:
                 state.todos = IdentifiedArray(uniqueElements:
-                    state.todos.enumerated().sorted {
-                        (!$0.element.isComplete && $1.element.isComplete) || $0.offset < $1.offset
-                    }
-                    .map(\.element)
+                    state.todos.sorted { !$0.isComplete && $1.isComplete }
                 )
                 return .none
             }
