@@ -2,8 +2,9 @@ import ComposableArchitecture
 @testable import LearningTCA
 import XCTest
 
+@MainActor
 final class TodosTests: XCTestCase {
-    func testCompletingTodo() {
+    func testCompletingTodo() async {
         let state = Root.State(todos: [
             Todo(
                 id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!,
@@ -16,13 +17,13 @@ final class TodosTests: XCTestCase {
             reducer: Root().dependency(\.mainQueue, .immediate)
         )
 
-        store.send(.todo(id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!, action: .checkboxTapped)) {
+        _ = await store.send(.todo(id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!, action: .checkboxTapped)) {
             $0.todos[id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!]?.isComplete = true
         }
-        store.receive(.sortCompletedTodos)
+        await store.receive(.sortCompletedTodos)
     }
 
-    func testAddTodo() {
+    func testAddTodo() async {
         let store = TestStore(
             initialState: Root.State(todos: []),
             reducer: Root()
@@ -30,7 +31,7 @@ final class TodosTests: XCTestCase {
                 .dependency(\.mainQueue, .immediate)
         )
 
-        store.send(.addButtonTapped) {
+        _ = await store.send(.addButtonTapped) {
             $0.todos = [
                 Todo(
                     id: UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")!,
@@ -39,12 +40,12 @@ final class TodosTests: XCTestCase {
                 )
             ]
         }
-        store.receive(.todo(id: UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")!, action: .setFocus(.description))) {
+        await store.receive(.todo(id: UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")!, action: .setFocus(.description))) {
             $0.focus = .init(id: UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")!, field: .description)
         }
     }
 
-    func testTodoSorting() {
+    func testTodoSorting() async {
         let state = Root.State(todos: [
             Todo(
                 id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!,
@@ -56,6 +57,11 @@ final class TodosTests: XCTestCase {
                 description: "Eggs",
                 isComplete: false
             ),
+            Todo(
+                id: UUID(uuidString: "00000000-0000-0000-0000-000000000002")!,
+                description: "Bread",
+                isComplete: false
+            ),
         ])
         let scheduler = DispatchQueue.test
         let store = TestStore(
@@ -63,7 +69,7 @@ final class TodosTests: XCTestCase {
             reducer: Root().dependency(\.mainQueue, scheduler.eraseToAnyScheduler())
         )
 
-        store.send(.todo(id: state.todos[0].id, action: .checkboxTapped)) {
+        _ = await store.send(.todo(id: state.todos[0].id, action: .checkboxTapped)) {
             $0.todos = [
                 Todo(
                     id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!,
@@ -75,10 +81,35 @@ final class TodosTests: XCTestCase {
                     description: "Eggs",
                     isComplete: false
                 ),
+                Todo(
+                    id: UUID(uuidString: "00000000-0000-0000-0000-000000000002")!,
+                    description: "Bread",
+                    isComplete: false
+                ),
             ]
         }
-        scheduler.advance(by: 1)
-        store.receive(.sortCompletedTodos) {
+        await scheduler.advance(by: 0.5)
+        _ = await store.send(.todo(id: state.todos[2].id, action: .checkboxTapped)) {
+            $0.todos = [
+                Todo(
+                    id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!,
+                    description: "Milk",
+                    isComplete: true
+                ),
+                Todo(
+                    id: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!,
+                    description: "Eggs",
+                    isComplete: false
+                ),
+                Todo(
+                    id: UUID(uuidString: "00000000-0000-0000-0000-000000000002")!,
+                    description: "Bread",
+                    isComplete: true
+                ),
+            ]
+        }
+        await scheduler.advance(by: 1)
+        await store.receive(.sortCompletedTodos) {
             $0.todos = [
                 Todo(
                     id: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!,
@@ -88,6 +119,11 @@ final class TodosTests: XCTestCase {
                 Todo(
                     id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!,
                     description: "Milk",
+                    isComplete: true
+                ),
+                Todo(
+                    id: UUID(uuidString: "00000000-0000-0000-0000-000000000002")!,
+                    description: "Bread",
                     isComplete: true
                 ),
             ]
