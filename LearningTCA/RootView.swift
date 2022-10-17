@@ -45,9 +45,9 @@ struct Root: ReducerProtocol {
             case .addButtonTapped:
                 let newTodo = Todo(id: uuid(), description: "")
                 state.todos.insert(newTodo, at: 0)
-                return .task {
+                return .run { send in
                     try await mainQueue.sleep(for: .zero) // fixes keyboard not showing
-                    return .todo(id: newTodo.id, action: .setFocus(.description))
+                    await send(.todo(id: newTodo.id, action: .setFocus(.description)))
                 }
 
             case .todo(let id, .setFocus(let field)):
@@ -60,12 +60,11 @@ struct Root: ReducerProtocol {
 
             case .todo(id: _, action: .checkboxTapped):
                 enum CancelID {}
-                return .task {
+                return .run { send in
                     try await self.mainQueue.sleep(for: .seconds(1))
-                    return .sortCompletedTodos
+                    await send(.sortCompletedTodos, animation: .default)
                 }
                 .cancellable(id: CancelID.self, cancelInFlight: true)
-                .animation(.default)
 
             case .todo:
                 return .none
