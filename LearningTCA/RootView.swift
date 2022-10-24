@@ -37,7 +37,7 @@ struct Root: ReducerProtocol {
     }
 
     @Dependency(\.uuid) var uuid
-    @Dependency(\.mainQueue) var mainQueue
+    @Dependency(\.continuousClock) var clock
 
     var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
@@ -46,7 +46,7 @@ struct Root: ReducerProtocol {
                 let newTodo = Todo(id: uuid(), description: "")
                 state.todos.insert(newTodo, at: 0)
                 return .run { send in
-                    try await mainQueue.sleep(for: .zero) // fixes keyboard not showing
+                    try await clock.sleep(for: .zero) // fixes keyboard not showing
                     await send(.todo(id: newTodo.id, action: .setFocus(.description)))
                 }
 
@@ -61,7 +61,7 @@ struct Root: ReducerProtocol {
             case .todo(id: _, action: .checkboxTapped):
                 enum CancelID {}
                 return .run { send in
-                    try await self.mainQueue.sleep(for: .seconds(1))
+                    try await clock.sleep(for: .seconds(1))
                     await send(.sortCompletedTodos, animation: .default)
                 }
                 .cancellable(id: CancelID.self, cancelInFlight: true)

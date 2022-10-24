@@ -14,7 +14,7 @@ final class TodosTests: XCTestCase {
         ])
         let store = TestStore(
             initialState: state,
-            reducer: Root().dependency(\.mainQueue, .immediate)
+            reducer: Root().dependency(\.continuousClock, ImmediateClock())
         )
 
         _ = await store.send(.todo(id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!, action: .checkboxTapped)) {
@@ -28,7 +28,7 @@ final class TodosTests: XCTestCase {
             initialState: Root.State(todos: []),
             reducer: Root()
                 .dependency(\.uuid, .constant(UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")!))
-                .dependency(\.mainQueue, .immediate)
+                .dependency(\.continuousClock, ImmediateClock())
         )
 
         _ = await store.send(.addButtonTapped) {
@@ -63,10 +63,10 @@ final class TodosTests: XCTestCase {
                 isComplete: false
             ),
         ])
-        let scheduler = DispatchQueue.test
+        let clock = TestClock()
         let store = TestStore(
             initialState: state,
-            reducer: Root().dependency(\.mainQueue, scheduler.eraseToAnyScheduler())
+            reducer: Root().dependency(\.continuousClock, clock)
         )
 
         _ = await store.send(.todo(id: state.todos[0].id, action: .checkboxTapped)) {
@@ -88,7 +88,7 @@ final class TodosTests: XCTestCase {
                 ),
             ]
         }
-        await scheduler.advance(by: 0.5)
+        await clock.advance(by: .seconds(0.5))
         _ = await store.send(.todo(id: state.todos[2].id, action: .checkboxTapped)) {
             $0.todos = [
                 Todo(
@@ -108,7 +108,7 @@ final class TodosTests: XCTestCase {
                 ),
             ]
         }
-        await scheduler.advance(by: 1)
+        await clock.advance(by: .seconds(1))
         await store.receive(.sortCompletedTodos) {
             $0.todos = [
                 Todo(
