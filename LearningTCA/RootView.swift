@@ -76,7 +76,9 @@ struct Root: ReducerProtocol {
                 return .none
             }
         }
-        .forEach(\.todoRowStates, action: /Action.todo, TodoRow.init)
+        .forEach(\.todoRowStates, action: /Action.todo) {
+            TodoRow()
+        }
     }
 }
 
