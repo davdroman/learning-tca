@@ -86,20 +86,19 @@ struct RootView: View {
 
 	var body: some View {
 		NavigationView {
-			WithViewStore(store) { viewStore in
-				List {
-					ForEachStore(
-						store.scope(state: \.todoRowStates, action: Root.Action.todo),
-						content: TodoRowView.init
-					)
-				}
-				.listStyle(.plain)
-				.navigationTitle("Todos")
-				.toolbar {
-					ToolbarItem(placement: .navigationBarTrailing) {
-						Button("Add") {
-							viewStore.send(.addButtonTapped, animation: .default)
-						}
+			List {
+				ForEachStore(
+					store.scope(state: \.todoRowStates, action: Root.Action.todo),
+					content: TodoRowView.init
+				)
+			}
+			.listStyle(.plain)
+			.scrollDismissesKeyboard(.interactively)
+			.navigationTitle("Todos")
+			.toolbar {
+				ToolbarItem(placement: .navigationBarTrailing) {
+					Button("Add") {
+						ViewStore(store).send(.addButtonTapped, animation: .default)
 					}
 				}
 			}
