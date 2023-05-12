@@ -117,9 +117,10 @@ struct RootView_Previews: PreviewProvider {
 						Todo(id: UUID(), description: "Eggs"),
 						Todo(id: UUID(), description: "Hand soap", isComplete: true),
 					]
-				),
-				reducer: Root()
-			)
+				)
+			) {
+				Root()
+			}
 		)
 	}
 }

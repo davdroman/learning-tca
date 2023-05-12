@@ -12,26 +12,27 @@ final class TodosTests: XCTestCase {
 				isComplete: false
 			),
 		])
-		let store = TestStore(
-			initialState: state,
-			reducer: Root().dependency(\.continuousClock, ImmediateClock())
-		)
+		let store = TestStore(initialState: state) {
+			Root()
+		} withDependencies: {
+			$0.continuousClock = ImmediateClock()
+		}
 
-		_ = await store.send(.todo(id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!, action: .checkboxTapped)) {
+		await store.send(.todo(id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!, action: .checkboxTapped)) {
 			$0.todos[id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!]?.isComplete = true
 		}
 		await store.receive(.sortCompletedTodos)
 	}
 
 	func testAddTodo() async {
-		let store = TestStore(
-			initialState: Root.State(todos: []),
-			reducer: Root()
-				.dependency(\.uuid, .constant(UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")!))
-				.dependency(\.continuousClock, ImmediateClock())
-		)
+		let store = TestStore(initialState: Root.State(todos: [])) {
+			Root()
+		} withDependencies: {
+			$0.uuid = .constant(UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")!)
+			$0.continuousClock = ImmediateClock()
+		}
 
-		_ = await store.send(.addButtonTapped) {
+		await store.send(.addButtonTapped) {
 			$0.todos = [
 				Todo(
 					id: UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")!,
@@ -64,12 +65,13 @@ final class TodosTests: XCTestCase {
 			),
 		])
 		let clock = TestClock()
-		let store = TestStore(
-			initialState: state,
-			reducer: Root().dependency(\.continuousClock, clock)
-		)
+		let store = TestStore(initialState: state) {
+			Root()
+		} withDependencies: {
+			$0.continuousClock = clock
+		}
 
-		_ = await store.send(.todo(id: state.todos[0].id, action: .checkboxTapped)) {
+		await store.send(.todo(id: state.todos[0].id, action: .checkboxTapped)) {
 			$0.todos = [
 				Todo(
 					id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!,
@@ -89,7 +91,7 @@ final class TodosTests: XCTestCase {
 			]
 		}
 		await clock.advance(by: .seconds(0.5))
-		_ = await store.send(.todo(id: state.todos[2].id, action: .checkboxTapped)) {
+		await store.send(.todo(id: state.todos[2].id, action: .checkboxTapped)) {
 			$0.todos = [
 				Todo(
 					id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!,

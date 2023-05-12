@@ -102,7 +102,7 @@ struct TodoRowView: View {
 				.offset(y: 2) // slight offset to counter the font's natural y offset
 			}
 			.opacity(viewStore.todo.isComplete ? 0.5 : 1)
-			.synchronize(viewStore.binding(get: \.focus, send: TodoRow.Action.setFocus), $focus)
+			.bind(viewStore.binding(get: \.focus, send: TodoRow.Action.setFocus), to: $focus)
 		}
 	}
 }
@@ -124,9 +124,9 @@ extension Optional where Wrapped == Date {
 }
 
 extension View {
-	func synchronize<Value: Equatable>(
+	func bind<Value: Equatable>(
 		_ first: Binding<Value>,
-		_ second: FocusState<Value>.Binding
+		to second: FocusState<Value>.Binding
 	) -> some View {
 		self.onChange(of: first.wrappedValue) { second.wrappedValue = $0 }
 			.onChange(of: second.wrappedValue) { first.wrappedValue = $0 }
@@ -148,10 +148,9 @@ struct TodoRowView_Previews: PreviewProvider {
 		]
 		ForEach(states) { state in
 			TodoRowView(
-				store: Store(
-					initialState: state,
-					reducer: TodoRow()
-				)
+				store: Store(initialState: state) {
+					TodoRow()
+				}
 			)
 		}
 		.padding()

@@ -14,9 +14,10 @@ struct App: SwiftUI.App {
 							Todo(id: UUID(), description: "Dust filter for Hoover Max Extract Pressure Pro model 60"),
 							Todo(id: UUID(), description: "Hand soap", isComplete: true),
 						]
-					),
-					reducer: Root()
-				)
+					)
+				) {
+					Root()
+				}
 			)
 		}
 	}
