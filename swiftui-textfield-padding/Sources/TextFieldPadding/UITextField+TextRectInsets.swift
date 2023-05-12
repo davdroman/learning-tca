@@ -2,59 +2,59 @@ import UIKit
 import ObjectiveC
 
 extension UITextField {
-    private enum StorageKey {
-        static var textRectInsets = "TextFieldPadding-textRectInsets"
-    }
-
-    public var textRectInsets: UIEdgeInsets? {
-        get {
-            objc_getAssociatedObject(self, &StorageKey.textRectInsets) as? UIEdgeInsets
-        }
-        set {
-            guard textRectInsets != newValue else {
-                return
-            }
-            UITextField.swizzleTextRectMethodsIfNeeded()
-            objc_setAssociatedObject(self, &StorageKey.textRectInsets, newValue, .OBJC_ASSOCIATION_RETAIN)
-            text = text // hack to force reload field's rect insets
-        }
-    }
+	private enum StorageKey {
+		static var textRectInsets = "TextFieldPadding-textRectInsets"
+	}
+	
+	public var textRectInsets: UIEdgeInsets? {
+		get {
+			objc_getAssociatedObject(self, &StorageKey.textRectInsets) as? UIEdgeInsets
+		}
+		set {
+			guard textRectInsets != newValue else {
+				return
+			}
+			UITextField.swizzleTextRectMethodsIfNeeded()
+			objc_setAssociatedObject(self, &StorageKey.textRectInsets, newValue, .OBJC_ASSOCIATION_RETAIN)
+			text = text // hack to force reload field's rect insets
+		}
+	}
 }
 
 private extension UITextField {
-    @objc func xxx_textRect(forBounds bounds: CGRect) -> CGRect {
-        guard let textRectInsets = textRectInsets else {
-            return self.xxx_textRect(forBounds: bounds)
-        }
-        return bounds.inset(by: textRectInsets)
-    }
-
-    @objc func xxx_editingRect(forBounds bounds: CGRect) -> CGRect {
-        guard let textRectInsets = textRectInsets else {
-            return self.xxx_editingRect(forBounds: bounds)
-        }
-        return bounds.inset(by: textRectInsets)
-    }
+	@objc func xxx_textRect(forBounds bounds: CGRect) -> CGRect {
+		guard let textRectInsets = textRectInsets else {
+			return self.xxx_textRect(forBounds: bounds)
+		}
+		return bounds.inset(by: textRectInsets)
+	}
+	
+	@objc func xxx_editingRect(forBounds bounds: CGRect) -> CGRect {
+		guard let textRectInsets = textRectInsets else {
+			return self.xxx_editingRect(forBounds: bounds)
+		}
+		return bounds.inset(by: textRectInsets)
+	}
 }
 
 private extension UITextField {
-    static var didSwizzle = false
-
-    static func swizzleTextRectMethodsIfNeeded() {
-        if !didSwizzle {
-            didSwizzle = true
-            swizzle(#selector(UITextField.textRect), with: #selector(UITextField.xxx_textRect))
-            swizzle(#selector(UITextField.editingRect), with: #selector(UITextField.xxx_editingRect))
-        }
-    }
-
-    static func swizzle(_ original: Selector, with swizzled: Selector) {
-        guard
-            let originalMethod = class_getInstanceMethod(UITextField.self, original),
-            let swizzledMethod = class_getInstanceMethod(UITextField.self, swizzled)
-        else {
-            return
-        }
-        method_exchangeImplementations(originalMethod, swizzledMethod)
-    }
+	static var didSwizzle = false
+	
+	static func swizzleTextRectMethodsIfNeeded() {
+		if !didSwizzle {
+			didSwizzle = true
+			swizzle(#selector(UITextField.textRect), with: #selector(UITextField.xxx_textRect))
+			swizzle(#selector(UITextField.editingRect), with: #selector(UITextField.xxx_editingRect))
+		}
+	}
+	
+	static func swizzle(_ original: Selector, with swizzled: Selector) {
+		guard
+			let originalMethod = class_getInstanceMethod(UITextField.self, original),
+			let swizzledMethod = class_getInstanceMethod(UITextField.self, swizzled)
+		else {
+			return
+		}
+		method_exchangeImplementations(originalMethod, swizzledMethod)
+	}
 }
