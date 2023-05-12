@@ -59,12 +59,12 @@ struct Root: ReducerProtocol {
                 return .none
 
             case .todo(id: _, action: .checkboxTapped):
-                enum CancelID {}
+                struct CancelID: Hashable {}
                 return .run { send in
                     try await clock.sleep(for: .seconds(1))
                     await send(.sortCompletedTodos, animation: .default)
                 }
-                .cancellable(id: CancelID.self, cancelInFlight: true)
+                .cancellable(id: CancelID(), cancelInFlight: true)
 
             case .todo:
                 return .none

@@ -38,7 +38,7 @@ struct TodoRow: ReducerProtocol {
 
     @Dependency(\.date.now) var now
 
-    func reduce(into state: inout State, action: Action) -> Effect<Action, Never> {
+    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .setFocus(let newFocus):
             if state.todo.dueDate == nil, newFocus == .dueDate {
