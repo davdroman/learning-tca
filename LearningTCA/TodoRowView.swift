@@ -11,65 +11,67 @@ struct Todo: Equatable, Identifiable {
 	var isComplete = false
 }
 
-struct TodoRow: ReducerProtocol {
+struct TodoRow: Reducer {
 	struct State: Equatable, Identifiable {
 		enum FocusedField: Hashable {
 			case description
 			case dueDate
 		}
-
+		
 		var id: Todo.ID { todo.id }
 		var todo: Todo
 		var focus: FocusedField?
-
+		
 		var showDueDate: Bool {
 			todo.dueDate != nil || focus != nil
 		}
 	}
-
+	
 	enum Action: Equatable {
 		case setFocus(State.FocusedField?)
 		case textFieldDidChange(String)
 		case dueDateDidChange(Date)
 		case checkboxTapped
 	}
-
+	
 	@Dependency(\.date.now) var now
-
-	func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-		switch action {
-		case .setFocus(let newFocus):
-			if state.todo.dueDate == nil, newFocus == .dueDate {
-				state.todo.dueDate = now
+	
+	var body: some ReducerOf<Self> {
+		Reduce { state, action in
+			switch action {
+			case .setFocus(let newFocus):
+				if state.todo.dueDate == nil, newFocus == .dueDate {
+					state.todo.dueDate = now
+				}
+				state.focus = newFocus
+				return .none
+			case .textFieldDidChange(let text):
+				state.todo.description = text
+				return .none
+			case .dueDateDidChange(let date):
+				state.todo.dueDate = date
+				return .none
+			case .checkboxTapped:
+				state.todo.isComplete.toggle()
+				return .none
 			}
-			state.focus = newFocus
-			return .none
-		case .textFieldDidChange(let text):
-			state.todo.description = text
-			return .none
-		case .dueDateDidChange(let date):
-			state.todo.dueDate = date
-			return .none
-		case .checkboxTapped:
-			state.todo.isComplete.toggle()
-			return .none
 		}
 	}
 }
 
 struct TodoRowView: View {
 	let store: StoreOf<TodoRow>
-
+	
 	@FocusState private var focus: TodoRow.State.FocusedField?
-
+	
 	var body: some View {
-		WithViewStore(store) { viewStore in
+		WithViewStore(store, observe: { $0 }) { viewStore in
 			HStack {
 				Button(action: { viewStore.send(.checkboxTapped, animation: .default) }) {
 					Image(systemName: viewStore.todo.isComplete ? "checkmark.square" : "square")
 				}
 				.buttonStyle(.plain)
-
+				
 				VStack(alignment: .leading, spacing: 0) {
 					TextArea(
 						"Untitled todo",
@@ -82,7 +84,7 @@ struct TodoRowView: View {
 					.textAreaPadding(.horizontal, 2)
 					.textAreaParagraphStyle(\.paragraphSpacing, 12)
 					.inputAccessory(.default)
-
+					
 					if viewStore.showDueDate {
 						TextField(
 							"Due date",
@@ -107,29 +109,9 @@ struct TodoRowView: View {
 	}
 }
 
-extension View {
-	func animationDisabled(_ isDisabled: Bool = true) -> some View {
-		transaction {
-			if isDisabled {
-				$0.disablesAnimations = true
-			}
-		}
-	}
-}
-
 extension Optional where Wrapped == Date {
 	var nowIfNil: Date {
 		self ?? .now
-	}
-}
-
-extension View {
-	func bind<Value: Equatable>(
-		_ first: Binding<Value>,
-		to second: FocusState<Value>.Binding
-	) -> some View {
-		self.onChange(of: first.wrappedValue) { second.wrappedValue = $0 }
-			.onChange(of: second.wrappedValue) { first.wrappedValue = $0 }
 	}
 }
 

@@ -1,7 +1,7 @@
 import ComposableArchitecture
 import SwiftUI
 
-struct Root: ReducerProtocol {
+struct Root: Reducer {
 	struct State: Equatable {
 		struct TodoFocus: Equatable {
 			var id: Todo.ID
@@ -38,7 +38,7 @@ struct Root: ReducerProtocol {
 	@Dependency(\.uuid) var uuid
 	@Dependency(\.continuousClock) var clock
 
-	var body: some ReducerProtocol<State, Action> {
+	var body: some ReducerOf<Self> {
 		Reduce { state, action in
 			switch action {
 			case .addButtonTapped:
@@ -98,7 +98,7 @@ struct RootView: View {
 			.toolbar {
 				ToolbarItem(placement: .navigationBarTrailing) {
 					Button("Add") {
-						ViewStore(store).send(.addButtonTapped, animation: .default)
+						ViewStore(store, observe: { $0 }).send(.addButtonTapped, animation: .default)
 					}
 				}
 			}
