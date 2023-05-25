@@ -5,21 +5,16 @@ import XCTest
 @MainActor
 final class TodosTests: XCTestCase {
 	func testCompletingTodo() async {
-		let state = Root.State(todos: [
-			Todo(
-				id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!,
-				description: "Milk",
-				isComplete: false
-			),
-		])
-		let store = TestStore(initialState: state) {
-			Root()
-		} withDependencies: {
-			$0.continuousClock = ImmediateClock()
+		let store = TestStore(
+            initialState: Root.State(todos: [
+                Todo(id: UUID(0), description: "Milk", isComplete: false),
+            ])
+        ) {
+			Root().dependency(\.continuousClock, ImmediateClock())
 		}
 
-		await store.send(.todo(id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!, action: .checkboxTapped)) {
-			$0.todos[id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!]?.isComplete = true
+		await store.send(.todo(id: UUID(0), action: .checkboxTapped)) {
+			$0.todos[id: UUID(0)]?.isComplete = true
 		}
 		await store.receive(.sortCompletedTodos)
 	}
@@ -28,106 +23,53 @@ final class TodosTests: XCTestCase {
 		let store = TestStore(initialState: Root.State(todos: [])) {
 			Root()
 		} withDependencies: {
-			$0.uuid = .constant(UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")!)
+			$0.uuid = .constant(UUID(0))
 			$0.continuousClock = ImmediateClock()
 		}
 
 		await store.send(.addButtonTapped) {
 			$0.todos = [
-				Todo(
-					id: UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")!,
-					description: "",
-					isComplete: false
-				)
+				Todo(id: UUID(0), description: "", isComplete: false)
 			]
 		}
-		await store.receive(.todo(id: UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")!, action: .setFocus(.description))) {
-			$0.focus = .init(id: UUID(uuidString: "DEADBEEF-DEAD-BEEF-DEAD-DEADBEEFDEAD")!, field: .description)
+		await store.receive(.todo(id: UUID(0), action: .setFocus(.description))) {
+			$0.focus = .init(id: UUID(0), field: .description)
 		}
 	}
 
 	func testTodoSorting() async {
-		let state = Root.State(todos: [
-			Todo(
-				id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!,
-				description: "Milk",
-				isComplete: false
-			),
-			Todo(
-				id: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!,
-				description: "Eggs",
-				isComplete: false
-			),
-			Todo(
-				id: UUID(uuidString: "00000000-0000-0000-0000-000000000002")!,
-				description: "Bread",
-				isComplete: false
-			),
-		])
 		let clock = TestClock()
-		let store = TestStore(initialState: state) {
-			Root()
-		} withDependencies: {
-			$0.continuousClock = clock
-		}
+		let store = TestStore(
+            initialState: Root.State(todos: [
+                Todo(id: UUID(0), description: "Milk", isComplete: false),
+                Todo(id: UUID(1), description: "Eggs", isComplete: false),
+                Todo(id: UUID(2), description: "Bread", isComplete: false),
+            ])
+        ) {
+            Root().dependency(\.continuousClock, clock)
+        }
 
-		await store.send(.todo(id: state.todos[0].id, action: .checkboxTapped)) {
+		await store.send(.todo(id: UUID(0), action: .checkboxTapped)) {
 			$0.todos = [
-				Todo(
-					id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!,
-					description: "Milk",
-					isComplete: true
-				),
-				Todo(
-					id: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!,
-					description: "Eggs",
-					isComplete: false
-				),
-				Todo(
-					id: UUID(uuidString: "00000000-0000-0000-0000-000000000002")!,
-					description: "Bread",
-					isComplete: false
-				),
+				Todo(id: UUID(0), description: "Milk", isComplete: true),
+				Todo(id: UUID(1), description: "Eggs", isComplete: false),
+				Todo(id: UUID(2), description: "Bread", isComplete: false),
 			]
 		}
 		await clock.advance(by: .seconds(0.5))
-		await store.send(.todo(id: state.todos[2].id, action: .checkboxTapped)) {
+		await store.send(.todo(id: UUID(2), action: .checkboxTapped)) {
 			$0.todos = [
-				Todo(
-					id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!,
-					description: "Milk",
-					isComplete: true
-				),
-				Todo(
-					id: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!,
-					description: "Eggs",
-					isComplete: false
-				),
-				Todo(
-					id: UUID(uuidString: "00000000-0000-0000-0000-000000000002")!,
-					description: "Bread",
-					isComplete: true
-				),
+				Todo(id: UUID(0), description: "Milk", isComplete: true),
+				Todo(id: UUID(1), description: "Eggs", isComplete: false),
+				Todo(id: UUID(2), description: "Bread", isComplete: true),
 			]
 		}
 		await clock.advance(by: .seconds(1))
 		await store.receive(.sortCompletedTodos) {
 			$0.todos = [
-				Todo(
-					id: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!,
-					description: "Eggs",
-					isComplete: false
-				),
-				Todo(
-					id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!,
-					description: "Milk",
-					isComplete: true
-				),
-				Todo(
-					id: UUID(uuidString: "00000000-0000-0000-0000-000000000002")!,
-					description: "Bread",
-					isComplete: true
-				),
+				Todo(id: UUID(1), description: "Eggs", isComplete: false),
+				Todo(id: UUID(0), description: "Milk", isComplete: true),
+				Todo(id: UUID(2), description: "Bread", isComplete: true),
 			]
 		}
 	}
