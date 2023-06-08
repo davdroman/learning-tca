@@ -1,5 +1,5 @@
-import Introspect
 import SwiftUI
+@_spi(Internals) import SwiftUIIntrospect
 
 struct Modifier<SwiftUIView: View>: ViewModifier {
 	@State
@@ -51,11 +51,17 @@ typealias TextContainerView = UIView & TextContainer
 
 extension View {
 	func introspectTextContainerView(customize: @escaping (TextContainerView) -> ()) -> some View {
-		introspect(
-			selector: { Introspect.findAncestorOrAncestorChild(ofType: TextContainerView.self, from: $0) },
-			customize: customize
-		)
+        self.introspect(.textField, on: .iOS(.all), customize: { customize($0) })
+            .introspect(.textEditor, on: .iOS(.all), customize: { customize($0) })
 	}
+}
+
+extension iOSViewVersion<TextFieldType, UITextField> {
+    static let all = Self(for: .init(isCurrent: { true }))
+}
+
+extension iOSViewVersion<TextEditorType, UITextView> {
+    static let all = Self(for: .init(isCurrent: { true }))
 }
 
 private extension UIView {

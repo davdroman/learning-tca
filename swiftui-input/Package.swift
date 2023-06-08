@@ -1,4 +1,4 @@
-// swift-tools-version: 5.5
+// swift-tools-version: 5.7
 
 import PackageDescription
 
@@ -11,10 +11,12 @@ let package = Package(
         .library(name: "SwiftUIInput", targets: ["SwiftUIInput"]),
     ],
     targets: [
-        .target(name: "SwiftUIInput", dependencies: [.product(name: "Introspect", package: "Introspect")]),
+        .target(name: "SwiftUIInput", dependencies: [
+            .product(name: "SwiftUIIntrospect", package: "swiftui-introspect")
+        ]),
     ]
 )
 
 package.dependencies = [
-    .package(name: "Introspect", url: "https://github.com/siteline/SwiftUI-Introspect", from: "0.1.3"),
+    .package(url: "https://github.com/siteline/swiftui-introspect", from: "0.6.1"),
 ]

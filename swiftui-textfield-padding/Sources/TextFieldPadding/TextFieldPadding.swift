@@ -1,4 +1,4 @@
-import Introspect
+@_spi(Internals) import SwiftUIIntrospect
 import SwiftUI
 
 extension View {
@@ -51,12 +51,16 @@ extension View {
 	}
 	
 	private func transformUITextFieldPadding(_ transform: @escaping (inout UIEdgeInsets) -> Void) -> some View {
-		self.introspectTextField {
+		self.introspect(.textField, on: .iOS(.all)) {
 			var insets = $0.textRectInsets ?? UIEdgeInsets()
 			transform(&insets)
 			$0.textRectInsets = insets
 		}
 	}
+}
+
+extension iOSViewVersion<TextFieldType, UITextField> {
+    static let all = Self(for: .init(isCurrent: { true }))
 }
 
 private extension Edge.Set {

@@ -1,5 +1,4 @@
 import ComposableArchitecture
-import TextArea
 import TextFieldPadding
 import SwiftUI
 import SwiftUIInput
@@ -73,16 +72,17 @@ struct TodoRowView: View {
 				.buttonStyle(.plain)
 				
 				VStack(alignment: .leading, spacing: 0) {
-					TextArea(
+					TextField(
 						"Untitled todo",
-						text: viewStore.binding(get: \.todo.description, send: TodoRow.Action.textFieldDidChange)
+						text: viewStore.binding(get: \.todo.description, send: TodoRow.Action.textFieldDidChange),
+                        axis: .vertical
 					)
 					.focused($focus, equals: .description)
-					.textAreaScrollDisabled(true)
-					.textAreaPadding(.top, 12)
-					.textAreaPadding(.bottom, viewStore.showDueDate ? 4 : 12)
-					.textAreaPadding(.horizontal, 2)
-					.textAreaParagraphStyle(\.paragraphSpacing, 12)
+//					.textAreaScrollDisabled(true)
+//					.textAreaPadding(.top, 12)
+//					.textAreaPadding(.bottom, viewStore.showDueDate ? 4 : 12)
+//					.textAreaPadding(.horizontal, 2)
+//					.textAreaParagraphStyle(\.paragraphSpacing, 12)
 					.inputAccessory(.default)
 					
 					if viewStore.showDueDate {
@@ -92,9 +92,9 @@ struct TodoRowView: View {
 						)
 						.foregroundColor(.gray)
 						.focused($focus, equals: .dueDate)
-						.textFieldPadding(.top, 4)
-						.textFieldPadding(.bottom, 12)
-						.textFieldPadding(.horizontal, 2)
+//						.textFieldPadding(.top, 4)
+//						.textFieldPadding(.bottom, 12)
+//						.textFieldPadding(.horizontal, 2)
 						.input(.datePicker(viewStore.binding(get: \.todo.dueDate.nowIfNil, send: TodoRow.Action.dueDateDidChange)))
 						.inputAccessory(.default)
 					}
