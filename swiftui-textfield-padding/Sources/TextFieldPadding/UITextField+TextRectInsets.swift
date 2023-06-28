@@ -2,20 +2,18 @@ import UIKit
 import ObjectiveC
 
 extension UITextField {
-	private enum StorageKey {
-		static var textRectInsets = "TextFieldPadding-textRectInsets"
-	}
-	
 	public var textRectInsets: UIEdgeInsets? {
 		get {
-			objc_getAssociatedObject(self, &StorageKey.textRectInsets) as? UIEdgeInsets
+			let key = unsafeBitCast(Selector(#function), to: UnsafeRawPointer.self)
+			return objc_getAssociatedObject(self, key) as? UIEdgeInsets
 		}
 		set {
 			guard textRectInsets != newValue else {
 				return
 			}
 			UITextField.swizzleTextRectMethodsIfNeeded()
-			objc_setAssociatedObject(self, &StorageKey.textRectInsets, newValue, .OBJC_ASSOCIATION_RETAIN)
+			let key = unsafeBitCast(Selector(#function), to: UnsafeRawPointer.self)
+			objc_setAssociatedObject(self, key, newValue, .OBJC_ASSOCIATION_RETAIN)
 			text = text // hack to force reload field's rect insets
 		}
 	}

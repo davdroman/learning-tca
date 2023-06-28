@@ -18,7 +18,6 @@
 		D5AEE2882779140100A62DAD /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AEE2862779140100A62DAD /* App.swift */; };
 		D5AEE2892779140100A62DAD /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AEE2872779140100A62DAD /* RootView.swift */; };
 		D5EFED2E27FDE42A0046640F /* SwiftUIInput in Frameworks */ = {isa = PBXBuildFile; productRef = D5EFED2D27FDE42A0046640F /* SwiftUIInput */; };
-		D5F8D5F12A1FD46D0054E9AB /* Bind.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F8D5F02A1FD46D0054E9AB /* Bind.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,7 +44,6 @@
 		D5AEE2862779140100A62DAD /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = App.swift; path = LearningTCA/App.swift; sourceTree = SOURCE_ROOT; };
 		D5AEE2872779140100A62DAD /* RootView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RootView.swift; path = LearningTCA/RootView.swift; sourceTree = SOURCE_ROOT; };
 		D5EFED2A27FDDF6B0046640F /* swiftui-input */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "swiftui-input"; sourceTree = "<group>"; };
-		D5F8D5F02A1FD46D0054E9AB /* Bind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bind.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,7 +102,6 @@
 				D5AEE2862779140100A62DAD /* App.swift */,
 				D5AEE2872779140100A62DAD /* RootView.swift */,
 				D5987C2F277B660D0039F71D /* TodoRowView.swift */,
-				D5F8D5F02A1FD46D0054E9AB /* Bind.swift */,
 				D511E56827F36D7500DF0400 /* whatever it takes bold.ttf */,
 				D511E56927F36D7500DF0400 /* whatever it takes.ttf */,
 				D5AEE25D2779136400A62DAD /* Assets.xcassets */,
@@ -242,7 +239,6 @@
 			files = (
 				D5AEE2892779140100A62DAD /* RootView.swift in Sources */,
 				D5987C30277B660D0039F71D /* TodoRowView.swift in Sources */,
-				D5F8D5F12A1FD46D0054E9AB /* Bind.swift in Sources */,
 				D5AEE2882779140100A62DAD /* App.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
