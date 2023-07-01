@@ -19,5 +19,5 @@ let package = Package(
 )
 
 package.dependencies = [
-    .package(url: "https://github.com/siteline/swiftui-introspect", from: "0.6.1"),
+    .package(url: "https://github.com/siteline/swiftui-introspect", from: "0.8.0"),
 ]
