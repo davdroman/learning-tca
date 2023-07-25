@@ -22,7 +22,7 @@ struct Modifier<SwiftUIView: View>: ViewModifier {
 	private func setInputView(for container: TextContainerView) {
 		guard
 			container[keyPath: keyPath] == nil,
-			let parent = container.parentViewController
+			let parent = container.viewController
 		else {
 			return
 		}
@@ -57,15 +57,12 @@ extension View {
 }
 
 private extension UIView {
-	var parentViewController: UIViewController? {
-		var parentResponder: UIResponder? = self.next
-		while parentResponder != nil {
-			if let viewController = parentResponder as? UIViewController {
-				return viewController
-			}
-			parentResponder = parentResponder?.next
-		}
-		return nil
+	var nexts: some Sequence<UIResponder> {
+		sequence(first: self, next: \.next).dropFirst()
+	}
+
+	var viewController: UIViewController? {
+		nexts.lazy.compactMap({ $0 as? UIViewController }).first(where: { _ in true })
 	}
 }
 
