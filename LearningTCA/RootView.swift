@@ -98,9 +98,7 @@ struct RootView: View {
 			.toolbar {
 				ToolbarItem(placement: .navigationBarTrailing) {
 					Button("Add") {
-						withAnimation(.default) {
-							store.send(.addButtonTapped)
-						}
+						store.send(.addButtonTapped, animation: .default)
 					}
 				}
 			}
