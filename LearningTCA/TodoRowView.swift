@@ -10,7 +10,8 @@ struct Todo: Equatable, Identifiable {
 	var isComplete = false
 }
 
-struct TodoRow: Reducer {
+@Reducer
+struct TodoRow {
 	struct State: Equatable, Identifiable {
 		enum FocusedField: Hashable {
 			case description

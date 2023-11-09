@@ -13,7 +13,7 @@ final class TodosTests: XCTestCase {
 			Root().dependency(\.continuousClock, ImmediateClock())
 		}
 
-		await store.send(.todo(id: UUID(0), action: .checkboxTapped)) {
+		await store.send(.todo(.element(id: UUID(0), action: .checkboxTapped))) {
 			$0.todos[id: UUID(0)]?.isComplete = true
 		}
 		await store.receive(.sortCompletedTodos)
@@ -32,7 +32,7 @@ final class TodosTests: XCTestCase {
 				Todo(id: UUID(0), description: "", isComplete: false)
 			]
 		}
-		await store.receive(.todo(id: UUID(0), action: .setFocus(.description))) {
+		await store.receive(.todo(.element(id: UUID(0), action: .setFocus(.description)))) {
 			$0.focus = .init(id: UUID(0), field: .description)
 		}
 	}
@@ -49,7 +49,7 @@ final class TodosTests: XCTestCase {
             Root().dependency(\.continuousClock, clock)
         }
 
-		await store.send(.todo(id: UUID(0), action: .checkboxTapped)) {
+		await store.send(.todo(.element(id: UUID(0), action: .checkboxTapped))) {
 			$0.todos = [
 				Todo(id: UUID(0), description: "Milk", isComplete: true),
 				Todo(id: UUID(1), description: "Eggs", isComplete: false),
@@ -57,7 +57,7 @@ final class TodosTests: XCTestCase {
 			]
 		}
 		await clock.advance(by: .seconds(0.5))
-		await store.send(.todo(id: UUID(2), action: .checkboxTapped)) {
+		await store.send(.todo(.element(id: UUID(2), action: .checkboxTapped))) {
 			$0.todos = [
 				Todo(id: UUID(0), description: "Milk", isComplete: true),
 				Todo(id: UUID(1), description: "Eggs", isComplete: false),

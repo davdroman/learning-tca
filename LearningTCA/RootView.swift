@@ -1,7 +1,8 @@
 import ComposableArchitecture
 import SwiftUI
 
-struct Root: Reducer {
+@Reducer
+struct Root {
 	struct State: Equatable {
 		struct TodoFocus: Equatable {
 			var id: Todo.ID
@@ -31,7 +32,7 @@ struct Root: Reducer {
 
 	enum Action: Equatable {
 		case addButtonTapped
-		case todo(id: Todo.ID, action: TodoRow.Action)
+		case todo(IdentifiedActionOf<TodoRow>)
 		case sortCompletedTodos
 	}
 
@@ -46,10 +47,10 @@ struct Root: Reducer {
 				state.todos.insert(newTodo, at: 0)
 				return .run { send in
 					try await clock.sleep(for: .zero) // fixes keyboard not showing
-					await send(.todo(id: newTodo.id, action: .setFocus(.description)))
+					await send(.todo(.element(id: newTodo.id, action: .setFocus(.description))))
 				}
 
-			case .todo(let id, .setFocus(let field)):
+			case .todo(.element(let id, .setFocus(let field))):
 				if let field = field {
 					state.focus = .init(id: id, field: field)
 				} else if state.focus?.id == id {
@@ -57,7 +58,7 @@ struct Root: Reducer {
 				}
 				return .none
 
-			case .todo(id: _, action: .checkboxTapped):
+			case .todo(.element(id: _, action: .checkboxTapped)):
 				struct CancelID: Hashable {}
 				return .run { send in
 					try await clock.sleep(for: .seconds(1))
@@ -75,7 +76,7 @@ struct Root: Reducer {
 				return .none
 			}
 		}
-		.forEach(\.todoRowStates, action: /Action.todo) {
+		.forEach(\.todoRowStates, action: \.todo) {
 			TodoRow()
 		}
 	}
