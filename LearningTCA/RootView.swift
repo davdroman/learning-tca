@@ -88,10 +88,9 @@ struct RootView: View {
 	var body: some View {
 		NavigationView {
 			List {
-				ForEachStore(
-					store.scope(state: \.todoRowStates, action: Root.Action.todo),
-					content: TodoRowView.init
-				)
+				ForEachStore(store.scope(state: \.todoRowStates, action: \.todo)) {
+					TodoRowView(store: $0)
+				}
 			}
 			.listStyle(.plain)
 			.scrollDismissesKeyboard(.interactively)
