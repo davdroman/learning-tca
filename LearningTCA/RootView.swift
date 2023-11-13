@@ -30,7 +30,7 @@ struct Root {
 		}
 	}
 
-	enum Action: Equatable {
+	enum Action {
 		case addButtonTapped
 		case todo(IdentifiedActionOf<TodoRow>)
 		case sortCompletedTodos

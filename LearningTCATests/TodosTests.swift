@@ -16,7 +16,7 @@ final class TodosTests: XCTestCase {
 		await store.send(.todo(.element(id: UUID(0), action: .checkboxTapped))) {
 			$0.todos[id: UUID(0)]?.isComplete = true
 		}
-		await store.receive(.sortCompletedTodos)
+		await store.receive(\.sortCompletedTodos)
 	}
 
 	func testAddTodo() async {
@@ -32,7 +32,7 @@ final class TodosTests: XCTestCase {
 				Todo(id: UUID(0), description: "", isComplete: false)
 			]
 		}
-		await store.receive(.todo(.element(id: UUID(0), action: .setFocus(.description)))) {
+		await store.receive(\.todo) {
 			$0.focus = .init(id: UUID(0), field: .description)
 		}
 	}
@@ -65,7 +65,7 @@ final class TodosTests: XCTestCase {
 			]
 		}
 		await clock.advance(by: .seconds(1))
-		await store.receive(.sortCompletedTodos) {
+		await store.receive(\.sortCompletedTodos) {
 			$0.todos = [
 				Todo(id: UUID(1), description: "Eggs", isComplete: false),
 				Todo(id: UUID(0), description: "Milk", isComplete: true),

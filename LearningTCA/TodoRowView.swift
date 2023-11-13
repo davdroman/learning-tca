@@ -13,7 +13,7 @@ struct Todo: Equatable, Identifiable {
 @Reducer
 struct TodoRow {
 	struct State: Equatable, Identifiable {
-		enum FocusedField: Hashable {
+		enum FocusedField: Equatable {
 			case description
 			case dueDate
 		}
@@ -27,7 +27,7 @@ struct TodoRow {
 		}
 	}
 	
-	enum Action: Equatable {
+	enum Action {
 		case setFocus(State.FocusedField?)
 		case textFieldDidChange(String)
 		case dueDateDidChange(Date)
