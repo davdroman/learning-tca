@@ -76,7 +76,7 @@ struct TodoRowView: View {
 					TextField(
 						"Untitled todo",
 						text: viewStore.binding(get: \.todo.description, send: TodoRow.Action.textFieldDidChange),
-                        axis: .vertical
+						axis: .vertical
 					)
 					.focused($focus, equals: .description)
 //					.textAreaScrollDisabled(true)
