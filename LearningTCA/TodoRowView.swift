@@ -12,6 +12,7 @@ struct Todo: Equatable, Identifiable {
 
 @Reducer
 struct TodoRow {
+	@ObservableState
 	struct State: Equatable, Identifiable {
 		enum FocusedField: Equatable {
 			case description
@@ -21,7 +22,12 @@ struct TodoRow {
 		var id: Todo.ID { todo.id }
 		var todo: Todo
 		var focus: FocusedField?
-		
+
+		init(todo: Todo, focus: FocusedField? = nil) {
+			self.todo = todo
+			self.focus = focus
+		}
+
 		var showDueDate: Bool {
 			todo.dueDate != nil || focus != nil
 		}
@@ -60,22 +66,22 @@ struct TodoRow {
 }
 
 struct TodoRowView: View {
-	let store: StoreOf<TodoRow>
-	
+	@Bindable var store: StoreOf<TodoRow>
+
 	@FocusState private var focus: TodoRow.State.FocusedField?
 	
 	var body: some View {
-		WithViewStore(store, observe: { $0 }) { viewStore in
+//		WithPerceptionTracking {
 			HStack {
-				Button(action: { viewStore.send(.checkboxTapped, animation: .default) }) {
-					Image(systemName: viewStore.todo.isComplete ? "checkmark.square" : "square")
+				Button(action: { store.send(.checkboxTapped, animation: .default) }) {
+					Image(systemName: store.todo.isComplete ? "checkmark.square" : "square")
 				}
 				.buttonStyle(.plain)
 				
 				VStack(alignment: .leading, spacing: 0) {
 					TextField(
 						"Untitled todo",
-						text: viewStore.binding(get: \.todo.description, send: TodoRow.Action.textFieldDidChange),
+						text: $store.todo.description.sending(\.textFieldDidChange),
 						axis: .vertical
 					)
 					.focused($focus, equals: .description)
@@ -84,29 +90,29 @@ struct TodoRowView: View {
 //					.textAreaPadding(.bottom, viewStore.showDueDate ? 4 : 12)
 //					.textAreaPadding(.horizontal, 2)
 //					.textAreaParagraphStyle(\.paragraphSpacing, 12)
-					.inputAccessory(.default)
+//					.inputAccessory(.default)
 					
-					if viewStore.showDueDate {
+					if store.showDueDate {
 						TextField(
 							"Due date",
-							text: .constant(viewStore.todo.dueDate?.formatted(.dateTime) ?? "")
+							text: .constant(store.todo.dueDate?.formatted(.dateTime) ?? "")
 						)
 						.foregroundColor(.gray)
 						.focused($focus, equals: .dueDate)
 //						.textFieldPadding(.top, 4)
 //						.textFieldPadding(.bottom, 12)
 //						.textFieldPadding(.horizontal, 2)
-						.input(.datePicker(viewStore.binding(get: \.todo.dueDate.nowIfNil, send: TodoRow.Action.dueDateDidChange)))
-						.inputAccessory(.default)
+//						.input(.datePicker($store.todo.dueDate.nowIfNil.sending(\.dueDateDidChange)))
+//						.inputAccessory(.default)
 					}
 				}
-				.disabled(viewStore.todo.isComplete)
+				.disabled(store.todo.isComplete)
 				.font(.custom("whatever it takes", size: 23))
 				.offset(y: 2) // slight offset to counter the font's natural y offset
 			}
-			.opacity(viewStore.todo.isComplete ? 0.5 : 1)
-			.bind(viewStore.binding(get: \.focus, send: TodoRow.Action.setFocus), to: $focus)
-		}
+			.opacity(store.todo.isComplete ? 0.5 : 1)
+			.bind($store.focus.sending(\.setFocus), to: $focus)
+//		}
 	}
 }
 
