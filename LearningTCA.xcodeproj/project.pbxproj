@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		D511E56A27F36D7500DF0400 /* whatever it takes bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D511E56827F36D7500DF0400 /* whatever it takes bold.ttf */; };
 		D511E56B27F36D7500DF0400 /* whatever it takes.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D511E56927F36D7500DF0400 /* whatever it takes.ttf */; };
-		D511E57527F4967500DF0400 /* TextFieldPadding in Frameworks */ = {isa = PBXBuildFile; productRef = D511E57427F4967500DF0400 /* TextFieldPadding */; };
 		D5987C30277B660D0039F71D /* TodoRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5987C2F277B660D0039F71D /* TodoRowView.swift */; };
 		D5AEE25E2779136400A62DAD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D5AEE25D2779136400A62DAD /* Assets.xcassets */; };
 		D5AEE2612779136400A62DAD /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D5AEE2602779136400A62DAD /* Preview Assets.xcassets */; };
@@ -17,7 +16,6 @@
 		D5AEE285277913F100A62DAD /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = D5AEE284277913F100A62DAD /* ComposableArchitecture */; };
 		D5AEE2882779140100A62DAD /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AEE2862779140100A62DAD /* App.swift */; };
 		D5AEE2892779140100A62DAD /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AEE2872779140100A62DAD /* RootView.swift */; };
-		D5EFED2E27FDE42A0046640F /* SwiftUIInput in Frameworks */ = {isa = PBXBuildFile; productRef = D5EFED2D27FDE42A0046640F /* SwiftUIInput */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,7 +32,6 @@
 		D511E56827F36D7500DF0400 /* whatever it takes bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "whatever it takes bold.ttf"; sourceTree = "<group>"; };
 		D511E56927F36D7500DF0400 /* whatever it takes.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "whatever it takes.ttf"; sourceTree = "<group>"; };
 		D511E56C27F36DD300DF0400 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		D511E57327F4957E00DF0400 /* swiftui-textfield-padding */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "swiftui-textfield-padding"; sourceTree = "<group>"; };
 		D5987C2F277B660D0039F71D /* TodoRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoRowView.swift; sourceTree = "<group>"; };
 		D5AEE2562779136300A62DAD /* LearningTCA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LearningTCA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5AEE25D2779136400A62DAD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -43,7 +40,6 @@
 		D5AEE26A2779136400A62DAD /* TodosTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosTests.swift; sourceTree = "<group>"; };
 		D5AEE2862779140100A62DAD /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = App.swift; path = LearningTCA/App.swift; sourceTree = SOURCE_ROOT; };
 		D5AEE2872779140100A62DAD /* RootView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RootView.swift; path = LearningTCA/RootView.swift; sourceTree = SOURCE_ROOT; };
-		D5EFED2A27FDDF6B0046640F /* swiftui-input */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "swiftui-input"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,8 +47,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D5EFED2E27FDE42A0046640F /* SwiftUIInput in Frameworks */,
-				D511E57527F4967500DF0400 /* TextFieldPadding in Frameworks */,
 				D5AEE285277913F100A62DAD /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -77,8 +71,6 @@
 		D5AEE24D2779136300A62DAD = {
 			isa = PBXGroup;
 			children = (
-				D511E57327F4957E00DF0400 /* swiftui-textfield-padding */,
-				D5EFED2A27FDDF6B0046640F /* swiftui-input */,
 				D5AEE2582779136300A62DAD /* LearningTCA */,
 				D5AEE2692779136400A62DAD /* LearningTCATests */,
 				D5AEE2572779136300A62DAD /* Products */,
@@ -144,8 +136,6 @@
 			name = LearningTCA;
 			packageProductDependencies = (
 				D5AEE284277913F100A62DAD /* ComposableArchitecture */,
-				D511E57427F4967500DF0400 /* TextFieldPadding */,
-				D5EFED2D27FDE42A0046640F /* SwiftUIInput */,
 			);
 			productName = LearningTCA;
 			productReference = D5AEE2562779136300A62DAD /* LearningTCA.app */;
@@ -523,18 +513,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		D511E57427F4967500DF0400 /* TextFieldPadding */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = TextFieldPadding;
-		};
 		D5AEE284277913F100A62DAD /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D5AEE283277913F100A62DAD /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
-		};
-		D5EFED2D27FDE42A0046640F /* SwiftUIInput */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = SwiftUIInput;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

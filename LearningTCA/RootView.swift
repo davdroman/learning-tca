@@ -3,24 +3,26 @@ import SwiftUI
 
 @Reducer
 struct Root {
+	@ObservableState
 	struct State: Equatable {
-		struct TodoFocus: Equatable {
-			var id: Todo.ID
-			var field: TodoRow.State.FocusedField
-		}
+		typealias Focus = Identified<Todo.ID, TodoRow.State.Field>
 
 		var todos: IdentifiedArrayOf<Todo>
-		var focus: TodoFocus?
+		var focus: Focus?
 
-		func focusedField(for todo: Todo) -> TodoRow.State.FocusedField? {
-			todo.id == focus?.id ? focus?.field : nil
+		init(todos: IdentifiedArrayOf<Todo>, focus: Focus? = nil) {
+			self.todos = todos
+			self.focus = focus
 		}
 
 		var todoRowStates: IdentifiedArrayOf<TodoRow.State> {
 			get {
 				IdentifiedArray(
 					uniqueElements: todos.map {
-						TodoRow.State(todo: $0, focus: focusedField(for: $0))
+						TodoRow.State(
+							todo: $0,
+							focus: $0.id == focus?.id ? focus?.value : nil
+						)
 					}
 				)
 			}
@@ -33,7 +35,6 @@ struct Root {
 	enum Action {
 		case addButtonTapped
 		case todo(IdentifiedActionOf<TodoRow>)
-		case sortCompletedTodos
 	}
 
 	@Dependency(\.uuid) var uuid
@@ -52,27 +53,13 @@ struct Root {
 
 			case .todo(.element(let id, .setFocus(let field))):
 				if let field = field {
-					state.focus = .init(id: id, field: field)
+					state.focus = Identified(field, id: id)
 				} else if state.focus?.id == id {
 					state.focus = nil
 				}
 				return .none
 
-			case .todo(.element(id: _, action: .checkboxTapped)):
-				struct CancelID: Hashable {}
-				return .run { send in
-					try await clock.sleep(for: .seconds(1))
-					await send(.sortCompletedTodos, animation: .default)
-				}
-				.cancellable(id: CancelID(), cancelInFlight: true)
-
 			case .todo:
-				return .none
-
-			case .sortCompletedTodos:
-				state.todos = IdentifiedArray(
-					uniqueElements: state.todos.sorted { !$0.isComplete && $1.isComplete }
-				)
 				return .none
 			}
 		}
@@ -87,10 +74,8 @@ struct RootView: View {
 
 	var body: some View {
 		NavigationView {
-			List {
-				ForEach(store.scope(state: \.todoRowStates, action: \.todo)) {
-					TodoRowView(store: $0)
-				}
+			List(store.scope(state: \.todoRowStates, action: \.todo)) {
+				TodoRowView(store: $0)
 			}
 			.listStyle(.plain)
 			.scrollDismissesKeyboard(.interactively)
@@ -103,23 +88,5 @@ struct RootView: View {
 				}
 			}
 		}
-	}
-}
-
-struct RootView_Previews: PreviewProvider {
-	static var previews: some View {
-		RootView(
-			store: Store(
-				initialState: Root.State(
-					todos: [
-						Todo(id: UUID(), description: "Milk"),
-						Todo(id: UUID(), description: "Eggs"),
-						Todo(id: UUID(), description: "Hand soap", isComplete: true),
-					]
-				)
-			) {
-				Root()
-			}
-		)
 	}
 }

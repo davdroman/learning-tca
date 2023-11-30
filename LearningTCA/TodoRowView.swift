@@ -1,43 +1,46 @@
 import ComposableArchitecture
-import TextFieldPadding
 import SwiftUI
-import SwiftUIInput
 
+@ObservableState
 struct Todo: Equatable, Identifiable {
 	var id: UUID
 	var description: String
-	var dueDate: Date?
-	var isComplete = false
+	var dueDate: String = ""
+
+	init(id: UUID, description: String, dueDate: String = "") {
+		self.id = id
+		self.description = description
+		self.dueDate = dueDate
+	}
 }
 
 @Reducer
 struct TodoRow {
 	@ObservableState
 	struct State: Equatable, Identifiable {
-		enum FocusedField: Equatable {
+		enum Field: Equatable {
 			case description
 			case dueDate
 		}
 		
 		var id: Todo.ID { todo.id }
 		var todo: Todo
-		var focus: FocusedField?
+		var focus: Field?
 
-		init(todo: Todo, focus: FocusedField? = nil) {
+		init(todo: Todo, focus: Field? = nil) {
 			self.todo = todo
 			self.focus = focus
 		}
 
 		var showDueDate: Bool {
-			todo.dueDate != nil || focus != nil
+			!todo.dueDate.isEmpty || focus != nil
 		}
 	}
 	
 	enum Action {
-		case setFocus(State.FocusedField?)
+		case setFocus(State.Field?)
 		case textFieldDidChange(String)
-		case dueDateDidChange(Date)
-		case checkboxTapped
+		case dueDateDidChange(String)
 	}
 	
 	@Dependency(\.date.now) var now
@@ -46,8 +49,8 @@ struct TodoRow {
 		Reduce { state, action in
 			switch action {
 			case .setFocus(let newFocus):
-				if state.todo.dueDate == nil, newFocus == .dueDate {
-					state.todo.dueDate = now
+				if state.todo.dueDate.isEmpty, newFocus == .dueDate {
+					state.todo.dueDate = now.formatted(.dateTime)
 				}
 				state.focus = newFocus
 				return .none
@@ -57,9 +60,6 @@ struct TodoRow {
 			case .dueDateDidChange(let date):
 				state.todo.dueDate = date
 				return .none
-			case .checkboxTapped:
-				state.todo.isComplete.toggle()
-				return .none
 			}
 		}
 	}
@@ -68,83 +68,25 @@ struct TodoRow {
 struct TodoRowView: View {
 	@Bindable var store: StoreOf<TodoRow>
 
-	@FocusState private var focus: TodoRow.State.FocusedField?
+	@FocusState private var focus: TodoRow.State.Field?
 	
 	var body: some View {
-//		WithPerceptionTracking {
-			HStack {
-				Button(action: { store.send(.checkboxTapped, animation: .default) }) {
-					Image(systemName: store.todo.isComplete ? "checkmark.square" : "square")
-				}
-				.buttonStyle(.plain)
-				
-				VStack(alignment: .leading, spacing: 0) {
-					TextField(
-						"Untitled todo",
-						text: $store.todo.description.sending(\.textFieldDidChange),
-						axis: .vertical
-					)
-					.focused($focus, equals: .description)
-//					.textAreaScrollDisabled(true)
-//					.textAreaPadding(.top, 12)
-//					.textAreaPadding(.bottom, viewStore.showDueDate ? 4 : 12)
-//					.textAreaPadding(.horizontal, 2)
-//					.textAreaParagraphStyle(\.paragraphSpacing, 12)
-//					.inputAccessory(.default)
-					
-					if store.showDueDate {
-						TextField(
-							"Due date",
-							text: .constant(store.todo.dueDate?.formatted(.dateTime) ?? "")
-						)
-						.foregroundColor(.gray)
-						.focused($focus, equals: .dueDate)
-//						.textFieldPadding(.top, 4)
-//						.textFieldPadding(.bottom, 12)
-//						.textFieldPadding(.horizontal, 2)
-//						.input(.datePicker($store.todo.dueDate.nowIfNil.sending(\.dueDateDidChange)))
-//						.inputAccessory(.default)
-					}
-				}
-				.disabled(store.todo.isComplete)
-				.font(.custom("whatever it takes", size: 23))
-				.offset(y: 2) // slight offset to counter the font's natural y offset
-			}
-			.opacity(store.todo.isComplete ? 0.5 : 1)
-			.bind($store.focus.sending(\.setFocus), to: $focus)
-//		}
-	}
-}
-
-extension Optional where Wrapped == Date {
-	var nowIfNil: Date {
-		self ?? .now
-	}
-}
-
-struct TodoRowView_Previews: PreviewProvider {
-	static var previews: some View {
-		let states = [
-			TodoRow.State(
-				todo: Todo(id: UUID(), description: "", isComplete: false)
-			),
-			TodoRow.State(
-				todo: Todo(id: UUID(), description: "Milk", isComplete: false)
-			),
-			TodoRow.State(
-				todo: Todo(id: UUID(), description: "Milk", isComplete: true)
-			),
-		]
-		ForEach(states) { state in
-			TodoRowView(
-				store: Store(initialState: state) {
-					TodoRow()
-				}
+		VStack(alignment: .leading, spacing: 0) {
+			TextField(
+				"Untitled todo",
+				text: $store.todo.description.sending(\.textFieldDidChange),
+				axis: .vertical
 			)
+			.focused($focus, equals: .description)
+
+			if store.showDueDate {
+				TextField(
+					"Due date",
+					text: $store.todo.dueDate.sending(\.dueDateDidChange)
+				)
+				.focused($focus, equals: .dueDate)
+			}
 		}
-		.padding()
-		.background(Color(.systemBackground))
-		.environment(\.colorScheme, .dark)
-		.previewLayout(.sizeThatFits)
+		.bind($store.focus.sending(\.setFocus), to: $focus)
 	}
 }
