@@ -68,7 +68,7 @@ struct TodoRow {
 struct TodoRowView: View {
 	@Bindable var store: StoreOf<TodoRow>
 
-//	@FocusState private var focus: TodoRow.State.Field?
+	@FocusState private var focus: TodoRow.State.Field?
 	
 	var body: some View {
 		VStack(alignment: .leading, spacing: 0) {
@@ -77,16 +77,16 @@ struct TodoRowView: View {
 				text: $store.todo.description.sending(\.textFieldDidChange),
 				axis: .vertical
 			)
-//			.focused($focus, equals: .description)
+			.focused($focus, equals: .description)
 
 			if store.showDueDate {
 				TextField(
 					"Due date",
 					text: $store.todo.dueDate.sending(\.dueDateDidChange)
 				)
-//				.focused($focus, equals: .dueDate)
+				.focused($focus, equals: .dueDate)
 			}
 		}
-//		.bind($store.focus.sending(\.setFocus), to: $focus)
+		.bind($store.focus.sending(\.setFocus), to: $focus)
 	}
 }
