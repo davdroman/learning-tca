@@ -71,48 +71,45 @@ struct TodoRowView: View {
 	@FocusState private var focus: TodoRow.State.FocusedField?
 	
 	var body: some View {
-//		WithPerceptionTracking {
-			HStack {
-				Button(action: { store.send(.checkboxTapped, animation: .default) }) {
-					Image(systemName: store.todo.isComplete ? "checkmark.square" : "square")
-				}
-				.buttonStyle(.plain)
-				
-				VStack(alignment: .leading, spacing: 0) {
-					TextField(
-						"Untitled todo",
-						text: $store.todo.description.sending(\.textFieldDidChange),
-						axis: .vertical
-					)
-					.focused($focus, equals: .description)
-//					.textAreaScrollDisabled(true)
-//					.textAreaPadding(.top, 12)
-//					.textAreaPadding(.bottom, viewStore.showDueDate ? 4 : 12)
-//					.textAreaPadding(.horizontal, 2)
-//					.textAreaParagraphStyle(\.paragraphSpacing, 12)
-//					.inputAccessory(.default)
-					
-					if store.showDueDate {
-						TextField(
-							"Due date",
-							text: .constant(store.todo.dueDate?.formatted(.dateTime) ?? "")
-						)
-						.foregroundColor(.gray)
-						.focused($focus, equals: .dueDate)
-//						.textFieldPadding(.top, 4)
-//						.textFieldPadding(.bottom, 12)
-//						.textFieldPadding(.horizontal, 2)
-//						.input(.datePicker($store.todo.dueDate.nowIfNil.sending(\.dueDateDidChange)))
-//						.inputAccessory(.default)
-					}
-				}
-				.disabled(store.todo.isComplete)
-				.font(.custom("whatever it takes", size: 23))
-				.offset(y: 2) // slight offset to counter the font's natural y offset
+		HStack {
+			Button(action: { store.send(.checkboxTapped, animation: .default) }) {
+				Image(systemName: store.todo.isComplete ? "checkmark.square" : "square")
 			}
-			.opacity(store.todo.isComplete ? 0.5 : 1)
-			.bind($store.focus.sending(\.setFocus), to: $focus)
-//		}
+			.buttonStyle(.plain)
+
+			VStack(alignment: .leading, spacing: 0) {
+				TextField(
+					"Untitled todo",
+					text: $store.todo.description.sending(\.textFieldDidChange),
+					axis: .vertical
+				)
+				.focused($focus, equals: .description)
+//				.textAreaScrollDisabled(true)
+//				.textAreaPadding(.top, 12)
+//				.textAreaPadding(.bottom, viewStore.showDueDate ? 4 : 12)
+//				.textAreaPadding(.horizontal, 2)
+//				.textAreaParagraphStyle(\.paragraphSpacing, 12)
+				.inputAccessory(.default)
+
+				if store.showDueDate {
+					TextField(
+						"Due date",
+						text: .constant(store.todo.dueDate?.formatted(.dateTime) ?? "")
+					)
+					.foregroundColor(.gray)
+					.focused($focus, equals: .dueDate)
+					.textFieldPadding(.top, 4)
+					.textFieldPadding(.horizontal, 2)
+					.input(.datePicker($store.todo.dueDate.nowIfNil.sending(\.dueDateDidChange)))
+					.inputAccessory(.default)
+				}
+			}
+			.disabled(store.todo.isComplete)
+			.font(.custom("whatever it takes", size: 23))
+			.offset(y: 2) // slight offset to counter the font's natural y offset
+		}
+		.opacity(store.todo.isComplete ? 0.5 : 1)
+		.bind($store.focus.sending(\.setFocus), to: $focus)
 	}
 }
 

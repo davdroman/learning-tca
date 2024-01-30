@@ -4,6 +4,7 @@ import SwiftUI
 @Reducer
 struct Root {
 	struct State: Equatable {
+		@ObservableState
 		struct TodoFocus: Equatable {
 			var id: Todo.ID
 			var field: TodoRow.State.FocusedField
@@ -88,7 +89,7 @@ struct RootView: View {
 	var body: some View {
 		NavigationView {
 			List {
-				ForEach(store.scope(state: \.todoRowStates, action: \.todo)) {
+				ForEachStore(store.scope(state: \.todoRowStates, action: \.todo)) { // TODO: ForEachStore -> ForEach
 					TodoRowView(store: $0)
 				}
 			}
