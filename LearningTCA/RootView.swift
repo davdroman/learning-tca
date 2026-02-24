@@ -3,8 +3,8 @@ import SwiftUI
 
 @Reducer
 struct Root {
+	@ObservableState
 	struct State: Equatable {
-		@ObservableState
 		struct TodoFocus: Equatable {
 			var id: Todo.ID
 			var field: TodoRow.State.FocusedField
@@ -88,11 +88,11 @@ struct RootView: View {
 
 	var body: some View {
 		NavigationView {
-			List {
-				ForEachStore(store.scope(state: \.todoRowStates, action: \.todo)) {
-					TodoRowView(store: $0)
-				}
-			}
+			List(
+				store.scope(state: \.todoRowStates, action: \.todo),
+				id: \.state.id,
+				rowContent: TodoRowView.init
+			)
 			.listStyle(.plain)
 			.scrollDismissesKeyboard(.interactively)
 			.navigationTitle("Todos")
