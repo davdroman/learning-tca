@@ -89,7 +89,7 @@ struct RootView: View {
 	var body: some View {
 		NavigationView {
 			List {
-				ForEachStore(store.scope(state: \.todoRowStates, action: \.todo)) { // TODO: ForEachStore -> ForEach
+				ForEachStore(store.scope(state: \.todoRowStates, action: \.todo)) {
 					TodoRowView(store: $0)
 				}
 			}
