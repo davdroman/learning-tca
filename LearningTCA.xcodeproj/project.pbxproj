@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 100;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -49,20 +49,16 @@
 /* Begin PBXFrameworksBuildPhase section */
 		D5AEE2532779136300A62DAD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				D5EFED2E27FDE42A0046640F /* SwiftUIInput in Frameworks */,
 				D511E57527F4967500DF0400 /* TextFieldPadding in Frameworks */,
 				D5AEE285277913F100A62DAD /* ComposableArchitecture in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		D5AEE2632779136400A62DAD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -139,8 +135,6 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
 			name = LearningTCA;
 			packageProductDependencies = (
 				D5AEE284277913F100A62DAD /* ComposableArchitecture */,
@@ -190,7 +184,6 @@
 				};
 			};
 			buildConfigurationList = D5AEE2512779136300A62DAD /* Build configuration list for PBXProject "LearningTCA" */;
-			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -201,6 +194,7 @@
 			packageReferences = (
 				D5AEE283277913F100A62DAD /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 			);
+			preferredProjectObjectVersion = 55;
 			productRefGroup = D5AEE2572779136300A62DAD /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -214,42 +208,34 @@
 /* Begin PBXResourcesBuildPhase section */
 		D5AEE2542779136300A62DAD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				D511E56B27F36D7500DF0400 /* whatever it takes.ttf in Resources */,
 				D5AEE2612779136400A62DAD /* Preview Assets.xcassets in Resources */,
 				D511E56A27F36D7500DF0400 /* whatever it takes bold.ttf in Resources */,
 				D5AEE25E2779136400A62DAD /* Assets.xcassets in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		D5AEE2642779136400A62DAD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D5AEE2522779136300A62DAD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				D5AEE2892779140100A62DAD /* RootView.swift in Sources */,
 				D5987C30277B660D0039F71D /* TodoRowView.swift in Sources */,
 				D5AEE2882779140100A62DAD /* App.swift in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		D5AEE2622779136400A62DAD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				D5AEE26B2779136400A62DAD /* TodosTests.swift in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
@@ -262,7 +248,7 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		D5AEE2782779136400A62DAD /* Debug */ = {
+		D5AEE2782779136400A62DAD /* Debug configuration for PBXProject "LearningTCA" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -329,7 +315,7 @@
 			};
 			name = Debug;
 		};
-		D5AEE2792779136400A62DAD /* Release */ = {
+		D5AEE2792779136400A62DAD /* Release configuration for PBXProject "LearningTCA" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -390,7 +376,7 @@
 			};
 			name = Release;
 		};
-		D5AEE27B2779136400A62DAD /* Debug */ = {
+		D5AEE27B2779136400A62DAD /* Debug configuration for PBXNativeTarget "LearningTCA" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -421,7 +407,7 @@
 			};
 			name = Debug;
 		};
-		D5AEE27C2779136400A62DAD /* Release */ = {
+		D5AEE27C2779136400A62DAD /* Release configuration for PBXNativeTarget "LearningTCA" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -451,7 +437,7 @@
 			};
 			name = Release;
 		};
-		D5AEE27E2779136400A62DAD /* Debug */ = {
+		D5AEE27E2779136400A62DAD /* Debug configuration for PBXNativeTarget "LearningTCATests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -467,7 +453,7 @@
 			};
 			name = Debug;
 		};
-		D5AEE27F2779136400A62DAD /* Release */ = {
+		D5AEE27F2779136400A62DAD /* Release configuration for PBXNativeTarget "LearningTCATests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -489,28 +475,25 @@
 		D5AEE2512779136300A62DAD /* Build configuration list for PBXProject "LearningTCA" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D5AEE2782779136400A62DAD /* Debug */,
-				D5AEE2792779136400A62DAD /* Release */,
+				D5AEE2782779136400A62DAD /* Debug configuration for PBXProject "LearningTCA" */,
+				D5AEE2792779136400A62DAD /* Release configuration for PBXProject "LearningTCA" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		D5AEE27A2779136400A62DAD /* Build configuration list for PBXNativeTarget "LearningTCA" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D5AEE27B2779136400A62DAD /* Debug */,
-				D5AEE27C2779136400A62DAD /* Release */,
+				D5AEE27B2779136400A62DAD /* Debug configuration for PBXNativeTarget "LearningTCA" */,
+				D5AEE27C2779136400A62DAD /* Release configuration for PBXNativeTarget "LearningTCA" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		D5AEE27D2779136400A62DAD /* Build configuration list for PBXNativeTarget "LearningTCATests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D5AEE27E2779136400A62DAD /* Debug */,
-				D5AEE27F2779136400A62DAD /* Release */,
+				D5AEE27E2779136400A62DAD /* Debug configuration for PBXNativeTarget "LearningTCATests" */,
+				D5AEE27F2779136400A62DAD /* Release configuration for PBXNativeTarget "LearningTCATests" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
@@ -523,6 +506,9 @@
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.7.0;
 			};
+			traits = (
+				ComposableArchitecture2Deprecations,
+			);
 		};
 /* End XCRemoteSwiftPackageReference section */
 
