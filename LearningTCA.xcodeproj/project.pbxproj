@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D50218F42F8183B5009B5527 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = D50218F32F8183B5009B5527 /* ComposableArchitecture */; };
 		D50218F62F8183B5009B5527 /* ComposableArchitecture2 in Frameworks */ = {isa = PBXBuildFile; productRef = D50218F52F8183B5009B5527 /* ComposableArchitecture2 */; };
+		D50218F92F81A335009B5527 /* DependenciesTestSupport in Frameworks */ = {isa = PBXBuildFile; productRef = D50218F82F81A335009B5527 /* DependenciesTestSupport */; };
 		D511E56A27F36D7500DF0400 /* whatever it takes bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D511E56827F36D7500DF0400 /* whatever it takes bold.ttf */; };
 		D511E56B27F36D7500DF0400 /* whatever it takes.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D511E56927F36D7500DF0400 /* whatever it takes.ttf */; };
 		D511E57527F4967500DF0400 /* TextFieldPadding in Frameworks */ = {isa = PBXBuildFile; productRef = D511E57427F4967500DF0400 /* TextFieldPadding */; };
@@ -63,6 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D50218F92F81A335009B5527 /* DependenciesTestSupport in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -169,6 +171,7 @@
 			);
 			name = LearningTCATests;
 			packageProductDependencies = (
+				D50218F82F81A335009B5527 /* DependenciesTestSupport */,
 			);
 			productName = LearningTCATests;
 			productReference = D5AEE2662779136400A62DAD /* LearningTCATests.xctest */;
@@ -205,6 +208,7 @@
 			mainGroup = D5AEE24D2779136300A62DAD;
 			packageReferences = (
 				D50218F22F8183B5009B5527 /* XCRemoteSwiftPackageReference "TCA26" */,
+				D50218F72F81A335009B5527 /* XCRemoteSwiftPackageReference "swift-dependencies" */,
 			);
 			productRefGroup = D5AEE2572779136300A62DAD /* Products */;
 			projectDirPath = "";
@@ -531,6 +535,14 @@
 			traits = (
 			);
 		};
+		D50218F72F81A335009B5527 /* XCRemoteSwiftPackageReference "swift-dependencies" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-dependencies";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.12.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -543,6 +555,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D50218F22F8183B5009B5527 /* XCRemoteSwiftPackageReference "TCA26" */;
 			productName = ComposableArchitecture2;
+		};
+		D50218F82F81A335009B5527 /* DependenciesTestSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D50218F72F81A335009B5527 /* XCRemoteSwiftPackageReference "swift-dependencies" */;
+			productName = DependenciesTestSupport;
 		};
 		D511E57427F4967500DF0400 /* TextFieldPadding */ = {
 			isa = XCSwiftPackageProductDependency;

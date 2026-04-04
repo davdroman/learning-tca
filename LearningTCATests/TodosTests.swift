@@ -1,16 +1,23 @@
 import ComposableArchitecture
+import DependenciesTestSupport
+import Foundation
 @testable import LearningTCA
-import XCTest
+import Testing
 
 @MainActor
-final class TodosTests: XCTestCase {
-	func testCompletingTodo() async {
+struct TodosTests {
+	@Test(
+		.dependencies {
+			$0.continuousClock = .immediate
+		}
+	)
+	func `completing a todo`() async {
 		let store = TestStore(
 			initialState: Root.State(todos: [
 				Todo(id: UUID(0), description: "Milk", isComplete: false),
 			])
 		) {
-			Root().dependency(\.continuousClock, ImmediateClock())
+			Root()
 		}
 
 		await store.send(.todo(.element(id: UUID(0), action: .checkboxTapped))) {
@@ -19,15 +26,18 @@ final class TodosTests: XCTestCase {
 		await store.receive(\.sortCompletedTodos)
 	}
 
-	func testAddTodo() async {
+	@Test(
+		.dependencies {
+			$0.uuid = .constant(UUID(0))
+			$0.continuousClock = .immediate
+		}
+	)
+	func `adding a todo`() async {
 		let store = TestStore(initialState: Root.State(todos: [])) {
 			Root()
-		} withDependencies: {
-			$0.uuid = .constant(UUID(0))
-			$0.continuousClock = ImmediateClock()
 		}
 
-		await store.send(.addButtonTapped) {
+		store.send(.addButtonTapped) {
 			$0.todos = [
 				Todo(id: UUID(0), description: "", isComplete: false)
 			]
@@ -37,7 +47,7 @@ final class TodosTests: XCTestCase {
 		}
 	}
 
-	func testTodoSorting() async {
+	@Test func `todo sorting`() async {
 		let clock = TestClock()
 		let store = TestStore(
 			initialState: Root.State(todos: [
