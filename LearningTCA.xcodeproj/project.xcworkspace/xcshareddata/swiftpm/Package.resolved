@@ -1,5 +1,5 @@
 {
-  "originHash" : "37e8d4e313bca8848d28207f0407553ad6b4985c592162bd8644ef377bde82d7",
+  "originHash" : "dd70b30de8f6fd6352257e435c47412ae3dcfb24a669a9b45ea0faec6ff09009",
   "pins" : [
     {
       "identity" : "combine-schedulers",
@@ -11,12 +11,21 @@
       }
     },
     {
+      "identity" : "swift-async-algorithms",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/FranzBusch/swift-async-algorithms",
+      "state" : {
+        "branch" : "fb-timeout",
+        "revision" : "b4773447b5f1e35101be61f08ac6e89fc85703c3"
+      }
+    },
+    {
       "identity" : "swift-case-paths",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-case-paths",
       "state" : {
-        "revision" : "6989976265be3f8d2b5802c722f9ba168e227c71",
-        "version" : "1.7.2"
+        "branch" : "26",
+        "revision" : "9f2b3c7f9dc1deab5e47896870d120659787da62"
       }
     },
     {
@@ -24,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-clocks",
       "state" : {
-        "revision" : "cc46202b53476d64e824e0b6612da09d84ffde8e",
-        "version" : "1.0.6"
+        "branch" : "clocks-2",
+        "revision" : "dd4cac5933e614d188b26c5c8c2197e4db52a207"
       }
     },
     {
@@ -35,15 +44,6 @@
       "state" : {
         "revision" : "6675bc0ff86e61436e615df6fc5174e043e57924",
         "version" : "1.4.1"
-      }
-    },
-    {
-      "identity" : "swift-composable-architecture",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pointfreeco/swift-composable-architecture.git",
-      "state" : {
-        "revision" : "adf6e52161f293fe4ab957dd732e214aca7031d2",
-        "version" : "1.25.2"
       }
     },
     {
@@ -60,8 +60,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-custom-dump",
       "state" : {
-        "revision" : "06c57924455064182d6b217f06ebc05d00cb2990",
-        "version" : "1.5.0"
+        "branch" : "main",
+        "revision" : "b0b74196750fef785cc3402eb35531e1e2fe7bb7"
+      }
+    },
+    {
+      "identity" : "swift-debug-snapshots",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/swift-debug-snapshots",
+      "state" : {
+        "branch" : "main",
+        "revision" : "f236c59e89393aa7ffc9dd2c1ac55c83921b262b"
       }
     },
     {
@@ -69,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-dependencies",
       "state" : {
-        "revision" : "c79f72b3e67a1eb64f66f76704c22ed6a5c1ed84",
-        "version" : "1.11.0"
+        "branch" : "26",
+        "revision" : "6f4e48611cf20f0ae7255265890cee6271cc89f3"
       }
     },
     {
@@ -87,8 +96,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-navigation",
       "state" : {
-        "revision" : "e7441dc4dfec6a4ae929e614e3c1e67c6639d164",
-        "version" : "2.7.0"
+        "branch" : "relax-sendable",
+        "revision" : "05a783cd0b3a792494829b64dd569d4ebf857b25"
       }
     },
     {
@@ -96,8 +105,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-perception",
       "state" : {
-        "revision" : "4f47ebafed5f0b0172cf5c661454fa8e28fb2ac4",
-        "version" : "2.0.9"
+        "revision" : "25ac73741c3436605d61eceb5207e896973918e7",
+        "version" : "2.0.10"
       }
     },
     {
@@ -105,8 +114,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-sharing",
       "state" : {
-        "revision" : "3bfc408cc2d0bee2287c174da6b1c76768377818",
-        "version" : "2.7.4"
+        "revision" : "bc27f8322bc30f6ce7d864d137dc77a6de8b57eb",
+        "version" : "2.8.0"
       }
     },
     {
@@ -125,6 +134,15 @@
       "state" : {
         "revision" : "26986a57e31c813f98262ddb62d4b07d40008535",
         "version" : "26.0.1"
+      }
+    },
+    {
+      "identity" : "tca26",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/TCA26",
+      "state" : {
+        "branch" : "main",
+        "revision" : "e91a679015fca4edeecc97d27e39f7e29bf8df32"
       }
     },
     {

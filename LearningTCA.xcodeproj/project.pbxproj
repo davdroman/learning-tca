@@ -3,10 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 100;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D50218F42F8183B5009B5527 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = D50218F32F8183B5009B5527 /* ComposableArchitecture */; };
+		D50218F62F8183B5009B5527 /* ComposableArchitecture2 in Frameworks */ = {isa = PBXBuildFile; productRef = D50218F52F8183B5009B5527 /* ComposableArchitecture2 */; };
 		D511E56A27F36D7500DF0400 /* whatever it takes bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D511E56827F36D7500DF0400 /* whatever it takes bold.ttf */; };
 		D511E56B27F36D7500DF0400 /* whatever it takes.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D511E56927F36D7500DF0400 /* whatever it takes.ttf */; };
 		D511E57527F4967500DF0400 /* TextFieldPadding in Frameworks */ = {isa = PBXBuildFile; productRef = D511E57427F4967500DF0400 /* TextFieldPadding */; };
@@ -14,7 +16,6 @@
 		D5AEE25E2779136400A62DAD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D5AEE25D2779136400A62DAD /* Assets.xcassets */; };
 		D5AEE2612779136400A62DAD /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D5AEE2602779136400A62DAD /* Preview Assets.xcassets */; };
 		D5AEE26B2779136400A62DAD /* TodosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AEE26A2779136400A62DAD /* TodosTests.swift */; };
-		D5AEE285277913F100A62DAD /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = D5AEE284277913F100A62DAD /* ComposableArchitecture */; };
 		D5AEE2882779140100A62DAD /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AEE2862779140100A62DAD /* App.swift */; };
 		D5AEE2892779140100A62DAD /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AEE2872779140100A62DAD /* RootView.swift */; };
 		D5EFED2E27FDE42A0046640F /* SwiftUIInput in Frameworks */ = {isa = PBXBuildFile; productRef = D5EFED2D27FDE42A0046640F /* SwiftUIInput */; };
@@ -49,16 +50,21 @@
 /* Begin PBXFrameworksBuildPhase section */
 		D5AEE2532779136300A62DAD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
 			files = (
 				D5EFED2E27FDE42A0046640F /* SwiftUIInput in Frameworks */,
+				D50218F62F8183B5009B5527 /* ComposableArchitecture2 in Frameworks */,
 				D511E57527F4967500DF0400 /* TextFieldPadding in Frameworks */,
-				D5AEE285277913F100A62DAD /* ComposableArchitecture in Frameworks */,
+				D50218F42F8183B5009B5527 /* ComposableArchitecture in Frameworks */,
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		D5AEE2632779136400A62DAD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
 			files = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -135,11 +141,14 @@
 			);
 			buildRules = (
 			);
+			dependencies = (
+			);
 			name = LearningTCA;
 			packageProductDependencies = (
-				D5AEE284277913F100A62DAD /* ComposableArchitecture */,
 				D511E57427F4967500DF0400 /* TextFieldPadding */,
 				D5EFED2D27FDE42A0046640F /* SwiftUIInput */,
+				D50218F32F8183B5009B5527 /* ComposableArchitecture */,
+				D50218F52F8183B5009B5527 /* ComposableArchitecture2 */,
 			);
 			productName = LearningTCA;
 			productReference = D5AEE2562779136300A62DAD /* LearningTCA.app */;
@@ -159,6 +168,8 @@
 				D5AEE2682779136400A62DAD /* PBXTargetDependency */,
 			);
 			name = LearningTCATests;
+			packageProductDependencies = (
+			);
 			productName = LearningTCATests;
 			productReference = D5AEE2662779136400A62DAD /* LearningTCATests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -184,6 +195,7 @@
 				};
 			};
 			buildConfigurationList = D5AEE2512779136300A62DAD /* Build configuration list for PBXProject "LearningTCA" */;
+			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -192,9 +204,8 @@
 			);
 			mainGroup = D5AEE24D2779136300A62DAD;
 			packageReferences = (
-				D5AEE283277913F100A62DAD /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				D50218F22F8183B5009B5527 /* XCRemoteSwiftPackageReference "TCA26" */,
 			);
-			preferredProjectObjectVersion = 55;
 			productRefGroup = D5AEE2572779136300A62DAD /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -208,34 +219,42 @@
 /* Begin PBXResourcesBuildPhase section */
 		D5AEE2542779136300A62DAD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
 			files = (
 				D511E56B27F36D7500DF0400 /* whatever it takes.ttf in Resources */,
 				D5AEE2612779136400A62DAD /* Preview Assets.xcassets in Resources */,
 				D511E56A27F36D7500DF0400 /* whatever it takes bold.ttf in Resources */,
 				D5AEE25E2779136400A62DAD /* Assets.xcassets in Resources */,
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		D5AEE2642779136400A62DAD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
 			files = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D5AEE2522779136300A62DAD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
 			files = (
 				D5AEE2892779140100A62DAD /* RootView.swift in Sources */,
 				D5987C30277B660D0039F71D /* TodoRowView.swift in Sources */,
 				D5AEE2882779140100A62DAD /* App.swift in Sources */,
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		D5AEE2622779136400A62DAD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
 			files = (
 				D5AEE26B2779136400A62DAD /* TodosTests.swift in Sources */,
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
@@ -248,7 +267,7 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		D5AEE2782779136400A62DAD /* Debug configuration for PBXProject "LearningTCA" */ = {
+		D5AEE2782779136400A62DAD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -315,7 +334,7 @@
 			};
 			name = Debug;
 		};
-		D5AEE2792779136400A62DAD /* Release configuration for PBXProject "LearningTCA" */ = {
+		D5AEE2792779136400A62DAD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -376,7 +395,7 @@
 			};
 			name = Release;
 		};
-		D5AEE27B2779136400A62DAD /* Debug configuration for PBXNativeTarget "LearningTCA" */ = {
+		D5AEE27B2779136400A62DAD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -407,7 +426,7 @@
 			};
 			name = Debug;
 		};
-		D5AEE27C2779136400A62DAD /* Release configuration for PBXNativeTarget "LearningTCA" */ = {
+		D5AEE27C2779136400A62DAD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -437,7 +456,7 @@
 			};
 			name = Release;
 		};
-		D5AEE27E2779136400A62DAD /* Debug configuration for PBXNativeTarget "LearningTCATests" */ = {
+		D5AEE27E2779136400A62DAD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -453,7 +472,7 @@
 			};
 			name = Debug;
 		};
-		D5AEE27F2779136400A62DAD /* Release configuration for PBXNativeTarget "LearningTCATests" */ = {
+		D5AEE27F2779136400A62DAD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -475,52 +494,59 @@
 		D5AEE2512779136300A62DAD /* Build configuration list for PBXProject "LearningTCA" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D5AEE2782779136400A62DAD /* Debug configuration for PBXProject "LearningTCA" */,
-				D5AEE2792779136400A62DAD /* Release configuration for PBXProject "LearningTCA" */,
+				D5AEE2782779136400A62DAD /* Debug */,
+				D5AEE2792779136400A62DAD /* Release */,
 			);
+			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		D5AEE27A2779136400A62DAD /* Build configuration list for PBXNativeTarget "LearningTCA" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D5AEE27B2779136400A62DAD /* Debug configuration for PBXNativeTarget "LearningTCA" */,
-				D5AEE27C2779136400A62DAD /* Release configuration for PBXNativeTarget "LearningTCA" */,
+				D5AEE27B2779136400A62DAD /* Debug */,
+				D5AEE27C2779136400A62DAD /* Release */,
 			);
+			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		D5AEE27D2779136400A62DAD /* Build configuration list for PBXNativeTarget "LearningTCATests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D5AEE27E2779136400A62DAD /* Debug configuration for PBXNativeTarget "LearningTCATests" */,
-				D5AEE27F2779136400A62DAD /* Release configuration for PBXNativeTarget "LearningTCATests" */,
+				D5AEE27E2779136400A62DAD /* Debug */,
+				D5AEE27F2779136400A62DAD /* Release */,
 			);
+			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		D5AEE283277913F100A62DAD /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+		D50218F22F8183B5009B5527 /* XCRemoteSwiftPackageReference "TCA26" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
+			repositoryURL = "https://github.com/pointfreeco/TCA26";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.7.0;
+				branch = main;
+				kind = branch;
 			};
 			traits = (
-				ComposableArchitecture2Deprecations,
 			);
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D50218F32F8183B5009B5527 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D50218F22F8183B5009B5527 /* XCRemoteSwiftPackageReference "TCA26" */;
+			productName = ComposableArchitecture;
+		};
+		D50218F52F8183B5009B5527 /* ComposableArchitecture2 */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D50218F22F8183B5009B5527 /* XCRemoteSwiftPackageReference "TCA26" */;
+			productName = ComposableArchitecture2;
+		};
 		D511E57427F4967500DF0400 /* TextFieldPadding */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = TextFieldPadding;
-		};
-		D5AEE284277913F100A62DAD /* ComposableArchitecture */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D5AEE283277913F100A62DAD /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
-			productName = ComposableArchitecture;
 		};
 		D5EFED2D27FDE42A0046640F /* SwiftUIInput */ = {
 			isa = XCSwiftPackageProductDependency;
