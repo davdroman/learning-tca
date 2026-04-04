@@ -1,83 +1,57 @@
-import ComposableArchitecture
+import ComposableArchitecture2
+import Sharing
 import SwiftUI
 
-@Reducer
+@Feature
 struct Root {
-	@ObservableState
-	struct State: Equatable {
-		struct TodoFocus: Equatable {
-			var id: Todo.ID
-			var field: TodoRow.State.FocusedField
-		}
+	struct State {
+		var todos: [Todo]
+		@Shared(.inMemory("focus")) var focus: TodoRow.Focus? = nil
+		@StoreTaskID var todoSorting
 
-		var todos: IdentifiedArrayOf<Todo>
-		var focus: TodoFocus?
-
-		func focusedField(for todo: Todo) -> TodoRow.State.FocusedField? {
-			todo.id == focus?.id ? focus?.field : nil
-		}
-
-		var todoRowStates: IdentifiedArrayOf<TodoRow.State> {
+		var todoRows: [TodoRow.State] {
 			get {
-				IdentifiedArray(
-					uniqueElements: todos.map {
-						TodoRow.State(todo: $0, focus: focusedField(for: $0))
-					}
-				)
+				todos.map {
+					TodoRow.State(todo: $0, focus: $focus)
+				}
 			}
 			set {
-				todos = IdentifiedArray(uniqueElements: newValue.map(\.todo))
+				todos = newValue.map(\.todo)
 			}
 		}
 	}
 
 	enum Action {
 		case addButtonTapped
-		case todo(IdentifiedActionOf<TodoRow>)
-		case sortCompletedTodos
+		case todoRow(Todo.ID, TodoRow.Action)
 	}
 
 	@Dependency(\.uuid) var uuid
 	@Dependency(\.continuousClock) var clock
 
-	var body: some ReducerOf<Self> {
-		Reduce { state, action in
+	var body: some Feature {
+		Update { state, action in
 			switch action {
 			case .addButtonTapped:
 				let newTodo = Todo(id: uuid(), description: "")
 				state.todos.insert(newTodo, at: 0)
-				return .run { send in
-					try await clock.sleep(for: .zero) // fixes keyboard not showing
-					await send(.todo(.element(id: newTodo.id, action: .setFocus(.description))))
-				}
+				state.$focus.withLock { $0 = .init(id: newTodo.id, field: .description) }
 
-			case .todo(.element(let id, .setFocus(let field))):
-				if let field = field {
-					state.focus = .init(id: id, field: field)
-				} else if state.focus?.id == id {
-					state.focus = nil
-				}
-				return .none
-
-			case .todo(.element(id: _, action: .checkboxTapped)):
-				struct CancelID: Hashable {}
-				return .run { send in
+			case .todoRow(_, .checkboxTapped):
+				store.addTask(id: state.todoSorting) {
 					try await clock.sleep(for: .seconds(1))
-					await send(.sortCompletedTodos, animation: .default)
+					_ = try withAnimation(.default) {
+						try store.modify { state in
+							state.todos = state.todos.sorted { !$0.isComplete && $1.isComplete }
+						}
+					}
 				}
-				.cancellable(id: CancelID(), cancelInFlight: true)
 
-			case .todo:
-				return .none
-
-			case .sortCompletedTodos:
-				state.todos = IdentifiedArray(
-					uniqueElements: state.todos.sorted { !$0.isComplete && $1.isComplete }
-				)
-				return .none
+			case .todoRow(_, .setFocus):
+				break
 			}
 		}
-		.forEach(\.todoRowStates, action: \.todo) {
+		.forEach(\.todoRows, action: \.todoRow) {
 			TodoRow()
 		}
 	}
@@ -89,8 +63,7 @@ struct RootView: View {
 	var body: some View {
 		NavigationView {
 			List(
-				store.scope(state: \.todoRowStates, action: \.todo),
-				id: \.state.id,
+				store.scope(state: \.todoRows, action: \.todoRow),
 				rowContent: TodoRowView.init
 			)
 			.listStyle(.plain)
@@ -99,7 +72,9 @@ struct RootView: View {
 			.toolbar {
 				ToolbarItem(placement: .navigationBarTrailing) {
 					Button("Add") {
-						store.send(.addButtonTapped, animation: .default)
+						withAnimation {
+							_ = store.send(.addButtonTapped)
+						}
 					}
 				}
 			}
@@ -107,20 +82,18 @@ struct RootView: View {
 	}
 }
 
-struct RootView_Previews: PreviewProvider {
-	static var previews: some View {
-		RootView(
-			store: Store(
-				initialState: Root.State(
-					todos: [
-						Todo(id: UUID(), description: "Milk"),
-						Todo(id: UUID(), description: "Eggs"),
-						Todo(id: UUID(), description: "Hand soap", isComplete: true),
-					]
-				)
-			) {
-				Root()
-			}
+#Preview {
+	@Previewable @State var store = Store(
+		initialState: Root.State(
+			todos: [
+				Todo(id: UUID(), description: "Milk"),
+				Todo(id: UUID(), description: "Eggs"),
+				Todo(id: UUID(), description: "Hand soap", isComplete: true),
+			]
 		)
+	) {
+		Root()
 	}
+
+	RootView(store: store)
 }

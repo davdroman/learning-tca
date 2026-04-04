@@ -1,7 +1,9 @@
-import ComposableArchitecture
+import ComposableArchitecture2
 import TextFieldPadding
+import Sharing
 import SwiftUI
 import SwiftUIInput
+import SwiftUINavigation
 
 struct Todo: Equatable, Identifiable {
 	var id: UUID
@@ -10,56 +12,65 @@ struct Todo: Equatable, Identifiable {
 	var isComplete = false
 }
 
-@Reducer
+@Feature
 struct TodoRow {
-	@ObservableState
-	struct State: Equatable, Identifiable {
-		enum FocusedField: Equatable {
-			case description
-			case dueDate
-		}
-		
+	struct State: Identifiable {
 		var id: Todo.ID { todo.id }
 		var todo: Todo
-		var focus: FocusedField?
+		@Shared var focus: Focus?
 
-		init(todo: Todo, focus: FocusedField? = nil) {
+		init(todo: Todo, focus: Shared<Focus?>) {
 			self.todo = todo
-			self.focus = focus
+			self._focus = focus
+		}
+
+		var focusedField: Focus.Field? {
+			focus?.id == todo.id ? focus?.field : nil
 		}
 
 		var showDueDate: Bool {
-			todo.dueDate != nil || focus != nil
+			todo.dueDate != nil || focusedField != nil
 		}
 	}
-	
+
+	struct Focus: Hashable {
+		var id: Todo.ID
+		var field: Field
+
+		enum Field {
+			case description
+			case dueDate
+		}
+	}
+
 	enum Action {
-		case setFocus(State.FocusedField?)
-		case textFieldDidChange(String)
-		case dueDateDidChange(Date)
+		case setFocus(Focus?)
 		case checkboxTapped
 	}
 	
-	@Dependency(\.date.now) var now
-	
-	var body: some ReducerOf<Self> {
-		Reduce { state, action in
+	@Dependency(\.date) var now
+
+	var body: some Feature {
+		Update { state, action in
 			switch action {
-			case .setFocus(let newFocus):
-				if state.todo.dueDate == nil, newFocus == .dueDate {
-					state.todo.dueDate = now
+			case .setFocus(let focus):
+				if let focus = focus {
+					state.$focus.withLock { $0 = focus }
+				} else if state.focus?.id == state.todo.id {
+					state.$focus.withLock { $0 = nil }
 				}
-				state.focus = newFocus
-				return .none
-			case .textFieldDidChange(let text):
-				state.todo.description = text
-				return .none
-			case .dueDateDidChange(let date):
-				state.todo.dueDate = date
-				return .none
 			case .checkboxTapped:
-				state.todo.isComplete.toggle()
-				return .none
+				withAnimation(.default) {
+					state.todo.isComplete.toggle()
+				}
+			}
+		}
+		.onChange(of: store.focus) { oldValue, state in
+			if
+				state.todo.dueDate == nil,
+				state.focusedField == .dueDate
+			{
+				state.todo.dueDate = now()
 			}
 		}
 	}
@@ -68,11 +79,11 @@ struct TodoRow {
 struct TodoRowView: View {
 	@Bindable var store: StoreOf<TodoRow>
 
-	@FocusState private var focus: TodoRow.State.FocusedField?
-	
+	@FocusState private var focus: TodoRow.Focus?
+
 	var body: some View {
 		HStack {
-			Button(action: { store.send(.checkboxTapped, animation: .default) }) {
+			Button(action: { store.send(.checkboxTapped) }) {
 				Image(systemName: store.todo.isComplete ? "checkmark.square" : "square")
 			}
 			.buttonStyle(.plain)
@@ -80,10 +91,10 @@ struct TodoRowView: View {
 			VStack(alignment: .leading, spacing: 0) {
 				TextField(
 					"Untitled todo",
-					text: $store.todo.description.sending(\.textFieldDidChange),
+					text: $store.todo.description,
 					axis: .vertical
 				)
-				.focused($focus, equals: .description)
+				.focused($focus, equals: TodoRow.Focus(id: store.todo.id, field: .description))
 //				.textAreaScrollDisabled(true)
 //				.textAreaPadding(.top, 12)
 //				.textAreaPadding(.bottom, viewStore.showDueDate ? 4 : 12)
@@ -97,10 +108,10 @@ struct TodoRowView: View {
 						text: .constant(store.todo.dueDate?.formatted(.dateTime) ?? "")
 					)
 					.foregroundColor(.gray)
-					.focused($focus, equals: .dueDate)
+					.focused($focus, equals: TodoRow.Focus(id: store.todo.id, field: .dueDate))
 					.textFieldPadding(.top, 4)
 					.textFieldPadding(.horizontal, 2)
-					.input(.datePicker($store.todo.dueDate.nowIfNil.sending(\.dueDateDidChange)))
+					.input(.datePicker($store.todo.dueDate.defaulting(.now)))
 					.inputAccessory(.default)
 				}
 			}
@@ -109,39 +120,50 @@ struct TodoRowView: View {
 			.offset(y: 2) // slight offset to counter the font's natural y offset
 		}
 		.opacity(store.todo.isComplete ? 0.5 : 1)
-		.bind($store.focus.sending(\.setFocus), to: $focus)
+		.bind(
+			Binding(
+				get: { store.focus },
+				set: { store.send(.setFocus($0)) }
+			),
+			to: $focus
+		)
 	}
 }
 
-extension Optional where Wrapped == Date {
-	var nowIfNil: Date {
-		self ?? .now
+extension Binding {
+	func defaulting<Wrapped>(
+		_ defaultValue: @Sendable @escaping @autoclosure () -> Wrapped
+	) -> Binding<Wrapped> where Value == Wrapped?, Value: Sendable {
+		Binding<Wrapped>(
+			get: { self.wrappedValue ?? defaultValue() },
+			set: { self.wrappedValue = $0 }
+		)
 	}
 }
 
-struct TodoRowView_Previews: PreviewProvider {
-	static var previews: some View {
-		let states = [
+#Preview {
+	@Previewable @State var states: [StoreOf<TodoRow>] = {
+		@Shared(.inMemory("focus")) var focus: TodoRow.Focus? = nil
+
+		return [
 			TodoRow.State(
-				todo: Todo(id: UUID(), description: "", isComplete: false)
+				todo: Todo(id: UUID(), description: "", isComplete: false),
+				focus: $focus
 			),
 			TodoRow.State(
-				todo: Todo(id: UUID(), description: "Milk", isComplete: false)
+				todo: Todo(id: UUID(), description: "Milk", isComplete: false),
+				focus: $focus
 			),
 			TodoRow.State(
-				todo: Todo(id: UUID(), description: "Milk", isComplete: true)
+				todo: Todo(id: UUID(), description: "Milk", isComplete: true),
+				focus: $focus
 			),
 		]
-		ForEach(states) { state in
-			TodoRowView(
-				store: Store(initialState: state) {
-					TodoRow()
-				}
-			)
-		}
+		.map { Store(initialState: $0, feature: TodoRow.init) }
+	}()
+
+	ForEach(states, content: TodoRowView.init)
 		.padding()
 		.background(Color(.systemBackground))
 		.environment(\.colorScheme, .dark)
-		.previewLayout(.sizeThatFits)
-	}
 }
