@@ -61,12 +61,11 @@ struct RootView: View {
 	let store: StoreOf<Root>
 
 	var body: some View {
-		NavigationView {
+		NavigationStack {
 			List(
 				store.scope(state: \.todoRows, action: \.todoRow),
 				rowContent: TodoRowView.init
 			)
-			.listStyle(.plain)
 			.scrollDismissesKeyboard(.interactively)
 			.navigationTitle("Todos")
 			.toolbar {
