@@ -142,7 +142,7 @@ extension Binding {
 }
 
 #Preview {
-	@Previewable @State var states: [StoreOf<TodoRow>] = {
+	@Previewable @State var stores: [StoreOf<TodoRow>] = {
 		@Shared(.inMemory("focus")) var focus: TodoRow.Focus? = nil
 
 		return [
@@ -162,7 +162,7 @@ extension Binding {
 		.map { Store(initialState: $0, feature: TodoRow.init) }
 	}()
 
-	ForEach(states, content: TodoRowView.init)
+	ForEach(stores, content: TodoRowView.init)
 		.padding()
 		.background(Color(.systemBackground))
 		.environment(\.colorScheme, .dark)
