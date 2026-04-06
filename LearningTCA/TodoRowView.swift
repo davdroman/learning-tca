@@ -53,12 +53,14 @@ struct TodoRow {
 	var body: some Feature {
 		Update { state, action in
 			switch action {
-			case .setFocus(let focus):
-				if let focus = focus {
-					state.$focus.withLock { $0 = focus }
-				} else if state.focus?.id == state.todo.id {
+			case .setFocus(let focus?):
+				state.$focus.withLock { $0 = focus }
+
+			case .setFocus(nil):
+				if state.focus?.id == state.todo.id {
 					state.$focus.withLock { $0 = nil }
 				}
+
 			case .checkboxTapped:
 				withAnimation(.default) {
 					state.todo.isComplete.toggle()
