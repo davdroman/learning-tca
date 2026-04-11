@@ -12,6 +12,7 @@
 		D511E56B27F36D7500DF0400 /* whatever it takes.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D511E56927F36D7500DF0400 /* whatever it takes.ttf */; };
 		D511E57527F4967500DF0400 /* TextFieldPadding in Frameworks */ = {isa = PBXBuildFile; productRef = D511E57427F4967500DF0400 /* TextFieldPadding */; };
 		D5987C30277B660D0039F71D /* TodoRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5987C2F277B660D0039F71D /* TodoRowView.swift */; };
+		AA000001AAAA00010000AA02 /* TodoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001AAAA00010000AA01 /* TodoListView.swift */; };
 		D5AEE25E2779136400A62DAD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D5AEE25D2779136400A62DAD /* Assets.xcassets */; };
 		D5AEE2612779136400A62DAD /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D5AEE2602779136400A62DAD /* Preview Assets.xcassets */; };
 		D5AEE26B2779136400A62DAD /* TodosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AEE26A2779136400A62DAD /* TodosTests.swift */; };
@@ -39,6 +40,7 @@
 		D511E56C27F36DD300DF0400 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D511E57327F4957E00DF0400 /* swiftui-textfield-padding */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "swiftui-textfield-padding"; sourceTree = "<group>"; };
 		D5987C2F277B660D0039F71D /* TodoRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoRowView.swift; sourceTree = "<group>"; };
+		AA000001AAAA00010000AA01 /* TodoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListView.swift; sourceTree = "<group>"; };
 		D5AEE2562779136300A62DAD /* LearningTCA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LearningTCA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5AEE25D2779136400A62DAD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D5AEE2602779136400A62DAD /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 				D5AEE2862779140100A62DAD /* App.swift */,
 				D5AEE2872779140100A62DAD /* RootView.swift */,
 				D5987C2F277B660D0039F71D /* TodoRowView.swift */,
+				AA000001AAAA00010000AA01 /* TodoListView.swift */,
 				D511E56827F36D7500DF0400 /* whatever it takes bold.ttf */,
 				D511E56927F36D7500DF0400 /* whatever it takes.ttf */,
 				D5AEE25D2779136400A62DAD /* Assets.xcassets */,
@@ -241,6 +244,7 @@
 			files = (
 				D5AEE2892779140100A62DAD /* RootView.swift in Sources */,
 				D5987C30277B660D0039F71D /* TodoRowView.swift in Sources */,
+				AA000001AAAA00010000AA02 /* TodoListView.swift in Sources */,
 				D5AEE2882779140100A62DAD /* App.swift in Sources */,
 			);
 		};

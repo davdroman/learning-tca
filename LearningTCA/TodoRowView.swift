@@ -44,7 +44,6 @@ struct TodoRow {
 	}
 
 	enum Action {
-		case setFocus(Focus?)
 		case checkboxTapped
 	}
 	
@@ -53,14 +52,6 @@ struct TodoRow {
 	var body: some Feature {
 		Update { state, action in
 			switch action {
-			case .setFocus(let focus?):
-				state.$focus.withLock { $0 = focus }
-
-			case .setFocus(nil):
-				if state.focus?.id == state.todo.id {
-					state.$focus.withLock { $0 = nil }
-				}
-
 			case .checkboxTapped:
 				withAnimation(.default) {
 					state.todo.isComplete.toggle()
@@ -77,11 +68,9 @@ struct TodoRow {
 		}
 	}
 }
-
 struct TodoRowView: View {
 	@Bindable var store: StoreOf<TodoRow>
-
-	@FocusState private var focus: TodoRow.Focus?
+	var focus: FocusState<TodoRow.Focus?>.Binding
 
 	var body: some View {
 		HStack {
@@ -96,7 +85,7 @@ struct TodoRowView: View {
 					text: $store.todo.description,
 					axis: .vertical
 				)
-				.focused($focus, equals: TodoRow.Focus(id: store.todo.id, field: .description))
+				.focused(focus, equals: TodoRow.Focus(id: store.todo.id, field: .description))
 //				.textAreaScrollDisabled(true)
 //				.textAreaPadding(.top, 12)
 //				.textAreaPadding(.bottom, viewStore.showDueDate ? 4 : 12)
@@ -110,7 +99,7 @@ struct TodoRowView: View {
 						text: .constant(store.todo.dueDate?.formatted(.dateTime) ?? "")
 					)
 					.foregroundColor(.gray)
-					.focused($focus, equals: TodoRow.Focus(id: store.todo.id, field: .dueDate))
+					.focused(focus, equals: TodoRow.Focus(id: store.todo.id, field: .dueDate))
 					.textFieldPadding(.top, 4)
 					.textFieldPadding(.horizontal, 2)
 					.input(.datePicker($store.todo.dueDate.defaulting(.now)))
@@ -122,13 +111,6 @@ struct TodoRowView: View {
 			.offset(y: 2) // slight offset to counter the font's natural y offset
 		}
 		.opacity(store.todo.isComplete ? 0.5 : 1)
-		.bind(
-			Binding(
-				get: { store.focus },
-				set: { store.send(.setFocus($0)) }
-			),
-			to: $focus
-		)
 	}
 }
 
@@ -144,28 +126,21 @@ extension Binding {
 }
 
 #Preview {
+	@Previewable @FocusState var focus: TodoRow.Focus?
 	@Previewable @State var stores: [StoreOf<TodoRow>] = {
 		@Shared(.inMemory("focus")) var focus: TodoRow.Focus? = nil
-
 		return [
-			TodoRow.State(
-				todo: Todo(id: UUID(), description: "", isComplete: false),
-				focus: $focus
-			),
-			TodoRow.State(
-				todo: Todo(id: UUID(), description: "Milk", isComplete: false),
-				focus: $focus
-			),
-			TodoRow.State(
-				todo: Todo(id: UUID(), description: "Milk", isComplete: true),
-				focus: $focus
-			),
+			TodoRow.State(todo: Todo(id: UUID(), description: "", isComplete: false), focus: $focus),
+			TodoRow.State(todo: Todo(id: UUID(), description: "Milk", isComplete: false), focus: $focus),
+			TodoRow.State(todo: Todo(id: UUID(), description: "Milk", isComplete: true), focus: $focus),
 		]
 		.map { Store(initialState: $0, feature: TodoRow.init) }
 	}()
 
-	ForEach(stores, content: TodoRowView.init)
-		.padding()
-		.background(Color(.systemBackground))
-		.environment(\.colorScheme, .dark)
+	ForEach(stores) { store in
+		TodoRowView(store: store, focus: $focus)
+	}
+	.padding()
+	.background(Color(.systemBackground))
+	.environment(\.colorScheme, .dark)
 }

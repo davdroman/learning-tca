@@ -12,15 +12,17 @@ struct TodosTests {
 	)
 	func `completing a todo`() async {
 		let store = await TestStoreActor(
-			initialState: Root.State(todos: [
-				Todo(id: UUID(0), description: "Milk", isComplete: false),
-			])
+			initialState: Root.State(
+				todoList: TodoList.State(todos: [
+					Todo(id: UUID(0), description: "Milk", isComplete: false),
+				])
+			)
 		) {
 			Root()
 		}
 
-		await store.send(.todoRow(UUID(0), .checkboxTapped)) {
-			$0.todos[0].isComplete = true
+		await store.send(.todoList(.todoRow(UUID(0), .checkboxTapped))) {
+			$0.todoList.todos[0].isComplete = true
 		}
 	}
 
@@ -31,15 +33,15 @@ struct TodosTests {
 		}
 	)
 	func `adding a todo`() async {
-		let store = await TestStoreActor(initialState: Root.State(todos: [])) {
+		let store = await TestStoreActor(initialState: Root.State()) {
 			Root()
 		}
 
 		await store.send(.addButtonTapped) {
-			$0.todos = [
+			$0.todoList.todos = [
 				Todo(id: UUID(0), description: "", isComplete: false)
 			]
-			$0.focus = .init(id: UUID(0), field: .description)
+			$0.todoList.focus = .init(id: UUID(0), field: .description)
 		}
 	}
 
@@ -52,25 +54,27 @@ struct TodosTests {
 		@Dependency(\.continuousClock, as: TestClock<Duration>.self) var clock
 
 		let store = await TestStoreActor(
-			initialState: Root.State(todos: [
-				Todo(id: UUID(0), description: "Milk", isComplete: false),
-				Todo(id: UUID(1), description: "Eggs", isComplete: false),
-				Todo(id: UUID(2), description: "Bread", isComplete: false),
-			])
+			initialState: Root.State(
+				todoList: TodoList.State(todos: [
+					Todo(id: UUID(0), description: "Milk", isComplete: false),
+					Todo(id: UUID(1), description: "Eggs", isComplete: false),
+					Todo(id: UUID(2), description: "Bread", isComplete: false),
+				])
+			)
 		) {
 			Root()
 		}
 
-		await store.send(.todoRow(UUID(0), .checkboxTapped)) {
-			$0.todos = [
+		await store.send(.todoList(.todoRow(UUID(0), .checkboxTapped))) {
+			$0.todoList.todos = [
 				Todo(id: UUID(0), description: "Milk", isComplete: true),
 				Todo(id: UUID(1), description: "Eggs", isComplete: false),
 				Todo(id: UUID(2), description: "Bread", isComplete: false),
 			]
 		}
 		await clock.advance(by: .seconds(0.5))
-		await store.send(.todoRow(UUID(2), .checkboxTapped)) {
-			$0.todos = [
+		await store.send(.todoList(.todoRow(UUID(2), .checkboxTapped))) {
+			$0.todoList.todos = [
 				Todo(id: UUID(0), description: "Milk", isComplete: true),
 				Todo(id: UUID(1), description: "Eggs", isComplete: false),
 				Todo(id: UUID(2), description: "Bread", isComplete: true),
@@ -78,7 +82,7 @@ struct TodosTests {
 		}
 		await clock.advance(by: .seconds(1))
 		await store.expect {
-			$0.todos = [
+			$0.todoList.todos = [
 				Todo(id: UUID(1), description: "Eggs", isComplete: false),
 				Todo(id: UUID(0), description: "Milk", isComplete: true),
 				Todo(id: UUID(2), description: "Bread", isComplete: true),

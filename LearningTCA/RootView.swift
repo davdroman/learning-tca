@@ -5,54 +5,26 @@ import SwiftUI
 @Feature
 struct Root {
 	struct State {
-		var todos: [Todo]
-		@Shared(.inMemory("focus")) var focus: TodoRow.Focus? = nil
-		@StoreTaskID var todoSorting
-
-		var todoRows: [TodoRow.State] {
-			get {
-				todos.map {
-					TodoRow.State(todo: $0, focus: $focus)
-				}
-			}
-			set {
-				todos = newValue.map(\.todo)
-			}
-		}
+		var todoList = TodoList.State(todos: [])
 	}
 
 	enum Action {
 		case addButtonTapped
-		case todoRow(Todo.ID, TodoRow.Action)
+		case todoList(TodoList.Action)
 	}
-
-	@Dependency(\.uuid) var uuid
-	@Dependency(\.continuousClock) var clock
 
 	var body: some Feature {
 		Update { state, action in
 			switch action {
 			case .addButtonTapped:
-				let newTodo = Todo(id: uuid(), description: "")
-				state.todos.insert(newTodo, at: 0)
-				state.$focus.withLock { $0 = .init(id: newTodo.id, field: .description) }
+				state.todoList.addNewTodo()
 
-			case .todoRow(_, .checkboxTapped):
-				store.addTask(id: state.todoSorting) {
-					try await clock.sleep(for: .seconds(1))
-					_ = try withAnimation(.default) {
-						try store.modify { state in
-							state.todos = state.todos.sorted { !$0.isComplete && $1.isComplete }
-						}
-					}
-				}
-
-			case .todoRow(_, .setFocus):
+			case .todoList:
 				break
 			}
 		}
-		.forEach(\.todoRows, action: \.todoRow) {
-			TodoRow()
+		Scope(state: \.todoList, action: \.todoList) {
+			TodoList()
 		}
 	}
 }
@@ -62,21 +34,18 @@ struct RootView: View {
 
 	var body: some View {
 		NavigationStack {
-			List(
-				store.scope(state: \.todoRows, action: \.todoRow),
-				rowContent: TodoRowView.init
-			)
-			.scrollDismissesKeyboard(.interactively)
-			.navigationTitle("Todos")
-			.toolbar {
-				ToolbarItem(placement: .navigationBarTrailing) {
-					Button("Add") {
-						withAnimation {
-							_ = store.send(.addButtonTapped)
+			TodoListView(store: store.scope(state: \.todoList, action: \.todoList))
+				.scrollDismissesKeyboard(.interactively)
+				.navigationTitle("Todos")
+				.toolbar {
+					ToolbarItem(placement: .navigationBarTrailing) {
+						Button("Add") {
+							withAnimation {
+								_ = store.send(.addButtonTapped)
+							}
 						}
 					}
 				}
-			}
 		}
 	}
 }
@@ -84,11 +53,11 @@ struct RootView: View {
 #Preview {
 	@Previewable @State var store = Store(
 		initialState: Root.State(
-			todos: [
+			todoList: TodoList.State(todos: [
 				Todo(id: UUID(), description: "Milk"),
 				Todo(id: UUID(), description: "Eggs"),
 				Todo(id: UUID(), description: "Hand soap", isComplete: true),
-			]
+			])
 		)
 	) {
 		Root()
