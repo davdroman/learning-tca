@@ -70,7 +70,7 @@
       "location" : "https://github.com/pointfreeco/swift-debug-snapshots",
       "state" : {
         "branch" : "main",
-        "revision" : "f236c59e89393aa7ffc9dd2c1ac55c83921b262b"
+        "revision" : "9e2831602260874e19482a1b36e70a35d69dddfc"
       }
     },
     {
@@ -142,7 +142,7 @@
       "location" : "https://github.com/pointfreeco/TCA26",
       "state" : {
         "branch" : "main",
-        "revision" : "74b1b942997ea267a8fe211eb9e186a0b340dc03"
+        "revision" : "bc15f0a61950966c08322699c548f91113d67746"
       }
     },
     {
